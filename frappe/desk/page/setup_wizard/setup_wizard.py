@@ -61,8 +61,22 @@ def setup_complete(args):
 		return process_setup_stages(stages, args)
 
 
+@frappe.whitelist()
+def prefill_setup_wizard(args):
+	"""Prefill the setup wizard with given values"""
+
+	if cint(frappe.db.get_single_value("System Settings", "setup_complete")):
+		return {"status": "ok"}
+
+	print(args)
+	args = parse_args(sanitize_input(args))
+	stages = get_setup_stages({**args, "complete_setup": False})
+
+	process_setup_stages(stages, args, complete_setup=False)
+
+
 @frappe.task()
-def process_setup_stages(stages, user_input, is_background_task=False):
+def process_setup_stages(stages, user_input, is_background_task=False, complete_setup=True):
 	from frappe.utils.telemetry import capture
 
 	capture("initated_server_side", "setup")
@@ -92,6 +106,11 @@ def process_setup_stages(stages, user_input, is_background_task=False):
 			user=frappe.session.user,
 		)
 	else:
+		if not complete_setup:
+			print("Setup wizard prefill complete")
+			return
+
+		print("Setup wizard complete")
 		run_setup_success(user_input)
 		capture("completed_server_side", "setup")
 		if not is_background_task:
@@ -113,7 +132,7 @@ def update_global_settings(args):  # nosemgrep
 
 
 def run_post_setup_complete(args):  # nosemgrep
-	disable_future_access()
+	disable_future_access(complete_setup=args.get("complete_setup", True))
 	frappe.db.commit()
 	frappe.clear_cache()
 	# HACK: due to race condition sometimes old doc stays in cache.
@@ -283,12 +302,13 @@ def _get_default_roles() -> set[str]:
 	return set(frappe.get_all("Role", pluck="name")) - skip_roles
 
 
-def disable_future_access():
+def disable_future_access(complete_setup=True):
 	frappe.db.set_default("desktop:home_page", "workspace")
 	# Enable onboarding after install
 	frappe.db.set_single_value("System Settings", "enable_onboarding", 1)
 
-	frappe.db.set_single_value("System Settings", "setup_complete", 1)
+	if complete_setup:
+		frappe.db.set_single_value("System Settings", "setup_complete", 1)
 
 
 @frappe.whitelist()
