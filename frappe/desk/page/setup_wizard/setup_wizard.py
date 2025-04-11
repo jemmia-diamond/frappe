@@ -27,7 +27,12 @@ def get_setup_stages(args):  # nosemgrep
 		}
 	]
 
-	stages += get_stages_hooks(args) + get_setup_complete_hooks(args)
+	complete_setup = args.get("complete_setup", True)
+	stages += get_stages_hooks(args)
+	if not complete_setup:
+		return stages
+
+	stages += get_setup_complete_hooks(args)
 
 	stages.append(
 		{
@@ -129,7 +134,7 @@ def update_global_settings(args):  # nosemgrep
 
 
 def run_post_setup_complete(args):  # nosemgrep
-	disable_future_access(complete_setup=args.get("complete_setup", True))
+	disable_future_access()
 	frappe.db.commit()
 	frappe.clear_cache()
 	# HACK: due to race condition sometimes old doc stays in cache.
@@ -299,13 +304,12 @@ def _get_default_roles() -> set[str]:
 	return set(frappe.get_all("Role", pluck="name")) - skip_roles
 
 
-def disable_future_access(complete_setup=True):
+def disable_future_access():
 	frappe.db.set_default("desktop:home_page", "workspace")
 	# Enable onboarding after install
 	frappe.db.set_single_value("System Settings", "enable_onboarding", 1)
 
-	if complete_setup:
-		frappe.db.set_single_value("System Settings", "setup_complete", 1)
+	frappe.db.set_single_value("System Settings", "setup_complete", 1)
 
 
 @frappe.whitelist()
