@@ -14,7 +14,7 @@ from frappe.utils.password import update_password
 from . import install_fixtures
 
 
-def get_setup_stages(args):  # nosemgrep
+def get_setup_stages(args, complete_setup=True):  # nosemgrep
 	# App setup stage functions should not include frappe.db.commit
 	# That is done by frappe after successful completion of all stages
 	stages = [
@@ -27,7 +27,6 @@ def get_setup_stages(args):  # nosemgrep
 		}
 	]
 
-	complete_setup = args.get("complete_setup", True)
 	stages += get_stages_hooks(args)
 	if not complete_setup:
 		return stages
@@ -73,8 +72,8 @@ def prefill_setup_wizard(args):
 	if cint(frappe.db.get_single_value("System Settings", "setup_complete")):
 		return {"status": "ok"}
 
-	args = parse_args(sanitize_input({**args, "complete_setup": False}))
-	stages = get_setup_stages(args)
+	args = parse_args(sanitize_input(args))
+	stages = get_setup_stages(args, complete_setup=False)
 
 	process_setup_stages(stages, args, complete_setup=False)
 
