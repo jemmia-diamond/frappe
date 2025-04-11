@@ -417,6 +417,7 @@ frappe.setup.slides_settings = [
 		],
 
 		onload: function (slide) {
+			frappe.setup.utils.load_prefilled_data();
 			if (frappe.setup.data.regional_data) {
 				this.setup_fields(slide);
 			} else {
@@ -508,6 +509,17 @@ frappe.setup.slides_settings = [
 ];
 
 frappe.setup.utils = {
+	load_prefilled_data: function () {
+		frappe.call({
+			method: "frappe.desk.page.setup_wizard.setup_wizard.get_prefilled_data",
+			callback: function (r) {
+				if (r.message) {
+					frappe.wizard.values = r.message;
+				}
+			},
+		});
+	},
+
 	load_regional_data: function (slide, callback) {
 		frappe.call({
 			method: "frappe.geo.country_info.get_country_timezone_info",

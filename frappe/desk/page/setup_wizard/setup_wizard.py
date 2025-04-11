@@ -68,9 +68,8 @@ def prefill_setup_wizard(args):
 	if cint(frappe.db.get_single_value("System Settings", "setup_complete")):
 		return {"status": "ok"}
 
-	print(args)
-	args = parse_args(sanitize_input(args))
-	stages = get_setup_stages({**args, "complete_setup": False})
+	args = parse_args(sanitize_input({**args, "complete_setup": False}))
+	stages = get_setup_stages(args)
 
 	process_setup_stages(stages, args, complete_setup=False)
 
@@ -107,10 +106,8 @@ def process_setup_stages(stages, user_input, is_background_task=False, complete_
 		)
 	else:
 		if not complete_setup:
-			print("Setup wizard prefill complete")
 			return
 
-		print("Setup wizard complete")
 		run_setup_success(user_input)
 		capture("completed_server_side", "setup")
 		if not is_background_task:
@@ -345,6 +342,25 @@ def load_user_details():
 	return {
 		"full_name": frappe.cache.hget("full_name", "signup"),
 		"email": frappe.cache.hget("email", "signup"),
+	}
+
+
+@frappe.whitelist()
+def get_prefilled_data():
+	"""Get prefilled data for setup wizard"""
+
+	system_settings = frappe.get_cached_doc("System Settings")
+	user = frappe.db.get_value(
+		"User", {"name": ("not in", frappe.STANDARD_USERS)}, ["email", "full_name"], as_dict=True
+	)
+
+	return {
+		"language": system_settings.language,
+		"country": system_settings.country,
+		"currency": system_settings.currency,
+		"timezone": system_settings.time_zone,
+		"full_name": user.full_name if user else "",
+		"email": user.email if user else "",
 	}
 
 
