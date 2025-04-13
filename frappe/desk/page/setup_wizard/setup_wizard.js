@@ -475,6 +475,7 @@ frappe.setup.slides_settings = [
 						: __("Update Password"),
 				fieldtype: "Password",
 				length: 512,
+				depends_on: "eval:!frappe.boot.is_fc_site",
 			},
 		],
 
@@ -492,7 +493,7 @@ frappe.setup.slides_settings = [
 			} else {
 				slide.form.fields_dict.email.df.reqd = 1;
 				slide.form.fields_dict.email.refresh();
-				slide.form.fields_dict.password.df.reqd = 1;
+				if (!frappe.boot.is_fc_site) slide.form.fields_dict.password.df.reqd = 1;
 				slide.form.fields_dict.password.refresh();
 
 				frappe.setup.utils.load_user_details(slide, this.setup_fields);
