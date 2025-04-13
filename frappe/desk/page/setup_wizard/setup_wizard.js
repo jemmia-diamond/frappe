@@ -417,11 +417,19 @@ frappe.setup.slides_settings = [
 		],
 
 		onload: function (slide) {
-			frappe.setup.utils.load_prefilled_data();
+			frappe.setup.utils.load_prefilled_data(slide, this.initialize_fields);
+		},
+
+		initialize_fields: function (slide) {
+			const setup_fields = function (slide) {
+				frappe.setup.utils.setup_region_fields(slide);
+				frappe.setup.utils.setup_language_field(slide);
+			};
+
 			if (frappe.setup.data.regional_data) {
 				this.setup_fields(slide);
 			} else {
-				frappe.setup.utils.load_regional_data(slide, this.setup_fields);
+				frappe.setup.utils.load_regional_data(slide, setup_fields);
 			}
 			if (!slide.get_value("language")) {
 				let session_language =
@@ -439,11 +447,6 @@ frappe.setup.slides_settings = [
 			}
 			frappe.setup.utils.bind_region_events(slide);
 			frappe.setup.utils.bind_language_events(slide);
-		},
-
-		setup_fields: function (slide) {
-			frappe.setup.utils.setup_region_fields(slide);
-			frappe.setup.utils.setup_language_field(slide);
 		},
 	},
 	{
@@ -509,13 +512,14 @@ frappe.setup.slides_settings = [
 ];
 
 frappe.setup.utils = {
-	load_prefilled_data: function () {
+	load_prefilled_data: function (slide, callback) {
 		frappe.call({
 			method: "frappe.desk.page.setup_wizard.setup_wizard.get_prefilled_data",
 			callback: function (r) {
 				if (r.message) {
 					frappe.wizard.values = r.message;
 				}
+				callback(slide);
 			},
 		});
 	},
