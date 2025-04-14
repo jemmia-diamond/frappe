@@ -173,13 +173,13 @@
   {
    "fieldname": "ward",
    "fieldtype": "Select",
-   "label": "ward"
+   "label": "Ward"
   }
  ],
  "icon": "fa fa-map-marker",
  "idx": 5,
  "links": [],
- "modified": "2025-04-14 15:13:27.298978",
+ "modified": "2025-04-14 15:48:46.958299",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
