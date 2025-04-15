@@ -30,6 +30,8 @@ from frappe.utils.data import escape_html
 from frappe.utils.deprecations import deprecation_warning
 from frappe.utils.error import log_error_snapshot
 from frappe.website.serve import get_response
+import warnings
+warnings.filterwarnings(action="ignore", message=r"datetime.datetime.utcnow")
 
 _site = None
 _sites_path = os.environ.get("SITES_PATH", ".")
