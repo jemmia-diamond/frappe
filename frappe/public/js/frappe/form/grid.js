@@ -87,18 +87,18 @@ export default class Grid {
 						<div class="grid-buttons">
 							<button type="button" class="btn btn-xs btn-danger grid-remove-rows hidden"
 								data-action="delete_rows">
-								${__("Delete")}
+								${__("Xóa")}
 							</button>
 							<button type="button" class="btn btn-xs btn-danger grid-remove-all-rows hidden"
 								data-action="delete_all_rows">
-								${__("Delete All")}
+								${__("Xóa Tất Cả")}
 							</button>
 							<!-- hack to allow firefox include this in tabs -->
 							<button type="button" class="btn btn-xs btn-secondary grid-add-row">
-								${__("Add Row")}
+								${__("Thêm")}
 							</button>
 							<button type="button" class="grid-add-multiple-rows btn btn-xs btn-secondary hidden">
-								${__("Add Multiple")}</a>
+								${__("Thêm Nhiều")}</a>
 							</button>
 						</div>
 						<div class="grid-pagination">

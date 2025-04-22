@@ -37,6 +37,7 @@
    "options": "fa fa-map-marker"
   },
   {
+   "default": "Địa Chỉ ",
    "fieldname": "address_title",
    "fieldtype": "Data",
    "hidden": 1,
@@ -179,7 +180,7 @@
  "icon": "fa fa-map-marker",
  "idx": 5,
  "links": [],
- "modified": "2025-04-14 15:48:46.958299",
+ "modified": "2025-04-21 09:01:06.707169",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
