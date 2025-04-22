@@ -37,7 +37,7 @@
    "options": "fa fa-map-marker"
   },
   {
-   "default": "Địa Chỉ ",
+   "default": "\u0110\u1ecba Ch\u1ec9 ",
    "fieldname": "address_title",
    "fieldtype": "Data",
    "hidden": 1,
