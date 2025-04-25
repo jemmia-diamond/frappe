@@ -9,11 +9,9 @@
  "field_order": [
   "address_details",
   "address_type",
-  "country",
-  "province",
-  "district",
-  "ward",
-  "address_line1",
+  "address_name",
+  "phone",
+  "email_id",
   "address_line2",
   "address_title",
   "city",
@@ -21,8 +19,11 @@
   "state",
   "pincode",
   "column_break0",
-  "email_id",
-  "phone",
+  "country",
+  "province",
+  "district",
+  "ward",
+  "address_line1",
   "fax",
   "is_primary_address",
   "is_shipping_address",
@@ -55,13 +56,14 @@
   {
    "fieldname": "address_line1",
    "fieldtype": "Data",
-   "label": "\u0110\u1ecba Ch\u1ec9 1",
+   "label": "S\u1ed1 Nh\u00e0, T\u00ean \u0110\u01b0\u1eddng",
    "length": 240,
    "reqd": 1
   },
   {
    "fieldname": "address_line2",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "\u0110\u1ecba Ch\u1ec9 2",
    "length": 240
   },
@@ -112,14 +114,13 @@
   {
    "fieldname": "email_id",
    "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Email Address",
+   "label": "Email",
    "options": "Email"
   },
   {
    "fieldname": "phone",
    "fieldtype": "Data",
-   "label": "Phone"
+   "label": "S\u1ed1 \u0110i\u1ec7n Tho\u1ea1i"
   },
   {
    "fieldname": "fax",
@@ -132,14 +133,14 @@
    "fieldname": "is_primary_address",
    "fieldtype": "Check",
    "hidden": 1,
-   "label": "Preferred Billing Address"
+   "label": "\u0110\u1ecba Ch\u1ec9 H\u00f3a \u0110\u01a1n"
   },
   {
    "default": "0",
    "fieldname": "is_shipping_address",
    "fieldtype": "Check",
    "hidden": 1,
-   "label": "Preferred Shipping Address"
+   "label": "\u0110\u1ecba Ch\u1ec9 Giao H\u00e0ng"
   },
   {
    "default": "0",
@@ -175,12 +176,18 @@
    "fieldname": "ward",
    "fieldtype": "Select",
    "label": "Ph\u01b0\u1eddng / X\u00e3"
+  },
+  {
+   "fieldname": "address_name",
+   "fieldtype": "Data",
+   "label": "H\u1ecd V\u00e0 T\u00ean",
+   "reqd": 1
   }
  ],
  "icon": "fa fa-map-marker",
  "idx": 5,
  "links": [],
- "modified": "2025-04-21 20:40:36.632506",
+ "modified": "2025-04-24 02:17:48.257861",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
