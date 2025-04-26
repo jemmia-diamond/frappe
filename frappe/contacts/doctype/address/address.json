@@ -2,6 +2,7 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
+ "autoname": "CRM-ADDRESS-.YYYY.-.#######",
  "creation": "2013-01-10 16:34:32",
  "doctype": "DocType",
  "document_type": "Setup",
@@ -38,7 +39,6 @@
    "options": "fa fa-map-marker"
   },
   {
-   "default": "\u0110\u1ecba Ch\u1ec9 ",
    "fieldname": "address_title",
    "fieldtype": "Data",
    "hidden": 1,
@@ -187,10 +187,11 @@
  "icon": "fa fa-map-marker",
  "idx": 5,
  "links": [],
- "modified": "2025-04-24 02:17:48.257861",
+ "modified": "2025-04-24 22:10:19.035564",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
+ "naming_rule": "By script",
  "owner": "Administrator",
  "permissions": [
   {
@@ -258,7 +259,10 @@
  ],
  "row_format": "Dynamic",
  "search_fields": "country, state",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "address_name",
+ "translated_doctype": 1
 }
