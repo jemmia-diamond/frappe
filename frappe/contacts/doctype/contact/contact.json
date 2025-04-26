@@ -3,6 +3,7 @@
  "allow_events_in_timeline": 1,
  "allow_import": 1,
  "allow_rename": 1,
+ "autoname": "CRM-CONTACT-.YYYY.-.#######",
  "creation": "2013-01-10 16:34:32",
  "doctype": "DocType",
  "document_type": "Setup",
@@ -19,6 +20,7 @@
   "last_name",
   "user",
   "cb00",
+  "lead_owner",
   "source_group",
   "source",
   "status",
@@ -28,6 +30,7 @@
   "mobile_no",
   "company_name",
   "image",
+  "_updated_at",
   "more_info",
   "column_break_smxk",
   "type",
@@ -42,7 +45,7 @@
   "th\u00f4ng_tin_pancake_section",
   "id",
   "inserted_at",
-  "updated_at",
+  "pancake_updated_at",
   "customer_id",
   "thread_id",
   "psid",
@@ -121,13 +124,14 @@
   {
    "fieldname": "salutation",
    "fieldtype": "Link",
-   "label": "X\u01b0ng H\u00f4",
+   "label": "Danh X\u01b0ng",
    "options": "Salutation"
   },
   {
    "fieldname": "gender",
    "fieldtype": "Link",
    "label": "Gi\u1edbi T\u00ednh",
+   "link_filters": "[[\"Gender\",\"name\",\"in\",[\"Nam\",\"N\u1eef\",\"Kh\u00e1c\"]]]",
    "options": "Gender"
   },
   {
@@ -353,11 +357,6 @@
    "label": "inserted_at"
   },
   {
-   "fieldname": "updated_at",
-   "fieldtype": "Datetime",
-   "label": "updated_at"
-  },
-  {
    "fieldname": "customer_id",
    "fieldtype": "Data",
    "label": "customer_id"
@@ -382,6 +381,25 @@
    "fieldname": "can_inbox",
    "fieldtype": "Check",
    "label": "can_inbox"
+  },
+  {
+   "default": "updated_at",
+   "fieldname": "_updated_at",
+   "fieldtype": "Datetime",
+   "is_virtual": 1,
+   "label": "Th\u1eddi gian t\u01b0\u01a1ng t\u00e1c g\u1ea7n nh\u1ea5t",
+   "options": "doc.pancake_updated_at"
+  },
+  {
+   "fieldname": "pancake_updated_at",
+   "fieldtype": "Datetime",
+   "label": "updated_at"
+  },
+  {
+   "fieldname": "lead_owner",
+   "fieldtype": "Link",
+   "label": "Nh\u00e2n Vi\u00ean Ph\u1ee5 Tr\u00e1ch",
+   "options": "User"
   }
  ],
  "icon": "fa fa-user",
@@ -389,7 +407,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-17 21:37:08.567596",
+ "modified": "2025-04-26 02:36:14.351181",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
@@ -526,5 +544,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "full_name"
+ "title_field": "first_name",
+ "translated_doctype": 1
 }
