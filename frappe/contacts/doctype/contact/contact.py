@@ -22,6 +22,7 @@ class Contact(Document):
 		from frappe.core.doctype.dynamic_link.dynamic_link import DynamicLink
 		from frappe.types import DF
 
+		_updated_at: DF.Datetime | None
 		address: DF.Link | None
 		birthday: DF.Date | None
 		can_inbox: DF.Check
@@ -33,6 +34,8 @@ class Contact(Document):
 		email_ids: DF.Table[ContactEmail]
 		first_message_time: DF.Datetime | None
 		first_name: DF.Data | None
+		form_id: DF.Data | None
+		form_name: DF.Data | None
 		full_name: DF.Data | None
 		gender: DF.Link | None
 		google_contacts: DF.Link | None
@@ -45,14 +48,18 @@ class Contact(Document):
 		last_message_time: DF.Datetime | None
 		last_name: DF.Data | None
 		last_outgoing_call_time: DF.Datetime | None
+		lead_owner: DF.Link | None
 		links: DF.Table[DynamicLink]
 		middle_name: DF.Data | None
 		mobile_no: DF.Data | None
+		page_url: DF.Data | None
+		pancake_updated_at: DF.Datetime | None
 		phone: DF.Data | None
 		phone_nos: DF.Table[ContactPhone]
 		phone_number_provided_time: DF.Datetime | None
 		psid: DF.Data | None
 		pulled_from_google_contacts: DF.Check
+		remote_ip: DF.Data | None
 		salutation: DF.Link | None
 		source: DF.Link | None
 		source_group: DF.Literal["Facebook", "Zalo", "Tiktok", "\u0110i\u1ec7n Tho\u1ea1i", "Form Website", "Kh\u00e1ch V\u00e3ng Lai", "Email"]
@@ -61,19 +68,19 @@ class Contact(Document):
 		thread_id: DF.Data | None
 		type: DF.Data | None
 		unsubscribed: DF.Check
-		updated_at: DF.Datetime | None
 		user: DF.Link | None
+		user_agent: DF.Data | None
 	# end: auto-generated types
-	def autoname(self):
-		self.name = self._get_full_name()
+	# def autoname(self):
+	# 	self.name = self._get_full_name()
 
-		# concat party name if reqd
-		for link in self.links:
-			self.name = self.name + "-" + link.link_name.strip()
-			break
+	# 	# concat party name if reqd
+	# 	for link in self.links:
+	# 		self.name = self.name + "-" + link.link_name.strip()
+	# 		break
 
-		if frappe.db.exists("Contact", self.name):
-			self.name = append_number_if_name_exists("Contact", self.name)
+	# 	if frappe.db.exists("Contact", self.name):
+	# 		self.name = append_number_if_name_exists("Contact", self.name)
 
 	def validate(self):
 		self.full_name = self._get_full_name()

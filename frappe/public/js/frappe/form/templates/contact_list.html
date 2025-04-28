@@ -28,8 +28,9 @@
 				<span class="text-muted"> {%= contact.designation %}</span>
 			{% } %}
 
-			<div><span>Nguồn liên hệ: {%= contact.source %}</span></div>
-			<div><span>Ngày thêm: {%= contact.inserted_at %}</span></div>
+			<div><span>Nguồn: {%= contact.source %}</span></div>
+			<div><span>Ngày tạo: {%= contact.inserted_at %}</span></div>
+			<div><span>Lần tương tác gần nhất: {%= contact.pancake_updated_at %}</span></div>
 
 		</p>
 		{% if (contact.phone || contact.mobile_no || contact.phone_nos.length > 0) { %}
@@ -80,11 +81,11 @@
 			{% endif %}
 		</p>
 		{% endif %}
-		{% if (contact.address) { %}
+		<!-- {% if (contact.address) { %}
 		<p>
 			{%= contact.address %}
 		</p>
-		{% endif %}
+		{% endif %} -->
 	</div>
 {% } %}
 
