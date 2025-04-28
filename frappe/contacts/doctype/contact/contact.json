@@ -51,6 +51,12 @@
   "psid",
   "birthday",
   "can_inbox",
+  "website_form_selection",
+  "page_url",
+  "user_agent",
+  "remote_ip",
+  "form_id",
+  "form_name",
   "sb_00",
   "google_contacts",
   "google_contacts_id",
@@ -400,6 +406,36 @@
    "fieldtype": "Link",
    "label": "Nh\u00e2n Vi\u00ean Ph\u1ee5 Tr\u00e1ch",
    "options": "User"
+  },
+  {
+   "fieldname": "website_form_selection",
+   "fieldtype": "Section Break",
+   "label": "Th\u00f4ng Tin Form Website"
+  },
+  {
+   "fieldname": "page_url",
+   "fieldtype": "Data",
+   "label": "Page URL"
+  },
+  {
+   "fieldname": "user_agent",
+   "fieldtype": "Data",
+   "label": "User Agent"
+  },
+  {
+   "fieldname": "remote_ip",
+   "fieldtype": "Data",
+   "label": "Remote IP"
+  },
+  {
+   "fieldname": "form_id",
+   "fieldtype": "Data",
+   "label": "Form ID"
+  },
+  {
+   "fieldname": "form_name",
+   "fieldtype": "Data",
+   "label": "T\u00ean Form"
   }
  ],
  "icon": "fa fa-user",
@@ -407,7 +443,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-26 02:36:14.351181",
+ "modified": "2025-04-28 00:11:24.831195",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",

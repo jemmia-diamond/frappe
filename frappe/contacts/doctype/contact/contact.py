@@ -34,6 +34,8 @@ class Contact(Document):
 		email_ids: DF.Table[ContactEmail]
 		first_message_time: DF.Datetime | None
 		first_name: DF.Data | None
+		form_id: DF.Data | None
+		form_name: DF.Data | None
 		full_name: DF.Data | None
 		gender: DF.Link | None
 		google_contacts: DF.Link | None
@@ -50,12 +52,14 @@ class Contact(Document):
 		links: DF.Table[DynamicLink]
 		middle_name: DF.Data | None
 		mobile_no: DF.Data | None
+		page_url: DF.Data | None
 		pancake_updated_at: DF.Datetime | None
 		phone: DF.Data | None
 		phone_nos: DF.Table[ContactPhone]
 		phone_number_provided_time: DF.Datetime | None
 		psid: DF.Data | None
 		pulled_from_google_contacts: DF.Check
+		remote_ip: DF.Data | None
 		salutation: DF.Link | None
 		source: DF.Link | None
 		source_group: DF.Literal["Facebook", "Zalo", "Tiktok", "\u0110i\u1ec7n Tho\u1ea1i", "Form Website", "Kh\u00e1ch V\u00e3ng Lai", "Email"]
@@ -65,6 +69,7 @@ class Contact(Document):
 		type: DF.Data | None
 		unsubscribed: DF.Check
 		user: DF.Link | None
+		user_agent: DF.Data | None
 	# end: auto-generated types
 	# def autoname(self):
 	# 	self.name = self._get_full_name()
