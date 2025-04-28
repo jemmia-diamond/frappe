@@ -383,7 +383,6 @@
    "label": "can_inbox"
   },
   {
-   "default": "updated_at",
    "fieldname": "_updated_at",
    "fieldtype": "Datetime",
    "is_virtual": 1,
@@ -407,7 +406,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-28 14:01:10.038500",
+ "modified": "2025-04-28 21:29:51.738120",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
