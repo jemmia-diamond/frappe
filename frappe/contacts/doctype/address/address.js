@@ -87,9 +87,9 @@ frappe.ui.form.on("Address", {
 	},
 
 	district: function (frm) {
-		cur_district = frm.doc.district;
-		districtData = ward_by_district.find(d => d.district == cur_district);
-    	wards = districtData ? districtData.wards : [];
+		let cur_district = frm.doc.district;
+		let districtData = ward_by_district.find(d => d.district == cur_district);
+    	let wards = districtData ? districtData.wards : [];
 		frm.set_df_property("ward", "options", wards);
 	},
 });
