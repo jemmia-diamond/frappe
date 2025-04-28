@@ -11,7 +11,7 @@ from frappe import _
 from frappe.desk.reportview import validate_args
 from frappe.model.db_query import check_parent_permission
 from frappe.model.utils import is_virtual_doctype
-from frappe.utils import get_safe_filters
+from frappe.utils import get_safe_filters, validate_phone_number
 from frappe.utils.deprecations import deprecated
 import re
 
@@ -295,6 +295,11 @@ def bulk_update(docs):
 	for doc in docs:
 		doc.pop("flags", None)
 		try:
+			pancake_phone = doc.get("phone", "")
+			is_valid_phone = validate_phone_number(pancake_phone)
+			if is_valid_phone is False:
+				doc["phone"] = ""
+
 			existing_doc = frappe.get_doc(doc["doctype"], doc["docname"])
 			existing_doc.update(doc)
 			existing_doc.save()
@@ -498,9 +503,12 @@ def insert_doc(doc) -> "Document":
 		return parent
     
 	pancake_list_tags = doc.get("pancake_tags", [])
+	pancake_phone = doc.get("phone", "")
+	is_valid_phone = validate_phone_number(pancake_phone)
+	if is_valid_phone is False:
+		doc["phone"] = ""
 	
 	frappe_doc = frappe.get_doc(doc)
-
 	try:
 		frappe_doc = frappe_doc.insert()
 		if len(pancake_list_tags) > 0:
@@ -508,14 +516,10 @@ def insert_doc(doc) -> "Document":
 				frappe_doc.add_tag(tag)
 		return frappe_doc
 	except Exception as e:
-		print(f"Fail {str(e)} {frappe_doc.doctype} {frappe_doc.name}")
-		print("doc == ", json.dumps(doc))
-
+		print(f"Error {str(e)} {frappe_doc.doctype} {frappe_doc.name}")
 		try: 
 			check_exist_doc = frappe.get_doc(frappe_doc.doctype, frappe_doc.name)
-			print("check_exist_doc = ", check_exist_doc)
 			if check_exist_doc:
-				print(f"Found existing doc: {check_exist_doc.name}")
 				return check_exist_doc 
 			return None 
 		except Exception as get_exception:
@@ -526,7 +530,6 @@ def insert_doc(doc) -> "Document":
 			match = re.search(pattern, str(e))
 			if match:
 				reference_frappe_doc_name = match.group(0)
-				print(f"Found existing reference: {reference_frappe_doc_name}")
 				return frappe.get_doc(frappe_doc.doctype, reference_frappe_doc_name)
 			return None
 	return None
