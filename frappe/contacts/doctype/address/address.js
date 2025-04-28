@@ -75,10 +75,11 @@ frappe.ui.form.on("Address", {
 
 	onload: function (frm) {
 		frm.set_df_property("province", "options", provinces);
+		frm.set_df_property("district", "options", [frm.doc.district])
+		frm.set_df_property("ward", "options", [frm.doc.ward])
 	},
 
 	province: function (frm) {
-		console.log(frm.doc.province);
 		cur_province = frm.doc.province;
 		districts = districts_by_province.find(p => p.province == cur_province).districts;
 		frm.set_df_property("district", "options", districts);
@@ -86,7 +87,6 @@ frappe.ui.form.on("Address", {
 	},
 
 	district: function (frm) {
-		console.log(frm.doc.district);
 		cur_district = frm.doc.district;
 		districtData = ward_by_district.find(d => d.district == cur_district);
     	wards = districtData ? districtData.wards : [];

@@ -58,7 +58,7 @@ class Contact(Document):
 		pulled_from_google_contacts: DF.Check
 		salutation: DF.Link | None
 		source: DF.Link | None
-		source_group: DF.Literal["Facebook", "Zalo", "Tiktok", "\u0110i\u1ec7n Tho\u1ea1i", "Form Website", "Kh\u00e1ch V\u00e3ng Lai", "Email"]
+		source_group: DF.Literal["", "Facebook", "Zalo", "Tiktok", "\u0110i\u1ec7n Tho\u1ea1i", "Form Website", "Kh\u00e1ch V\u00e3ng Lai", "Email"]
 		status: DF.Literal["Passive", "Open", "Replied"]
 		sync_with_google_contacts: DF.Check
 		thread_id: DF.Data | None
