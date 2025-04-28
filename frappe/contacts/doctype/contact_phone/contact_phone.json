@@ -16,8 +16,7 @@
    "in_list_view": 1,
    "label": "S\u1ed1 \u0110i\u1ec7n Tho\u1ea1i",
    "options": "Phone",
-   "reqd": 1,
-   "unique": 1
+   "reqd": 1
   },
   {
    "columns": 2,
