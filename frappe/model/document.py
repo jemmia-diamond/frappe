@@ -317,6 +317,7 @@ class Document(BaseDocument):
 		if getattr(self.meta, "issingle", 0):
 			self.update_single(self.get_valid_dict())
 		else:
+			print("WWWWWW")
 			self.db_insert(ignore_if_duplicate=ignore_if_duplicate)
 
 		# children

@@ -13,6 +13,7 @@ from frappe.model.db_query import check_parent_permission
 from frappe.model.utils import is_virtual_doctype
 from frappe.utils import get_safe_filters
 from frappe.utils.deprecations import deprecated
+import re
 
 if TYPE_CHECKING:
 	from frappe.model.document import Document
@@ -211,8 +212,17 @@ def insert_many(docs=None):
 
 	if len(docs) > 200:
 		frappe.throw(_("Only 200 inserts allowed in one request"))
+	
+	print("Inserting multiple documents...")
 
-	return [insert_doc(doc).name for doc in docs]
+	result = []
+	for doc in docs:
+		inserted_doc = insert_doc(doc)
+		if inserted_doc:
+			result.append(inserted_doc.name)
+		else:
+			result.append(None)
+	return result
 
 
 @frappe.whitelist(methods=["POST", "PUT"])
@@ -486,8 +496,40 @@ def insert_doc(doc) -> "Document":
 		parent.append(doc.parentfield, doc)
 		parent.save()
 		return parent
+    
+	pancake_list_tags = doc.get("pancake_tags", [])
+	
+	frappe_doc = frappe.get_doc(doc)
 
-	return frappe.get_doc(doc).insert()
+	try:
+		frappe_doc = frappe_doc.insert()
+		if len(pancake_list_tags) > 0:
+			for tag in pancake_list_tags:
+				frappe_doc.add_tag(tag)
+		return frappe_doc
+	except Exception as e:
+		print(f"Fail {str(e)} {frappe_doc.doctype} {frappe_doc.name}")
+		print("doc == ", json.dumps(doc))
+
+		try: 
+			check_exist_doc = frappe.get_doc(frappe_doc.doctype, frappe_doc.name)
+			print("check_exist_doc = ", check_exist_doc)
+			if check_exist_doc:
+				print(f"Found existing doc: {check_exist_doc.name}")
+				return check_exist_doc 
+			return None 
+		except Exception as get_exception:
+			'''
+			If a Lead already exists, create a new contact
+			'''
+			pattern = r'CRM-LEAD-\d+-\d+'
+			match = re.search(pattern, str(e))
+			if match:
+				reference_frappe_doc_name = match.group(0)
+				print(f"Found existing reference: {reference_frappe_doc_name}")
+				return frappe.get_doc(frappe_doc.doctype, reference_frappe_doc_name)
+			return None
+	return None
 
 
 def delete_doc(doctype, name):

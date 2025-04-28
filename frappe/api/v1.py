@@ -39,6 +39,7 @@ def handle_rpc_call(method: str):
 def create_doc(doctype: str):
 	data = get_request_form_data()
 	data.pop("doctype", None)
+	print("Creatint doc using /resouce/doctype")
 	return frappe.new_doc(doctype, **data).insert()
 
 
