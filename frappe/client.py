@@ -501,38 +501,38 @@ def insert_doc(doc) -> "Document":
 		parent.append(doc.parentfield, doc)
 		parent.save()
 		return parent
-    
-	pancake_list_tags = doc.get("pancake_tags", [])
-	pancake_phone = doc.get("phone", "")
-	is_valid_phone = validate_phone_number(pancake_phone)
-	if is_valid_phone is False:
-		doc["phone"] = ""
+
+	if doc.doctype == "Lead":
+		pancake_list_tags = doc.get("pancake_tags", [])
+		pancake_phone = doc.get("phone", "")
+		is_valid_phone = validate_phone_number(pancake_phone)
+		if is_valid_phone is False:
+			doc["phone"] = ""
+		
+		frappe_doc = frappe.get_doc(doc)
+		try:
+			frappe_doc = frappe_doc.insert()
+			if len(pancake_list_tags) > 0:
+				for tag in pancake_list_tags:
+					frappe_doc.add_tag(tag)
+			return frappe_doc
+		except Exception as e:
+			print(f"Error {str(e)} {frappe_doc.doctype} {frappe_doc.name}")
+			try: 
+				check_exist_doc = frappe.get_doc(frappe_doc.doctype, frappe_doc.name)
+				if check_exist_doc:
+					return check_exist_doc 
+				return None 
+			except Exception as get_exception:
+				pattern = r'CRM-LEAD-\d+-\d+'
+				match = re.search(pattern, str(e))
+				if match:
+					reference_frappe_doc_name = match.group(0)
+					return frappe.get_doc(frappe_doc.doctype, reference_frappe_doc_name)
+				return None
+		return None
 	
-	frappe_doc = frappe.get_doc(doc)
-	try:
-		frappe_doc = frappe_doc.insert()
-		if len(pancake_list_tags) > 0:
-			for tag in pancake_list_tags:
-				frappe_doc.add_tag(tag)
-		return frappe_doc
-	except Exception as e:
-		print(f"Error {str(e)} {frappe_doc.doctype} {frappe_doc.name}")
-		try: 
-			check_exist_doc = frappe.get_doc(frappe_doc.doctype, frappe_doc.name)
-			if check_exist_doc:
-				return check_exist_doc 
-			return None 
-		except Exception as get_exception:
-			'''
-			If a Lead already exists, create a new contact
-			'''
-			pattern = r'CRM-LEAD-\d+-\d+'
-			match = re.search(pattern, str(e))
-			if match:
-				reference_frappe_doc_name = match.group(0)
-				return frappe.get_doc(frappe_doc.doctype, reference_frappe_doc_name)
-			return None
-	return None
+	return frappe.get_doc(doc).insert()
 
 
 def delete_doc(doctype, name):

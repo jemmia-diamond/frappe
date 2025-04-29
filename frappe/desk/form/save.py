@@ -30,8 +30,6 @@ def savedocs(doc, action):
 		"Cancel": DocStatus.CANCELLED,
 	}[action]
 
-	print("CHECK 0", doc.doctype, doc.name, doc)
-
 	if doc.docstatus.is_submitted():
 		if action == "Submit" and doc.meta.queue_in_background and not is_scheduler_inactive():
 			queue_submission(doc, action)
