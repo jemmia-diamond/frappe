@@ -215,10 +215,13 @@ def insert_many(docs=None):
 	
 	result = []
 	for doc in docs:
-		inserted_doc = insert_doc(doc)
-		if inserted_doc:
-			result.append(inserted_doc.name)
-		else:
+		try:
+			inserted_doc = insert_doc(doc)
+			if inserted_doc:
+				result.append(inserted_doc.name)
+			else:
+				result.append(None)
+		except Exception:
 			result.append(None)
 	return result
 
@@ -516,7 +519,6 @@ def insert_doc(doc) -> "Document":
 					frappe_doc.add_tag(tag)
 			return frappe_doc
 		except Exception as e:
-			print(f"Error {str(e)} {frappe_doc.doctype} {frappe_doc.name}")
 			try: 
 				check_exist_doc = frappe.get_doc(frappe_doc.doctype, frappe_doc.name)
 				if check_exist_doc:
