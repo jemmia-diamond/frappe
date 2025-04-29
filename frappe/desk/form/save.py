@@ -37,6 +37,7 @@ def savedocs(doc, action):
 		doc.submit()
 	else:
 		doc.save()
+
 	# update recent documents
 	run_onload(doc)
 	send_updated_docs(doc)

@@ -213,8 +213,6 @@ def insert_many(docs=None):
 	if len(docs) > 200:
 		frappe.throw(_("Only 200 inserts allowed in one request"))
 	
-	print("Inserting multiple documents...")
-
 	result = []
 	for doc in docs:
 		inserted_doc = insert_doc(doc)
@@ -295,10 +293,11 @@ def bulk_update(docs):
 	for doc in docs:
 		doc.pop("flags", None)
 		try:
-			pancake_phone = doc.get("phone", "")
-			is_valid_phone = validate_phone_number(pancake_phone)
-			if is_valid_phone is False:
-				doc["phone"] = ""
+			if doc.get("doctype", None) == "Lead":
+				pancake_phone = doc.get("phone", "")
+				is_valid_phone = validate_phone_number(pancake_phone)
+				if is_valid_phone is False:
+					doc["phone"] = ""
 
 			existing_doc = frappe.get_doc(doc["doctype"], doc["docname"])
 			existing_doc.update(doc)
@@ -502,7 +501,7 @@ def insert_doc(doc) -> "Document":
 		parent.save()
 		return parent
 
-	if doc.doctype == "Lead":
+	if doc.get("doctype", None) == "Lead":
 		pancake_list_tags = doc.get("pancake_tags", [])
 		pancake_phone = doc.get("phone", "")
 		is_valid_phone = validate_phone_number(pancake_phone)
