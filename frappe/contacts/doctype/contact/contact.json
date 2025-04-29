@@ -43,14 +43,14 @@
   "last_outgoing_call_time",
   "last_incoming_call_time",
   "th\u00f4ng_tin_pancake_section",
-  "id",
+  "pancake_conversation_id",
   "inserted_at",
   "pancake_updated_at",
-  "customer_id",
+  "pancake_customer_id",
   "thread_id",
   "psid",
-  "birthday",
   "can_inbox",
+  "pancake_page_id",
   "website_form_selection",
   "page_url",
   "user_agent",
@@ -353,19 +353,9 @@
    "label": "Th\u00f4ng Tin Pancake"
   },
   {
-   "fieldname": "id",
-   "fieldtype": "Data",
-   "label": "id"
-  },
-  {
    "fieldname": "inserted_at",
    "fieldtype": "Datetime",
    "label": "inserted_at"
-  },
-  {
-   "fieldname": "customer_id",
-   "fieldtype": "Data",
-   "label": "customer_id"
   },
   {
    "fieldname": "thread_id",
@@ -376,11 +366,6 @@
    "fieldname": "psid",
    "fieldtype": "Data",
    "label": "psid"
-  },
-  {
-   "fieldname": "birthday",
-   "fieldtype": "Date",
-   "label": "birthday"
   },
   {
    "default": "0",
@@ -404,7 +389,7 @@
   {
    "fieldname": "lead_owner",
    "fieldtype": "Link",
-   "label": "Nh\u00e2n Vi\u00ean Ph\u1ee5 Tr\u00e1ch",
+   "label": "Ph\u1ee5 Tr\u00e1ch",
    "options": "User"
   },
   {
@@ -436,6 +421,21 @@
    "fieldname": "form_name",
    "fieldtype": "Data",
    "label": "T\u00ean Form"
+  },
+  {
+   "fieldname": "pancake_conversation_id",
+   "fieldtype": "Data",
+   "label": "pancake_conversation_id"
+  },
+  {
+   "fieldname": "pancake_customer_id",
+   "fieldtype": "Data",
+   "label": "pancake_customer_id"
+  },
+  {
+   "fieldname": "pancake_page_id",
+   "fieldtype": "Data",
+   "label": "pancake_page_id"
   }
  ],
  "icon": "fa fa-user",
@@ -443,7 +443,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-28 00:11:24.831195",
+ "modified": "2025-04-28 19:33:27.027897",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
