@@ -57,6 +57,15 @@
   "remote_ip",
   "form_id",
   "form_name",
+  "stringee_selection",
+  "stringee_id",
+  "stringee_to_number",
+  "stringee_from_number",
+  "stringee_start_time",
+  "stringee_from_internal",
+  "stringee_to_internal",
+  "stringee_recorded",
+  "video_call",
   "sb_00",
   "google_contacts",
   "google_contacts_id",
@@ -392,6 +401,7 @@
    "options": "User"
   },
   {
+   "collapsible": 1,
    "fieldname": "website_form_selection",
    "fieldtype": "Section Break",
    "label": "Th\u00f4ng Tin Form Website"
@@ -435,6 +445,56 @@
    "fieldname": "pancake_page_id",
    "fieldtype": "Data",
    "label": "pancake_page_id"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "stringee_selection",
+   "fieldtype": "Section Break",
+   "label": "Th\u00f4ng tin Stringee"
+  },
+  {
+   "fieldname": "stringee_id",
+   "fieldtype": "Data",
+   "label": "Stringee_id"
+  },
+  {
+   "fieldname": "stringee_to_number",
+   "fieldtype": "Data",
+   "label": "G\u1ecdi T\u1eeb"
+  },
+  {
+   "fieldname": "stringee_from_number",
+   "fieldtype": "Data",
+   "label": "G\u1ecdi \u0110\u1ebfn"
+  },
+  {
+   "fieldname": "stringee_start_time",
+   "fieldtype": "Datetime",
+   "label": "B\u1eaft \u0110\u1ea7u G\u1ecdi L\u00fac"
+  },
+  {
+   "default": "0",
+   "fieldname": "stringee_from_internal",
+   "fieldtype": "Check",
+   "label": "G\u1ecdi \u0110i"
+  },
+  {
+   "default": "0",
+   "fieldname": "stringee_to_internal",
+   "fieldtype": "Check",
+   "label": "G\u1ecdi \u0110\u1ebfn"
+  },
+  {
+   "default": "0",
+   "fieldname": "stringee_recorded",
+   "fieldtype": "Check",
+   "label": "\u0110\u00e3 Ghi \u00c2m"
+  },
+  {
+   "default": "0",
+   "fieldname": "video_call",
+   "fieldtype": "Check",
+   "label": "Cu\u1ed9c G\u1ecdi Video"
   }
  ],
  "icon": "fa fa-user",
@@ -442,7 +502,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-28 19:33:27.027897",
+ "modified": "2025-04-29 00:17:30.389434",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
