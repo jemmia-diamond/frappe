@@ -24,10 +24,8 @@ class Contact(Document):
 
 		_updated_at: DF.Datetime | None
 		address: DF.Link | None
-		birthday: DF.Date | None
 		can_inbox: DF.Check
 		company_name: DF.Data | None
-		customer_id: DF.Data | None
 		department: DF.Data | None
 		designation: DF.Data | None
 		email_id: DF.Data | None
@@ -40,7 +38,6 @@ class Contact(Document):
 		gender: DF.Link | None
 		google_contacts: DF.Link | None
 		google_contacts_id: DF.Data | None
-		id: DF.Data | None
 		image: DF.AttachImage | None
 		inserted_at: DF.Datetime | None
 		is_primary_contact: DF.Check
@@ -53,6 +50,9 @@ class Contact(Document):
 		middle_name: DF.Data | None
 		mobile_no: DF.Data | None
 		page_url: DF.Data | None
+		pancake_conversation_id: DF.Data | None
+		pancake_customer_id: DF.Data | None
+		pancake_page_id: DF.Data | None
 		pancake_updated_at: DF.Datetime | None
 		phone: DF.Data | None
 		phone_nos: DF.Table[ContactPhone]
