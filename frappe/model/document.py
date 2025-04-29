@@ -317,10 +317,17 @@ class Document(BaseDocument):
 		if getattr(self.meta, "issingle", 0):
 			self.update_single(self.get_valid_dict())
 		else:
+			if self.doctype == "Lead":
+				print("Inserting Lead")
+			else:
+				print("Inserting Contact")
 			self.db_insert(ignore_if_duplicate=ignore_if_duplicate)
 
 		# children
 		for d in self.get_all_children():
+			print(d.doctype)
+			if d.doctype == "Contact Phone":
+				print("Inserting Contact Child")
 			d.db_insert()
 
 		self.run_method("after_insert")
