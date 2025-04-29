@@ -513,6 +513,9 @@ def insert_doc(doc) -> "Document":
 		
 		frappe_doc = frappe.get_doc(doc)
 		try:
+			"""
+			Insert a new Lead
+			"""
 			frappe_doc = frappe_doc.insert()
 			if len(pancake_list_tags) > 0:
 				for tag in pancake_list_tags:
@@ -531,7 +534,6 @@ def insert_doc(doc) -> "Document":
 					reference_frappe_doc_name = match.group(0)
 					return frappe.get_doc(frappe_doc.doctype, reference_frappe_doc_name)
 				return None
-		return None
 	
 	return frappe.get_doc(doc).insert()
 
