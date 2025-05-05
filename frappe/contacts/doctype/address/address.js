@@ -80,10 +80,12 @@ frappe.ui.form.on("Address", {
 	},
 
 	province: function (frm) {
-		cur_province = frm.doc.province;
-		districts = districts_by_province.find(p => p.province == cur_province).districts;
+		let cur_province = frm.doc.province;
+		let districts = districts_by_province.find(p => p.province == cur_province).districts;
 		frm.set_df_property("district", "options", districts);
 		frm.set_df_property("ward", "options", []);
+		frm.set_value("district", ""); // Clear district when province changes
+		frm.set_value("ward", ""); // Clear ward when province changes
 	},
 
 	district: function (frm) {
@@ -91,6 +93,7 @@ frappe.ui.form.on("Address", {
 		let districtData = ward_by_district.find(d => d.district == cur_district);
     	let wards = districtData ? districtData.wards : [];
 		frm.set_df_property("ward", "options", wards);
+		frm.set_value("ward", ""); // Clear ward when district changes
 	},
 });
 
