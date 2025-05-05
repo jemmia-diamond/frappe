@@ -455,7 +455,8 @@
   {
    "fieldname": "stringee_id",
    "fieldtype": "Data",
-   "label": "Stringee_id"
+   "label": "Stringee_id",
+   "unique": 1
   },
   {
    "fieldname": "stringee_to_number",
@@ -502,7 +503,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-29 00:17:30.389434",
+ "modified": "2025-04-29 02:05:29.171540",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
