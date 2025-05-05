@@ -152,7 +152,6 @@
   {
    "fieldname": "linked_with",
    "fieldtype": "Section Break",
-   "hidden": 1,
    "label": "Reference",
    "options": "fa fa-pushpin"
   },
@@ -187,7 +186,7 @@
  "icon": "fa fa-map-marker",
  "idx": 5,
  "links": [],
- "modified": "2025-04-24 22:10:19.035564",
+ "modified": "2025-05-05 11:04:33.576229",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
