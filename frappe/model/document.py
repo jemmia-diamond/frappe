@@ -299,10 +299,9 @@ class Document(BaseDocument):
 		self.set_user_and_timestamp()
 		self.set_docstatus()
 		self.check_if_latest()
-		if self.doctype != "Lead":
-			self._validate_links(
-				raise_direct_exception=raise_direct_exception,
-			)
+		self._validate_links(
+			raise_direct_exception=raise_direct_exception,
+		)
 		self.check_permission("create")
 		self.run_method("before_insert")
 		self.set_new_name(set_name=set_name, set_child_names=set_child_names)
