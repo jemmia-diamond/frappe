@@ -308,7 +308,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Nh\u00f3m Ngu\u1ed3n",
-   "options": "\nFacebook\nZalo\nInstagram\nTiktok\n\u0110i\u1ec7n Tho\u1ea1i\nForm Website\nKh\u00e1ch V\u00e3ng Lai\nEmail",
+   "options": "Facebook\nZalo\nTiktok\n\u0110i\u1ec7n Tho\u1ea1i\nForm Website\nKh\u00e1ch V\u00e3ng Lai\nEmail",
    "reqd": 1
   },
   {
@@ -359,6 +359,7 @@
    "collapsible": 1,
    "fieldname": "th\u00f4ng_tin_pancake_section",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Th\u00f4ng Tin Pancake"
   },
   {
@@ -383,6 +384,7 @@
    "label": "can_inbox"
   },
   {
+   "default": "updated_at",
    "fieldname": "_updated_at",
    "fieldtype": "Datetime",
    "is_virtual": 1,
@@ -404,6 +406,7 @@
    "collapsible": 1,
    "fieldname": "website_form_selection",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Th\u00f4ng Tin Form Website"
   },
   {
@@ -450,6 +453,7 @@
    "collapsible": 1,
    "fieldname": "stringee_selection",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Th\u00f4ng tin Stringee"
   },
   {
@@ -503,7 +507,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-29 02:05:29.171540",
+ "modified": "2025-05-06 02:39:28.457767",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
