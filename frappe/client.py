@@ -508,14 +508,13 @@ def insert_doc(doc) -> "Document":
 		pancake_list_tags = doc.get("pancake_tags", [])
 		pancake_phone = doc.get("phone", "")
 		is_valid_phone = validate_phone_number(pancake_phone)
-		if is_valid_phone is False:
+		if not is_valid_phone:
 			doc["phone"] = ""
 		
 		frappe_doc = frappe.get_doc(doc)
 		try:
-			"""
-			Insert a new Lead
-			"""
+			
+			#Insert a new Lead
 			frappe_doc = frappe_doc.insert()
 			if len(pancake_list_tags) > 0:
 				for tag in pancake_list_tags:
