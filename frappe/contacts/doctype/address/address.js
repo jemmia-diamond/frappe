@@ -75,8 +75,8 @@ frappe.ui.form.on("Address", {
 
 	onload: function (frm) {
 		frm.set_df_property("province", "options", provinces);
-		frm.set_df_property("district", "options", [frm.doc.district])
-		frm.set_df_property("ward", "options", [frm.doc.ward])
+		frm.set_df_property("district", "options", frm.doc.district ? [frm.doc.district] : [])
+		frm.set_df_property("ward", "options", frm.doc.ward ? [frm.doc.ward] : [])
 	},
 
 	province: function (frm) {
