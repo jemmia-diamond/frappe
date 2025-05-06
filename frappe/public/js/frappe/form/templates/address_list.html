@@ -19,11 +19,11 @@
 			{% } %} -->
 			{% if (addr.is_primary_address) { %}
 				&nbsp;&#183;&nbsp;
-				<span class="text-muted">{%= __("Đại Chỉ Chính") %}</span>
+				<span class="text-muted">{%= __("Primary Address") %}</span>
 			{% } %}
 			{% if (addr.is_shipping_address) { %}
 				&nbsp;&#183;&nbsp;
-				<span class="text-muted">{%= __("Địa Chỉ Giao Hàng") %}</span>
+				<span class="text-muted">{%= __("Shipping Address") %}</span>
 			{% } %}
 			{% if (addr.disabled) { %}
 				&nbsp;&#183;&nbsp;
@@ -44,11 +44,11 @@
 {% } %}
 
 {% if (!addr_list.length) { %}
-	<p class="text-muted small">{%= __("Chưa có địa chỉ được thêm.") %}</p>
+	<p class="text-muted small">{%= __("No address added yet.") %}</p>
 {% } %}
 
 <p>
 	<button class="btn btn-xs btn-default btn-address">
-		{{ __("Thêm Địa Chỉ") }}
+		{{ __("New Address") }}
 	</button>
 </p>
