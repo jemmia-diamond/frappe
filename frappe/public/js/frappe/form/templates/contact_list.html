@@ -25,9 +25,9 @@
 				<span class="text-muted"> {%= contact.designation %}</span>
 			{% } %}
 
-			<div><span>Nguồn: {%= contact.source_name %}</span></div>
-			<div><span>Ngày tạo: {%= contact.inserted_at %}</span></div>
-			<div><span>Lần tương tác gần nhất: {%= contact.pancake_updated_at %}</span></div>
+			<div><span>Source: {%= contact.source_name %}</span></div>
+			<div><span>Created Date: {%= contact.inserted_at %}</span></div>
+			<div><span>Last Contact Date: {%= contact.pancake_updated_at %}</span></div>
 
 		</p>
 		{% if (contact.phone || contact.mobile_no || contact.phone_nos.length > 0) { %}
