@@ -31,6 +31,7 @@
   "company_name",
   "image",
   "_updated_at",
+  "source_name",
   "more_info",
   "column_break_smxk",
   "type",
@@ -500,6 +501,12 @@
    "fieldname": "video_call",
    "fieldtype": "Check",
    "label": "Cu\u1ed9c G\u1ecdi Video"
+  },
+  {
+   "fetch_from": "source.source_name",
+   "fieldname": "source_name",
+   "fieldtype": "Read Only",
+   "label": "Source Name"
   }
  ],
  "icon": "fa fa-user",
@@ -507,7 +514,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-06 02:39:28.457767",
+ "modified": "2025-05-06 21:58:03.848261",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
