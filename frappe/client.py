@@ -13,7 +13,6 @@ from frappe.model.db_query import check_parent_permission
 from frappe.model.utils import is_virtual_doctype
 from frappe.utils import get_safe_filters
 from frappe.utils.deprecations import deprecated
-import re
 
 if TYPE_CHECKING:
 	from frappe.model.document import Document
@@ -201,6 +200,7 @@ def insert(doc=None):
 
 	return insert_doc(doc).as_dict()
 
+
 @frappe.whitelist(methods=["POST", "PUT"])
 def insert_many(docs=None):
 	"""Insert multiple documents
@@ -211,8 +211,9 @@ def insert_many(docs=None):
 
 	if len(docs) > 200:
 		frappe.throw(_("Only 200 inserts allowed in one request"))
-	
+
 	return [insert_doc(doc).name for doc in docs]
+
 
 @frappe.whitelist(methods=["POST", "PUT"])
 def save(doc):
@@ -292,9 +293,10 @@ def bulk_update(docs):
 
 	return {"failed_docs": failed_docs}
 
+
 @frappe.whitelist()
-def has_permission(doctype, docname, perm_type="read"):
-	"""Returns a JSON with data whether the document has the requested permission
+def has_permission(doctype: str, docname: str, perm_type: str = "read"):
+	"""Return a JSON with data whether the document has the requested permission.
 
 	:param doctype: DocType of the document to be checked
 	:param docname: `name` of the document to be checked
@@ -304,8 +306,8 @@ def has_permission(doctype, docname, perm_type="read"):
 
 
 @frappe.whitelist()
-def get_doc_permissions(doctype, docname):
-	"""Returns an evaluated document permissions dict like `{"read":1, "write":1}`
+def get_doc_permissions(doctype: str, docname: str):
+	"""Return an evaluated document permissions dict like `{"read":1, "write":1}`.
 
 	:param doctype: DocType of the document to be evaluated
 	:param docname: `name` of the document to be evaluated
@@ -315,7 +317,7 @@ def get_doc_permissions(doctype, docname):
 
 
 @frappe.whitelist()
-def get_password(doctype, name, fieldname):
+def get_password(doctype: str, name: str, fieldname: str):
 	"""Return a password type property. Only applicable for System Managers
 
 	:param doctype: DocType of the document that holds the password
@@ -403,7 +405,7 @@ def attach_file(
 
 
 @frappe.whitelist()
-def is_document_amended(doctype, docname):
+def is_document_amended(doctype: str, docname: str):
 	if frappe.permissions.has_permission(doctype):
 		try:
 			return frappe.db.exists(doctype, {"amended_from": docname})
@@ -486,6 +488,7 @@ def insert_doc(doc) -> "Document":
 		return parent
 
 	return frappe.get_doc(doc).insert()
+
 
 def delete_doc(doctype, name):
 	"""Deletes document
