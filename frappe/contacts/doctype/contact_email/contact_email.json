@@ -23,12 +23,12 @@
    "fieldname": "is_primary",
    "fieldtype": "Check",
    "in_list_view": 1,
-   "label": "Email Ch\u00ednh"
+   "label": "Is Primary"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2025-04-17 21:47:36.703927",
+ "modified": "2025-05-07 03:09:54.693785",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact Email",

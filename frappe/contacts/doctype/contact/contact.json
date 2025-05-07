@@ -43,7 +43,7 @@
   "column_break_rtxe",
   "last_outgoing_call_time",
   "last_incoming_call_time",
-  "th\u00f4ng_tin_pancake_section",
+  "pancake_section",
   "pancake_conversation_id",
   "inserted_at",
   "pancake_updated_at",
@@ -83,14 +83,14 @@
   {
    "fieldname": "contact_section",
    "fieldtype": "Section Break",
-   "label": "Th\u00f4ng Tin C\u01a1 B\u1ea3n",
+   "label": "Contact Section",
    "options": "fa fa-user"
   },
   {
    "fieldname": "first_name",
    "fieldtype": "Data",
    "in_global_search": 1,
-   "label": "H\u1ecd V\u00e0 T\u00ean",
+   "label": "Contact Name",
    "oldfieldname": "first_name",
    "oldfieldtype": "Data"
   },
@@ -134,19 +134,19 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Tr\u1ea1ng Th\u00e1i",
+   "label": "Contact Status",
    "options": "Passive\nOpen\nReplied"
   },
   {
    "fieldname": "salutation",
    "fieldtype": "Link",
-   "label": "Danh X\u01b0ng",
+   "label": "Salutation",
    "options": "Salutation"
   },
   {
    "fieldname": "gender",
    "fieldtype": "Link",
-   "label": "Gi\u1edbi T\u00ednh",
+   "label": "Gender",
    "link_filters": "[[\"Gender\",\"name\",\"in\",[\"Nam\",\"N\u1eef\",\"Kh\u00e1c\"]]]",
    "options": "Gender"
   },
@@ -179,7 +179,7 @@
    "default": "0",
    "fieldname": "is_primary_contact",
    "fieldtype": "Check",
-   "label": "Ch\u1ecdn l\u00e0m \u0111\u1ecba ch\u1ec9 li\u00ean h\u1ec7 ch\u00ednh",
+   "label": "Is Primary Contact",
    "oldfieldname": "is_primary_contact",
    "oldfieldtype": "Select"
   },
@@ -193,7 +193,7 @@
    "collapsible": 1,
    "fieldname": "more_info",
    "fieldtype": "Section Break",
-   "label": "Th\u00f4ng Tin Kh\u00e1c",
+   "label": "More Information",
    "options": "fa fa-file-text"
   },
   {
@@ -232,19 +232,19 @@
   {
    "fieldname": "email_ids",
    "fieldtype": "Table",
-   "label": "Danh S\u00e1ch Emails",
+   "label": "email list",
    "options": "Contact Email"
   },
   {
    "fieldname": "address",
    "fieldtype": "Link",
-   "label": "\u0110\u1ecba Ch\u1ec9",
+   "label": "Address",
    "options": "Address"
   },
   {
    "fieldname": "phone_nos",
    "fieldtype": "Table",
-   "label": "Danh s\u00e1ch s\u1ed1 \u0111i\u1ec7n tho\u1ea1i",
+   "label": "phone list",
    "options": "Contact Phone"
   },
   {
@@ -282,7 +282,7 @@
   {
    "fieldname": "sb_01",
    "fieldtype": "Section Break",
-   "label": "Chi Ti\u1ebft Li\u00ean H\u1ec7"
+   "label": "Contact Detail"
   },
   {
    "fieldname": "google_contacts_id",
@@ -308,35 +308,35 @@
    "fieldname": "source_group",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Nh\u00f3m Ngu\u1ed3n",
-   "options": "Facebook\nZalo\nTiktok\n\u0110i\u1ec7n Tho\u1ea1i\nForm Website\nKh\u00e1ch V\u00e3ng Lai\nEmail",
+   "label": "Source_group",
+   "options": "Facebook\nZalo\nTiktok\nPhone\nForm Website\nEmail\nOrthers",
    "reqd": 1
   },
   {
    "fieldname": "source",
    "fieldtype": "Link",
-   "label": "Ngu\u1ed3n",
+   "label": "Source",
    "options": "Lead Source"
   },
   {
    "fieldname": "first_message_time",
    "fieldtype": "Datetime",
-   "label": "Th\u1eddi Gian Tin Nh\u1eafn \u0110\u1ea7u"
+   "label": "First Message Time"
   },
   {
    "fieldname": "last_message_time",
    "fieldtype": "Datetime",
-   "label": "Th\u1eddi Gian Tin Nh\u1eafn Cu\u1ed1i"
+   "label": "Last Message Time"
   },
   {
    "fieldname": "last_incoming_call_time",
    "fieldtype": "Datetime",
-   "label": "Th\u1eddi Gian G\u1ecdi \u0110\u1ebfn G\u1ea7n Nh\u1ea5t"
+   "label": "Last Incoming Call Time"
   },
   {
    "fieldname": "last_outgoing_call_time",
    "fieldtype": "Datetime",
-   "label": "Th\u1eddi Gian G\u1ecdi \u0110i G\u1ea7n Nh\u1ea5t"
+   "label": "Last Outgoing Call Time"
   },
   {
    "fieldname": "column_break_smxk",
@@ -345,23 +345,16 @@
   {
    "fieldname": "phone_number_provided_time",
    "fieldtype": "Datetime",
-   "label": "Th\u1eddi Gian \u0110\u1ec3 L\u1ea1i S\u1ed1 \u0110i\u1ec7n Tho\u1ea1i"
+   "label": "Phone Number Provided Time"
   },
   {
    "fieldname": "type",
    "fieldtype": "Data",
-   "label": "Lo\u1ea1i"
+   "label": "Contact Type"
   },
   {
    "fieldname": "column_break_rtxe",
    "fieldtype": "Column Break"
-  },
-  {
-   "collapsible": 1,
-   "fieldname": "th\u00f4ng_tin_pancake_section",
-   "fieldtype": "Section Break",
-   "hidden": 1,
-   "label": "Th\u00f4ng Tin Pancake"
   },
   {
    "fieldname": "inserted_at",
@@ -389,7 +382,7 @@
    "fieldname": "_updated_at",
    "fieldtype": "Datetime",
    "is_virtual": 1,
-   "label": "Th\u1eddi gian t\u01b0\u01a1ng t\u00e1c g\u1ea7n nh\u1ea5t",
+   "label": "The Nearest Interaction Time",
    "options": "doc.pancake_updated_at"
   },
   {
@@ -400,7 +393,7 @@
   {
    "fieldname": "lead_owner",
    "fieldtype": "Link",
-   "label": "Ph\u1ee5 Tr\u00e1ch",
+   "label": "Lead_Owner",
    "options": "User"
   },
   {
@@ -408,7 +401,7 @@
    "fieldname": "website_form_selection",
    "fieldtype": "Section Break",
    "hidden": 1,
-   "label": "Th\u00f4ng Tin Form Website"
+   "label": "Form Website"
   },
   {
    "fieldname": "page_url",
@@ -433,7 +426,7 @@
   {
    "fieldname": "form_name",
    "fieldtype": "Data",
-   "label": "T\u00ean Form"
+   "label": "Form Name"
   },
   {
    "fieldname": "pancake_conversation_id",
@@ -455,7 +448,7 @@
    "fieldname": "stringee_selection",
    "fieldtype": "Section Break",
    "hidden": 1,
-   "label": "Th\u00f4ng tin Stringee"
+   "label": "Stringee"
   },
   {
    "fieldname": "stringee_id",
@@ -466,47 +459,54 @@
   {
    "fieldname": "stringee_to_number",
    "fieldtype": "Data",
-   "label": "G\u1ecdi T\u1eeb"
+   "label": "Stringee To Number"
   },
   {
    "fieldname": "stringee_from_number",
    "fieldtype": "Data",
-   "label": "G\u1ecdi \u0110\u1ebfn"
+   "label": "Stringee From Number"
   },
   {
    "fieldname": "stringee_start_time",
    "fieldtype": "Datetime",
-   "label": "B\u1eaft \u0110\u1ea7u G\u1ecdi L\u00fac"
+   "label": "Stringee Start Time"
   },
   {
    "default": "0",
    "fieldname": "stringee_from_internal",
    "fieldtype": "Check",
-   "label": "G\u1ecdi \u0110i"
+   "label": "Outcoming"
   },
   {
    "default": "0",
    "fieldname": "stringee_to_internal",
    "fieldtype": "Check",
-   "label": "G\u1ecdi \u0110\u1ebfn"
+   "label": "Incoming"
   },
   {
    "default": "0",
    "fieldname": "stringee_recorded",
    "fieldtype": "Check",
-   "label": "\u0110\u00e3 Ghi \u00c2m"
+   "label": "Stringee Recorded"
   },
   {
    "default": "0",
    "fieldname": "video_call",
    "fieldtype": "Check",
-   "label": "Cu\u1ed9c G\u1ecdi Video"
+   "label": "Video Call"
   },
   {
    "fetch_from": "source.source_name",
    "fieldname": "source_name",
    "fieldtype": "Read Only",
    "label": "Source Name"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "pancake_section",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Pancake"
   }
  ],
  "icon": "fa fa-user",
@@ -514,7 +514,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-06 21:58:03.848261",
+ "modified": "2025-05-07 03:08:20.634280",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",

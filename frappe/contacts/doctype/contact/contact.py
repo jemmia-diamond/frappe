@@ -62,7 +62,7 @@ class Contact(Document):
 		remote_ip: DF.Data | None
 		salutation: DF.Link | None
 		source: DF.Link | None
-		source_group: DF.Literal["Facebook", "Zalo", "Tiktok", "\u0110i\u1ec7n Tho\u1ea1i", "Form Website", "Kh\u00e1ch V\u00e3ng Lai", "Email"]
+		source_group: DF.Literal["Facebook", "Zalo", "Tiktok", "Phone", "Form Website", "Email", "Orthers"]
 		source_name: DF.ReadOnly | None
 		status: DF.Literal["Passive", "Open", "Replied"]
 		stringee_from_internal: DF.Check
