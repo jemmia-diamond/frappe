@@ -85,9 +85,8 @@ class Contact(Document):
 		self.full_name = self._get_full_name()
 		self.set_primary_email()
 		self.set_primary("phone")
-		#self.set_primary("mobile_no")
 
-		#added role check duplicate primary phone
+		# added role check duplicate primary phone
 		self.check_phone_is_unique()
 
 		self.set_user()
@@ -161,7 +160,6 @@ class Contact(Document):
 				fields=["parent"],
 				distinct=True
 			)
-			
 			if duplicate_contacts:
 				contact_names = [contact.parent for contact in duplicate_contacts]
 				frappe.throw(
