@@ -56,7 +56,6 @@ class Address(Document):
 	def __setup__(self):
 		self.flags.linked = False
 
-
 	def validate(self):
 		self.link_address()
 		self.validate_preferred_address()
