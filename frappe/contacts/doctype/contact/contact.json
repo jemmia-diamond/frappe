@@ -459,7 +459,7 @@
   {
    "fieldname": "stringee_id",
    "fieldtype": "Data",
-   "label": "Stringee_id",
+   "label": "Stringee ID",
    "unique": 1
   },
   {
