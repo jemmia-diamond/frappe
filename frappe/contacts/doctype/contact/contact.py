@@ -62,7 +62,7 @@ class Contact(Document):
 		remote_ip: DF.Data | None
 		salutation: DF.Link | None
 		source: DF.Link | None
-		source_group: DF.Literal["Facebook", "Zalo", "Tiktok", "Phone", "Form Website", "Email", "Orthers"]
+		source_group: DF.Literal["Facebook", "Zalo", "Tiktok", "Phone", "Website Form", "Email", "Orther"]
 		source_name: DF.ReadOnly | None
 		status: DF.Literal["Passive", "Open", "Replied"]
 		stringee_from_internal: DF.Check
@@ -144,8 +144,6 @@ class Contact(Document):
 
 			if autosave:
 				self.save(ignore_permissions=True)
-
-
 
 	def check_phone_is_unique(self):
 		"""check duplicate primary"""
