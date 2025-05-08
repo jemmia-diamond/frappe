@@ -400,7 +400,6 @@
    "collapsible": 1,
    "fieldname": "website_form_selection",
    "fieldtype": "Section Break",
-   "hidden": 1,
    "label": "Form Website"
   },
   {
@@ -447,7 +446,6 @@
    "collapsible": 1,
    "fieldname": "stringee_selection",
    "fieldtype": "Section Break",
-   "hidden": 1,
    "label": "Stringee"
   },
   {
@@ -505,7 +503,6 @@
    "collapsible": 1,
    "fieldname": "pancake_section",
    "fieldtype": "Section Break",
-   "hidden": 1,
    "label": "Pancake"
   }
  ],
@@ -514,7 +511,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-07 03:37:14.530874",
+ "modified": "2025-05-07 20:25:13.417853",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
