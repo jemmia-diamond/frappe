@@ -147,7 +147,7 @@
    "fieldname": "gender",
    "fieldtype": "Link",
    "label": "Gender",
-   "link_filters": "[[\"Gender\",\"name\",\"in\",[\"Nam\",\"N\u1eef\",\"Kh\u00e1c\"]]]",
+   "link_filters": "[]",
    "options": "Gender"
   },
   {
@@ -232,7 +232,7 @@
   {
    "fieldname": "email_ids",
    "fieldtype": "Table",
-   "label": "email list",
+   "label": "Email List",
    "options": "Contact Email"
   },
   {
@@ -244,7 +244,7 @@
   {
    "fieldname": "phone_nos",
    "fieldtype": "Table",
-   "label": "phone list",
+   "label": "Phone List",
    "options": "Contact Phone"
   },
   {
@@ -308,7 +308,7 @@
    "fieldname": "source_group",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Source_group",
+   "label": "Source Group",
    "options": "Facebook\nZalo\nTiktok\nPhone\nForm Website\nEmail\nOrthers",
    "reqd": 1
   },
@@ -393,7 +393,7 @@
   {
    "fieldname": "lead_owner",
    "fieldtype": "Link",
-   "label": "Lead_Owner",
+   "label": "Lead Owner",
    "options": "User"
   },
   {
@@ -514,7 +514,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-07 03:08:20.634280",
+ "modified": "2025-05-07 03:37:14.530874",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
