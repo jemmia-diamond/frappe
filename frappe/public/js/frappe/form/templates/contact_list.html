@@ -24,6 +24,11 @@
 				&nbsp;&#183;&nbsp;
 				<span class="text-muted"> {%= contact.designation %}</span>
 			{% } %}
+
+			<div><span>Source: {%= contact.source_name %}</span></div>
+			<div><span>Created Date: {%= contact.inserted_at %}</span></div>
+			<div><span>Last Contact Date: {%= contact.pancake_updated_at %}</span></div>
+
 		</p>
 		{% if (contact.phone || contact.mobile_no || contact.phone_nos.length > 0) { %}
 		<p>
@@ -71,11 +76,6 @@
 					<br>
 				{% } %}
 			{% endif %}
-		</p>
-		{% endif %}
-		{% if (contact.address) { %}
-		<p>
-			{%= contact.address %}
 		</p>
 		{% endif %}
 	</div>

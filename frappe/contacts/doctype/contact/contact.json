@@ -3,55 +3,94 @@
  "allow_events_in_timeline": 1,
  "allow_import": 1,
  "allow_rename": 1,
+ "autoname": "CRM-CONTACT-.YYYY.-.#######",
  "creation": "2013-01-10 16:34:32",
  "doctype": "DocType",
  "document_type": "Setup",
  "engine": "InnoDB",
  "field_order": [
   "contact_section",
-  "first_name",
-  "middle_name",
-  "last_name",
-  "full_name",
-  "email_id",
-  "user",
-  "address",
-  "sync_with_google_contacts",
-  "cb00",
-  "status",
   "salutation",
-  "designation",
+  "first_name",
+  "address",
   "gender",
+  "sync_with_google_contacts",
+  "middle_name",
+  "full_name",
+  "last_name",
+  "user",
+  "cb00",
+  "lead_owner",
+  "source_group",
+  "source",
+  "status",
+  "designation",
   "phone",
+  "email_id",
   "mobile_no",
   "company_name",
   "image",
+  "_updated_at",
+  "source_name",
+  "more_info",
+  "column_break_smxk",
+  "type",
+  "first_message_time",
+  "last_message_time",
+  "phone_number_provided_time",
+  "department",
+  "unsubscribed",
+  "column_break_rtxe",
+  "last_outgoing_call_time",
+  "last_incoming_call_time",
+  "pancake_section",
+  "pancake_conversation_id",
+  "inserted_at",
+  "pancake_updated_at",
+  "pancake_customer_id",
+  "thread_id",
+  "psid",
+  "can_inbox",
+  "pancake_page_id",
+  "website_form_selection",
+  "page_url",
+  "user_agent",
+  "remote_ip",
+  "form_id",
+  "form_name",
+  "stringee_selection",
+  "stringee_id",
+  "stringee_to_number",
+  "stringee_from_number",
+  "stringee_start_time",
+  "stringee_from_internal",
+  "stringee_to_internal",
+  "stringee_recorded",
+  "video_call",
   "sb_00",
   "google_contacts",
   "google_contacts_id",
   "cb_00",
   "pulled_from_google_contacts",
   "sb_01",
-  "email_ids",
-  "phone_nos",
-  "contact_details",
-  "links",
   "is_primary_contact",
-  "more_info",
-  "department",
-  "unsubscribed"
+  "phone_nos",
+  "email_ids",
+  "contact_details",
+  "links"
  ],
  "fields": [
   {
    "fieldname": "contact_section",
    "fieldtype": "Section Break",
+   "label": "Contact Section",
    "options": "fa fa-user"
   },
   {
    "fieldname": "first_name",
    "fieldtype": "Data",
    "in_global_search": 1,
-   "label": "First Name",
+   "label": "Contact Name",
    "oldfieldname": "first_name",
    "oldfieldtype": "Data"
   },
@@ -59,6 +98,7 @@
    "bold": 1,
    "fieldname": "last_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Last Name",
    "oldfieldname": "last_name",
    "oldfieldtype": "Data"
@@ -81,7 +121,8 @@
    "fieldtype": "Link",
    "in_global_search": 1,
    "label": "User Id",
-   "options": "User"
+   "options": "User",
+   "search_index": 1
   },
   {
    "fieldname": "cb00",
@@ -106,6 +147,7 @@
    "fieldname": "gender",
    "fieldtype": "Link",
    "label": "Gender",
+   "link_filters": "[]",
    "options": "Gender"
   },
   {
@@ -127,6 +169,7 @@
    "print_hide": 1
   },
   {
+   "collapsible": 1,
    "fieldname": "contact_details",
    "fieldtype": "Section Break",
    "label": "Reference",
@@ -147,6 +190,7 @@
    "options": "Dynamic Link"
   },
   {
+   "collapsible": 1,
    "fieldname": "more_info",
    "fieldtype": "Section Break",
    "label": "More Information",
@@ -155,22 +199,26 @@
   {
    "fieldname": "department",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Department"
   },
   {
    "fieldname": "designation",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Designation"
   },
   {
    "default": "0",
    "fieldname": "unsubscribed",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Unsubscribed"
   },
   {
    "fieldname": "middle_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Middle Name"
   },
   {
@@ -178,12 +226,13 @@
    "depends_on": "eval:doc.sync_with_google_contacts || doc.pulled_from_google_contacts",
    "fieldname": "sb_00",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Google Contacts"
   },
   {
    "fieldname": "email_ids",
    "fieldtype": "Table",
-   "label": "Email IDs",
+   "label": "Email List",
    "options": "Contact Email"
   },
   {
@@ -195,12 +244,13 @@
   {
    "fieldname": "phone_nos",
    "fieldtype": "Table",
-   "label": "Contact Numbers",
+   "label": "Phone List",
    "options": "Contact Phone"
   },
   {
    "fieldname": "mobile_no",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Mobile No",
    "options": "Phone",
    "read_only": 1
@@ -216,6 +266,7 @@
    "default": "0",
    "fieldname": "sync_with_google_contacts",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Sync with Google Contacts"
   },
   {
@@ -242,6 +293,7 @@
   {
    "fieldname": "company_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Company Name"
   },
   {
@@ -250,6 +302,208 @@
    "hidden": 1,
    "label": "Full Name",
    "read_only": 1
+  },
+  {
+   "default": "Facebook",
+   "fieldname": "source_group",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Source Group",
+   "options": "Facebook\nZalo\nTiktok\nPhone\nForm Website\nEmail\nOrthers",
+   "reqd": 1
+  },
+  {
+   "fieldname": "source",
+   "fieldtype": "Link",
+   "label": "Source",
+   "options": "Lead Source"
+  },
+  {
+   "fieldname": "first_message_time",
+   "fieldtype": "Datetime",
+   "label": "First Message Time"
+  },
+  {
+   "fieldname": "last_message_time",
+   "fieldtype": "Datetime",
+   "label": "Last Message Time"
+  },
+  {
+   "fieldname": "last_incoming_call_time",
+   "fieldtype": "Datetime",
+   "label": "Last Incoming Call Time"
+  },
+  {
+   "fieldname": "last_outgoing_call_time",
+   "fieldtype": "Datetime",
+   "label": "Last Outgoing Call Time"
+  },
+  {
+   "fieldname": "column_break_smxk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "phone_number_provided_time",
+   "fieldtype": "Datetime",
+   "label": "Phone Number Provided Time"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Data",
+   "label": "Contact Type"
+  },
+  {
+   "fieldname": "column_break_rtxe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "inserted_at",
+   "fieldtype": "Datetime",
+   "label": "inserted_at"
+  },
+  {
+   "fieldname": "thread_id",
+   "fieldtype": "Data",
+   "label": "thread_id"
+  },
+  {
+   "fieldname": "psid",
+   "fieldtype": "Data",
+   "label": "psid"
+  },
+  {
+   "default": "0",
+   "fieldname": "can_inbox",
+   "fieldtype": "Check",
+   "label": "can_inbox"
+  },
+  {
+   "default": "updated_at",
+   "fieldname": "_updated_at",
+   "fieldtype": "Datetime",
+   "is_virtual": 1,
+   "label": "The Nearest Interaction Time",
+   "options": "doc.pancake_updated_at"
+  },
+  {
+   "fieldname": "pancake_updated_at",
+   "fieldtype": "Datetime",
+   "label": "updated_at"
+  },
+  {
+   "fieldname": "lead_owner",
+   "fieldtype": "Link",
+   "label": "Lead Owner",
+   "options": "User"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "website_form_selection",
+   "fieldtype": "Section Break",
+   "label": "Form Website"
+  },
+  {
+   "fieldname": "page_url",
+   "fieldtype": "Data",
+   "label": "Page URL"
+  },
+  {
+   "fieldname": "user_agent",
+   "fieldtype": "Data",
+   "label": "User Agent"
+  },
+  {
+   "fieldname": "remote_ip",
+   "fieldtype": "Data",
+   "label": "Remote IP"
+  },
+  {
+   "fieldname": "form_id",
+   "fieldtype": "Data",
+   "label": "Form ID"
+  },
+  {
+   "fieldname": "form_name",
+   "fieldtype": "Data",
+   "label": "Form Name"
+  },
+  {
+   "fieldname": "pancake_conversation_id",
+   "fieldtype": "Data",
+   "label": "pancake_conversation_id"
+  },
+  {
+   "fieldname": "pancake_customer_id",
+   "fieldtype": "Data",
+   "label": "pancake_customer_id"
+  },
+  {
+   "fieldname": "pancake_page_id",
+   "fieldtype": "Data",
+   "label": "pancake_page_id"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "stringee_selection",
+   "fieldtype": "Section Break",
+   "label": "Stringee"
+  },
+  {
+   "fieldname": "stringee_id",
+   "fieldtype": "Data",
+   "label": "Stringee ID",
+   "unique": 1
+  },
+  {
+   "fieldname": "stringee_to_number",
+   "fieldtype": "Data",
+   "label": "Stringee To Number"
+  },
+  {
+   "fieldname": "stringee_from_number",
+   "fieldtype": "Data",
+   "label": "Stringee From Number"
+  },
+  {
+   "fieldname": "stringee_start_time",
+   "fieldtype": "Datetime",
+   "label": "Stringee Start Time"
+  },
+  {
+   "default": "0",
+   "fieldname": "stringee_from_internal",
+   "fieldtype": "Check",
+   "label": "Outcoming"
+  },
+  {
+   "default": "0",
+   "fieldname": "stringee_to_internal",
+   "fieldtype": "Check",
+   "label": "Incoming"
+  },
+  {
+   "default": "0",
+   "fieldname": "stringee_recorded",
+   "fieldtype": "Check",
+   "label": "Stringee Recorded"
+  },
+  {
+   "default": "0",
+   "fieldname": "video_call",
+   "fieldtype": "Check",
+   "label": "Video Call"
+  },
+  {
+   "fetch_from": "source.source_name",
+   "fieldname": "source_name",
+   "fieldtype": "Read Only",
+   "label": "Source Name"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "pancake_section",
+   "fieldtype": "Section Break",
+   "label": "Pancake"
   }
  ],
  "icon": "fa fa-user",
@@ -257,11 +511,10 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-08 15:52:37.525003",
+ "modified": "2025-05-07 20:25:13.417853",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
- "name_case": "Title Case",
  "naming_rule": "By script",
  "owner": "Administrator",
  "permissions": [
@@ -390,9 +643,11 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "full_name"
+ "title_field": "first_name",
+ "translated_doctype": 1
 }

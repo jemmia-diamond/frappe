@@ -22,49 +22,72 @@ class Contact(Document):
 		from frappe.core.doctype.dynamic_link.dynamic_link import DynamicLink
 		from frappe.types import DF
 
+		_updated_at: DF.Datetime | None
 		address: DF.Link | None
+		can_inbox: DF.Check
 		company_name: DF.Data | None
 		department: DF.Data | None
 		designation: DF.Data | None
 		email_id: DF.Data | None
 		email_ids: DF.Table[ContactEmail]
+		first_message_time: DF.Datetime | None
 		first_name: DF.Data | None
+		form_id: DF.Data | None
+		form_name: DF.Data | None
 		full_name: DF.Data | None
 		gender: DF.Link | None
 		google_contacts: DF.Link | None
 		google_contacts_id: DF.Data | None
 		image: DF.AttachImage | None
+		inserted_at: DF.Datetime | None
 		is_primary_contact: DF.Check
+		last_incoming_call_time: DF.Datetime | None
+		last_message_time: DF.Datetime | None
 		last_name: DF.Data | None
+		last_outgoing_call_time: DF.Datetime | None
+		lead_owner: DF.Link | None
 		links: DF.Table[DynamicLink]
 		middle_name: DF.Data | None
 		mobile_no: DF.Data | None
+		page_url: DF.Data | None
+		pancake_conversation_id: DF.Data | None
+		pancake_customer_id: DF.Data | None
+		pancake_page_id: DF.Data | None
+		pancake_updated_at: DF.Datetime | None
 		phone: DF.Data | None
 		phone_nos: DF.Table[ContactPhone]
+		phone_number_provided_time: DF.Datetime | None
+		psid: DF.Data | None
 		pulled_from_google_contacts: DF.Check
+		remote_ip: DF.Data | None
 		salutation: DF.Link | None
+		source: DF.Link | None
+		source_group: DF.Literal["Facebook", "Zalo", "Tiktok", "Phone", "Website Form", "Email", "Other"]
+		source_name: DF.ReadOnly | None
 		status: DF.Literal["Passive", "Open", "Replied"]
+		stringee_from_internal: DF.Check
+		stringee_from_number: DF.Data | None
+		stringee_id: DF.Data | None
+		stringee_recorded: DF.Check
+		stringee_start_time: DF.Datetime | None
+		stringee_to_internal: DF.Check
+		stringee_to_number: DF.Data | None
 		sync_with_google_contacts: DF.Check
+		thread_id: DF.Data | None
+		type: DF.Data | None
 		unsubscribed: DF.Check
 		user: DF.Link | None
-
+		user_agent: DF.Data | None
+		video_call: DF.Check
 	# end: auto-generated types
-	def autoname(self):
-		self.name = self._get_full_name()
-
-		# concat party name if reqd
-		for link in self.links:
-			self.name = self.name + "-" + link.link_name.strip()
-			break
-
-		if frappe.db.exists("Contact", self.name):
-			self.name = append_number_if_name_exists("Contact", self.name)
 
 	def validate(self):
 		self.full_name = self._get_full_name()
 		self.set_primary_email()
 		self.set_primary("phone")
-		self.set_primary("mobile_no")
+
+		# added role check duplicate primary phone
+		self.check_phone_is_unique()
 
 		self.set_user()
 
@@ -121,6 +144,29 @@ class Contact(Document):
 
 			if autosave:
 				self.save(ignore_permissions=True)
+
+	def check_phone_is_unique(self):
+		"""check duplicate primary"""
+		if self.phone:
+			duplicate_contacts = frappe.get_all(
+				"Contact Phone",
+				filters={
+					"phone": self.phone,
+					"is_primary_phone": 1,
+					"parent": ["!=", self.name]
+				},
+				fields=["parent"],
+				distinct=True
+			)
+			if duplicate_contacts:
+				contact_names = [contact.parent for contact in duplicate_contacts]
+				frappe.throw(
+					_("Primary Phone Number must be unique, it is already used in Contact(s): {0}").format(
+						", ".join(contact_names)
+					),
+					frappe.DuplicateEntryError,
+					title=_("Duplicate Phone Number")
+				)
 
 	def set_primary_email(self):
 		if not self.email_ids:

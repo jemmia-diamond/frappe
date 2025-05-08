@@ -2,24 +2,29 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
+ "autoname": "CRM-ADDRESS-.YYYY.-.#######",
  "creation": "2013-01-10 16:34:32",
  "doctype": "DocType",
  "document_type": "Setup",
  "engine": "InnoDB",
  "field_order": [
   "address_details",
-  "address_title",
   "address_type",
-  "address_line1",
+  "address_name",
+  "phone",
+  "email_id",
   "address_line2",
+  "address_title",
   "city",
   "county",
   "state",
-  "country",
   "pincode",
   "column_break0",
-  "email_id",
-  "phone",
+  "country",
+  "province",
+  "district",
+  "ward",
+  "address_line1",
   "fax",
   "is_primary_address",
   "is_shipping_address",
@@ -36,6 +41,7 @@
   {
    "fieldname": "address_title",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Address Title"
   },
   {
@@ -57,29 +63,32 @@
   {
    "fieldname": "address_line2",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Address Line 2",
    "length": 240
   },
   {
    "fieldname": "city",
    "fieldtype": "Data",
+   "hidden": 1,
    "in_global_search": 1,
-   "in_list_view": 1,
    "label": "City/Town",
-   "reqd": 1,
    "search_index": 1
   },
   {
    "fieldname": "county",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "County"
   },
   {
    "fieldname": "state",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "State/Province"
   },
   {
+   "default": "Vietnam",
    "fieldname": "country",
    "fieldtype": "Link",
    "in_global_search": 1,
@@ -92,6 +101,7 @@
   {
    "fieldname": "pincode",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Postal Code",
    "search_index": 1
   },
@@ -114,24 +124,28 @@
   {
    "fieldname": "fax",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Fax"
   },
   {
    "default": "0",
    "fieldname": "is_primary_address",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Preferred Billing Address"
   },
   {
    "default": "0",
    "fieldname": "is_shipping_address",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Preferred Shipping Address"
   },
   {
    "default": "0",
    "fieldname": "disabled",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Disabled"
   },
   {
@@ -145,15 +159,37 @@
    "fieldtype": "Table",
    "label": "Links",
    "options": "Dynamic Link"
+  },
+  {
+   "fieldname": "province",
+   "fieldtype": "Select",
+   "label": "Province"
+  },
+  {
+   "fieldname": "district",
+   "fieldtype": "Select",
+   "label": "District"
+  },
+  {
+   "fieldname": "ward",
+   "fieldtype": "Select",
+   "label": "Ward"
+  },
+  {
+   "fieldname": "address_name",
+   "fieldtype": "Data",
+   "label": "Address Name",
+   "reqd": 1
   }
  ],
  "icon": "fa fa-map-marker",
  "idx": 5,
  "links": [],
- "modified": "2023-11-20 17:28:41.698356",
+ "modified": "2025-05-07 17:19:25.015671",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
+ "naming_rule": "By script",
  "owner": "Administrator",
  "permissions": [
   {
@@ -219,8 +255,12 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "search_fields": "country, state",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "address_name",
+ "translated_doctype": 1
 }
