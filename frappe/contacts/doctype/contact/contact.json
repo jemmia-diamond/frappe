@@ -359,7 +359,7 @@
   {
    "fieldname": "inserted_at",
    "fieldtype": "Datetime",
-   "label": " Pancake Inserted At"
+   "label": "Pancake Inserted At"
   },
   {
    "fieldname": "thread_id",
