@@ -369,6 +369,7 @@
   {
    "fieldname": "psid",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "psid"
   },
   {
@@ -511,7 +512,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-07 20:25:13.417853",
+ "modified": "2025-05-08 04:06:59.427158",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
