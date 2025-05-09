@@ -359,23 +359,24 @@
   {
    "fieldname": "inserted_at",
    "fieldtype": "Datetime",
-   "label": "inserted_at"
+   "label": "Pancake Inserted At"
   },
   {
    "fieldname": "thread_id",
    "fieldtype": "Data",
-   "label": "thread_id"
+   "label": "Thread ID"
   },
   {
    "fieldname": "psid",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "psid"
   },
   {
    "default": "0",
    "fieldname": "can_inbox",
    "fieldtype": "Check",
-   "label": "can_inbox"
+   "label": "Can Inbox"
   },
   {
    "default": "updated_at",
@@ -388,7 +389,7 @@
   {
    "fieldname": "pancake_updated_at",
    "fieldtype": "Datetime",
-   "label": "updated_at"
+   "label": "Pancake Updated At"
   },
   {
    "fieldname": "lead_owner",
@@ -430,17 +431,17 @@
   {
    "fieldname": "pancake_conversation_id",
    "fieldtype": "Data",
-   "label": "pancake_conversation_id"
+   "label": "Pancake Conversation ID"
   },
   {
    "fieldname": "pancake_customer_id",
    "fieldtype": "Data",
-   "label": "pancake_customer_id"
+   "label": "Pancake Customer ID"
   },
   {
    "fieldname": "pancake_page_id",
    "fieldtype": "Data",
-   "label": "pancake_page_id"
+   "label": "Pancake Page ID"
   },
   {
    "collapsible": 1,
@@ -511,7 +512,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-07 20:25:13.417853",
+ "modified": "2025-05-08 04:06:59.427158",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
