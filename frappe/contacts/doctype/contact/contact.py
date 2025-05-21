@@ -33,9 +33,9 @@ class Contact(Document):
 		first_message_time: DF.Datetime | None
 		first_name: DF.Data | None
 		form_id: DF.Data | None
+		form_inserted_at: DF.Datetime | None
 		form_name: DF.Data | None
 		form_updated_at: DF.Datetime | None
-		from_inserted_at: DF.Datetime | None
 		full_name: DF.Data | None
 		gender: DF.Link | None
 		google_contacts: DF.Link | None

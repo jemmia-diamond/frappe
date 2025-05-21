@@ -60,7 +60,7 @@
   "remote_ip",
   "form_id",
   "form_name",
-  "from_inserted_at",
+  "form_inserted_at",
   "form_updated_at",
   "stringee_selection",
   "stringee_id",
@@ -512,11 +512,6 @@
    "label": "Pancake Inserted At"
   },
   {
-   "fieldname": "from_inserted_at",
-   "fieldtype": "Datetime",
-   "label": "From Inserted At"
-  },
-  {
    "fieldname": "stringee_end_time",
    "fieldtype": "Datetime",
    "label": "Stringee End Time"
@@ -535,6 +530,11 @@
    "fieldname": "updated_at",
    "fieldtype": "Datetime",
    "label": "Updated At"
+  },
+  {
+   "fieldname": "form_inserted_at",
+   "fieldtype": "Datetime",
+   "label": "From Inserted At"
   }
  ],
  "icon": "fa fa-user",
@@ -542,7 +542,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-20 21:41:18.730507",
+ "modified": "2025-05-20 22:04:14.585415",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
