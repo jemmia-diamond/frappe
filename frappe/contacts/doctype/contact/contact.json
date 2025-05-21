@@ -519,7 +519,7 @@
   {
    "fieldname": "form_updated_at",
    "fieldtype": "Datetime",
-   "label": "From Updated At"
+   "label": "Form Updated At"
   },
   {
    "fieldname": "updated_at",
@@ -529,7 +529,7 @@
   {
    "fieldname": "form_inserted_at",
    "fieldtype": "Datetime",
-   "label": "From Inserted At"
+   "label": "Form Inserted At"
   },
   {
    "fieldname": "inserted_at",
@@ -542,7 +542,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-20 22:20:24.016814",
+ "modified": "2025-05-21 03:54:44.914096",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
