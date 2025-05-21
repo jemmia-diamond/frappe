@@ -314,7 +314,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Source Group",
-   "options": "Facebook\nZalo\nTiktok\nPhone\nForm Website\nEmail\nOrthers",
+   "options": "Facebook\nZalo\nTiktok\nPhone\nWebsite Form\nEmail\nOther",
    "reqd": 1
   },
   {
@@ -542,7 +542,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-20 22:06:31.110397",
+ "modified": "2025-05-20 22:20:24.016814",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
