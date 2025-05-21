@@ -41,7 +41,7 @@ class Contact(Document):
 		google_contacts: DF.Link | None
 		google_contacts_id: DF.Data | None
 		image: DF.AttachImage | None
-		insert_at: DF.Datetime | None
+		inserted_at: DF.Datetime | None
 		is_primary_contact: DF.Check
 		last_incoming_call_time: DF.Datetime | None
 		last_message_time: DF.Datetime | None

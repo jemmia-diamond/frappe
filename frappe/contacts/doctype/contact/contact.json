@@ -19,7 +19,7 @@
   "full_name",
   "last_name",
   "user",
-  "insert_at",
+  "inserted_at",
   "updated_at",
   "cb00",
   "lead_owner",
@@ -522,11 +522,6 @@
    "label": "From Updated At"
   },
   {
-   "fieldname": "insert_at",
-   "fieldtype": "Datetime",
-   "label": "Inserted At"
-  },
-  {
    "fieldname": "updated_at",
    "fieldtype": "Datetime",
    "label": "Updated At"
@@ -535,6 +530,11 @@
    "fieldname": "form_inserted_at",
    "fieldtype": "Datetime",
    "label": "From Inserted At"
+  },
+  {
+   "fieldname": "inserted_at",
+   "fieldtype": "Datetime",
+   "label": "Inserted At"
   }
  ],
  "icon": "fa fa-user",
@@ -542,7 +542,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-20 22:04:14.585415",
+ "modified": "2025-05-20 22:06:31.110397",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
