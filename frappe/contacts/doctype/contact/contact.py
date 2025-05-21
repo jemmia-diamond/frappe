@@ -34,12 +34,14 @@ class Contact(Document):
 		first_name: DF.Data | None
 		form_id: DF.Data | None
 		form_name: DF.Data | None
+		form_updated_at: DF.Datetime | None
+		from_inserted_at: DF.Datetime | None
 		full_name: DF.Data | None
 		gender: DF.Link | None
 		google_contacts: DF.Link | None
 		google_contacts_id: DF.Data | None
 		image: DF.AttachImage | None
-		inserted_at: DF.Datetime | None
+		insert_at: DF.Datetime | None
 		is_primary_contact: DF.Check
 		last_incoming_call_time: DF.Datetime | None
 		last_message_time: DF.Datetime | None
@@ -52,6 +54,7 @@ class Contact(Document):
 		page_url: DF.Data | None
 		pancake_conversation_id: DF.Data | None
 		pancake_customer_id: DF.Data | None
+		pancake_inserted_at: DF.Datetime | None
 		pancake_page_id: DF.Data | None
 		pancake_updated_at: DF.Datetime | None
 		phone: DF.Data | None
@@ -65,6 +68,7 @@ class Contact(Document):
 		source_group: DF.Literal["Facebook", "Zalo", "Tiktok", "Phone", "Form Website", "Email", "Orthers"]
 		source_name: DF.ReadOnly | None
 		status: DF.Literal["Passive", "Open", "Replied"]
+		stringee_end_time: DF.Datetime | None
 		stringee_from_internal: DF.Check
 		stringee_from_number: DF.Data | None
 		stringee_id: DF.Data | None
@@ -76,6 +80,7 @@ class Contact(Document):
 		thread_id: DF.Data | None
 		type: DF.Data | None
 		unsubscribed: DF.Check
+		updated_at: DF.Datetime | None
 		user: DF.Link | None
 		user_agent: DF.Data | None
 		video_call: DF.Check
