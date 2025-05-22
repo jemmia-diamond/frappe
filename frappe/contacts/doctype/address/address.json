@@ -29,6 +29,7 @@
   "is_primary_address",
   "is_shipping_address",
   "disabled",
+  "haravan_id",
   "linked_with",
   "links"
  ],
@@ -180,12 +181,17 @@
    "fieldtype": "Data",
    "label": "Address Name",
    "reqd": 1
+  },
+  {
+   "fieldname": "haravan_id",
+   "fieldtype": "Int",
+   "label": "Haravan ID"
   }
  ],
  "icon": "fa fa-map-marker",
  "idx": 5,
  "links": [],
- "modified": "2025-05-07 17:19:25.015671",
+ "modified": "2025-05-21 17:22:20.856346",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
