@@ -40,7 +40,6 @@ class Address(Document):
 			"Other",
 		]
 		city: DF.Data
-		city_: DF.Data
 		country: DF.Link
 		county: DF.Data | None
 		disabled: DF.Check
