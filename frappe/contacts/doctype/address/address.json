@@ -184,14 +184,14 @@
   },
   {
    "fieldname": "haravan_id",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "label": "Haravan ID"
   }
  ],
  "icon": "fa fa-map-marker",
  "idx": 5,
  "links": [],
- "modified": "2025-05-21 17:22:20.856346",
+ "modified": "2025-05-26 12:25:47.609918",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
