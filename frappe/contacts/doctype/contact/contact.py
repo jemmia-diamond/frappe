@@ -43,10 +43,12 @@ class Contact(Document):
 		image: DF.AttachImage | None
 		inserted_at: DF.Datetime | None
 		is_primary_contact: DF.Check
+		is_replied: DF.Check
 		last_incoming_call_time: DF.Datetime | None
 		last_message_time: DF.Datetime | None
 		last_name: DF.Data | None
 		last_outgoing_call_time: DF.Datetime | None
+		last_summarize_time: DF.Datetime | None
 		lead_owner: DF.Link | None
 		links: DF.Table[DynamicLink]
 		middle_name: DF.Data | None
