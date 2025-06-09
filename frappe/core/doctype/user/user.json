@@ -43,6 +43,7 @@
   "bio",
   "column_break_22",
   "mobile_no",
+  "pancake_id",
   "settings_tab",
   "desk_settings_section",
   "mute_sounds",
@@ -743,8 +744,7 @@
    "description": "Redirect to the selected app after login",
    "fieldname": "default_app",
    "fieldtype": "Select",
-   "label": "Default App",
-   "options": ""
+   "label": "Default App"
   },
   {
    "collapsible": 1,
@@ -811,6 +811,12 @@
    "fieldname": "dashboard",
    "fieldtype": "Check",
    "label": "Dashboard"
+  },
+  {
+   "fieldname": "pancake_id",
+   "fieldtype": "Data",
+   "label": "Pancake ID",
+   "unique": 1
   }
  ],
  "icon": "fa fa-user",
@@ -874,7 +880,7 @@
   }
  ],
  "make_attachments_public": 1,
- "modified": "2025-03-17 11:29:39.254304",
+ "modified": "2025-06-09 12:06:11.209293",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",
