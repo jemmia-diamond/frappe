@@ -815,7 +815,8 @@
   {
    "fieldname": "pancake_id",
    "fieldtype": "Data",
-   "label": "Pancake ID"
+   "label": "Pancake ID",
+   "unique": 1
   }
  ],
  "icon": "fa fa-user",
@@ -879,7 +880,7 @@
   }
  ],
  "make_attachments_public": 1,
- "modified": "2025-06-09 10:44:56.767120",
+ "modified": "2025-06-09 12:06:11.209293",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",
