@@ -131,7 +131,6 @@
    "fieldname": "time_zone",
    "fieldtype": "Select",
    "label": "Time Zone",
-   "read_only": 1,
    "reqd": 1
   },
   {
@@ -697,7 +696,7 @@
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2025-02-21 20:06:55.499937",
+ "modified": "2025-06-16 03:43:38.552252",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
@@ -712,6 +711,7 @@
   }
  ],
  "quick_entry": 1,
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
