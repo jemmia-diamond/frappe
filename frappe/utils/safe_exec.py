@@ -701,6 +701,7 @@ WHITELISTED_SAFE_EVAL_GLOBALS = {
 	"float": float,
 	"long": int,
 	"round": round,
+	"get_datetime": frappe.utils.data.get_datetime,
 	# RestrictedPython specific overrides
 	"_getattr_": _get_attr_for_eval,
 	"_getitem_": _getitem,
