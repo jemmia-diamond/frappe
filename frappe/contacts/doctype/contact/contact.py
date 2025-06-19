@@ -93,8 +93,6 @@ class Contact(Document):
 		self.set_primary_email()
 		self.set_primary("phone")
 
-		# added role check duplicate primary phone
-		self.check_phone_is_unique()
 
 		self.set_user()
 
