@@ -150,29 +150,6 @@ class Contact(Document):
 			if autosave:
 				self.save(ignore_permissions=True)
 
-	def check_phone_is_unique(self):
-		"""check duplicate primary"""
-		if self.phone:
-			duplicate_contacts = frappe.get_all(
-				"Contact Phone",
-				filters={
-					"phone": self.phone,
-					"is_primary_phone": 1,
-					"parent": ["!=", self.name]
-				},
-				fields=["parent"],
-				distinct=True
-			)
-			if duplicate_contacts:
-				contact_names = [contact.parent for contact in duplicate_contacts]
-				frappe.throw(
-					_("Primary Phone Number must be unique, it is already used in Contact(s): {0}").format(
-						", ".join(contact_names)
-					),
-					frappe.DuplicateEntryError,
-					title=_("Duplicate Phone Number")
-				)
-
 	def set_primary_email(self):
 		if not self.email_ids:
 			self.email_id = ""
