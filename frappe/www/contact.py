@@ -66,17 +66,18 @@ Your query:
 		)
 	).insert(ignore_permissions=True)
 
-def get_contact_by_conversation_id(conversation_id : str):
+def get_contacts_by_conversation_id(conversation_id : str):
 
-	contact = None
+	contacts = None
 	
 	try:
-		contact = frappe.get_doc(
-		'Contact', {
-		'pancake_conversation_id' : conversation_id,
-		}, 
+		contacts = frappe.get_all(
+			'Contact', filters={
+            'pancake_conversation_id': conversation_id,
+       	}, fields=['name']
 	)
-	except Exception:
-		return None
-	
-	return contact
+	except Exception as e:
+		print(e)
+		return []
+	print(contacts)
+	return contacts
