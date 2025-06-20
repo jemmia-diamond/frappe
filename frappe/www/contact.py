@@ -77,7 +77,5 @@ def get_contacts_by_conversation_id(conversation_id : str):
        	}, fields=['name']
 	)
 	except Exception as e:
-		print(e)
 		return []
-	print(contacts)
 	return contacts
