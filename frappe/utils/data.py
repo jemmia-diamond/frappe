@@ -833,7 +833,38 @@ def get_timespan_date_range(timespan: str) -> tuple[datetime.datetime, datetime.
 		case _:
 			return
 
+def get_timespan_date_range_for_user(timespan: str, user: str = None) -> tuple[datetime.datetime, datetime.datetime] | None:
+	"""
+	Calculates the date range for a given timespan based on the user's timezone,
+	and returns the range as UTC datetime objects for database querying.
+	"""
+	
+	try:
+		user_timezone_str = (frappe.db.get_value("User", user, "time_zone") if user else None) or get_system_timezone()
+		user_timezone = pytz.timezone(user_timezone_str)
+	except pytz.UnknownTimeZoneError:
+		user_timezone = pytz.timezone(get_system_timezone())
 
+	user_now = datetime.datetime.now(user_timezone)
+	today = user_now.date()
+
+
+	range_start_date, range_end_date = None, None
+	date_range = get_timespan_date_range(timespan) 
+	if date_range:
+			range_start_date, range_end_date = date_range
+
+	if range_start_date and range_end_date:
+		start_dt_local_aware = user_timezone.localize(datetime.datetime.combine(range_start_date, datetime.time.min))
+
+		end_dt_local_aware = user_timezone.localize(datetime.datetime.combine(range_end_date, datetime.time.max))
+
+		start_dt_utc = start_dt_local_aware.astimezone(pytz.utc).replace(tzinfo=None)
+		end_dt_utc = end_dt_local_aware.astimezone(pytz.utc).replace(tzinfo=None)
+
+		return (start_dt_utc, end_dt_utc)
+
+	return None
 def global_date_format(date, format="long"):
 	"""returns localized date in the form of January 1, 2012"""
 	import babel.dates
