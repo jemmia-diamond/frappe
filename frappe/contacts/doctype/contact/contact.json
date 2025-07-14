@@ -21,6 +21,7 @@
   "user",
   "inserted_at",
   "updated_at",
+  "haravan_customer_id",
   "cb00",
   "lead_owner",
   "source_group",
@@ -556,6 +557,13 @@
    "label": "Custom UUID",
    "read_only": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "haravan_customer_id",
+   "fieldtype": "Data",
+   "label": "Haravan Customer ID",
+   "read_only": 1,
+   "unique": 1
   }
  ],
  "icon": "fa fa-user",
@@ -563,7 +571,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-24 03:30:18.495432",
+ "modified": "2025-07-14 08:41:19.450166",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",

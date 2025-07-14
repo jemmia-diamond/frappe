@@ -41,6 +41,7 @@ class Contact(Document):
 		gender: DF.Link | None
 		google_contacts: DF.Link | None
 		google_contacts_id: DF.Data | None
+		haravan_customer_id: DF.Data | None
 		image: DF.AttachImage | None
 		inserted_at: DF.Datetime | None
 		is_primary_contact: DF.Check
