@@ -99,10 +99,15 @@ def flush_webhook_execution_queue():
 	unique_last_instances.reverse()
 
 	for instance in unique_last_instances:
-		frappe.enqueue(
-			"frappe.integrations.doctype.webhook.webhook.enqueue_webhook",
-			doc=instance.doc,
-			webhook=instance.webhook,
-			now=frappe.flags.in_test,
-			queue=instance.webhook.background_jobs_queue or "default",
-		)
+		if instance.doc.get("doctype") == "Lead":
+			# For Lead, execute webhook immediately instead of enqueueing
+			from frappe.integrations.doctype.webhook.webhook import enqueue_webhook
+			enqueue_webhook(instance.doc, instance.webhook)
+		else:
+			frappe.enqueue(
+				"frappe.integrations.doctype.webhook.webhook.enqueue_webhook",
+				doc=instance.doc,
+				webhook=instance.webhook,
+				now=frappe.flags.in_test,
+				queue=instance.webhook.background_jobs_queue or "default",
+			)

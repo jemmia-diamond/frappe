@@ -157,6 +157,7 @@ def get_context(doc):
 
 def enqueue_webhook(doc, webhook) -> None:
 	request_url = headers = data = r = None
+	
 	try:
 		webhook: Webhook = frappe.get_doc("Webhook", webhook.get("name"))
 		request_url = webhook.request_url
@@ -180,6 +181,7 @@ def enqueue_webhook(doc, webhook) -> None:
 				timeout=webhook.timeout or 5,
 			)
 			r.raise_for_status()
+			
 			frappe.logger().debug({"webhook_success": r.text})
 			log_request(webhook.name, doc.name, request_url, headers, data, r)
 			break
@@ -204,21 +206,30 @@ def log_request(
 	data: dict,
 	res: requests.Response | None = None,
 ):
-	request_log = frappe.get_doc(
-		{
-			"doctype": "Webhook Request Log",
-			"webhook": webhook,
-			"reference_document": docname,
-			"user": frappe.session.user if frappe.session.user else None,
-			"url": url,
-			"headers": frappe.as_json(headers) if headers else None,
-			"data": frappe.as_json(data) if data else None,
-			"response": res.text if res is not None else None,
-			"error": frappe.get_traceback(),
-		}
-	)
+	try:
+		request_log = frappe.get_doc(
+			{
+				"doctype": "Webhook Request Log",
+				"webhook": webhook,
+				"reference_document": docname,
+				"user": frappe.session.user if frappe.session.user else None,
+				"url": url,
+				"headers": frappe.as_json(headers) if headers else None,
+				"data": frappe.as_json(data) if data else None,
+				"response": res.text if res is not None else None,
+				"error": frappe.get_traceback(),
+			}
+		)
 
-	request_log.save(ignore_permissions=True)
+		request_log.save(ignore_permissions=True)
+		
+		# Force commit for Lead webhook logs
+		if docname and "CRM-LEAD" in docname:
+			frappe.db.commit()
+			
+	except Exception as e:
+		# Don't let log saving errors break webhook execution
+		pass
 
 
 def get_webhook_headers(doc, webhook):
