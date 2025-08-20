@@ -157,7 +157,6 @@ def get_context(doc):
 
 def enqueue_webhook(doc, webhook) -> None:
 	request_url = headers = data = r = None
-	
 	try:
 		webhook: Webhook = frappe.get_doc("Webhook", webhook.get("name"))
 		request_url = webhook.request_url
@@ -181,7 +180,6 @@ def enqueue_webhook(doc, webhook) -> None:
 				timeout=webhook.timeout or 5,
 			)
 			r.raise_for_status()
-			
 			frappe.logger().debug({"webhook_success": r.text})
 			log_request(webhook.name, doc.name, request_url, headers, data, r)
 			break
