@@ -158,16 +158,20 @@ def get_context(doc):
 def enqueue_webhook(doc, webhook) -> None:
 	request_url = headers = data = r = None
 	try:
+		# Normalize doc to a plain dict for safe processing
+		doc_dict = doc.as_dict(convert_dates_to_str=True) if hasattr(doc, "as_dict") else doc
+		doc_name = doc.name if hasattr(doc, "name") else (doc_dict.get("name") if isinstance(doc_dict, dict) else None)
+
 		webhook: Webhook = frappe.get_doc("Webhook", webhook.get("name"))
 		request_url = webhook.request_url
 		if webhook.is_dynamic_url:
-			request_url = frappe.render_template(webhook.request_url, get_context(doc))
-		headers = get_webhook_headers(doc, webhook)
-		data = get_webhook_data(doc, webhook)
+			request_url = frappe.render_template(webhook.request_url, get_context(doc_dict))
+		headers = get_webhook_headers(doc_dict, webhook)
+		data = get_webhook_data(doc_dict, webhook)
 
 	except Exception as e:
 		frappe.logger().debug({"enqueue_webhook_error": e})
-		log_request(webhook.name, doc.name, request_url, headers, data)
+		log_request(webhook.name, doc_name or "", request_url, headers, data)
 		return
 
 	for i in range(3):
@@ -181,16 +185,16 @@ def enqueue_webhook(doc, webhook) -> None:
 			)
 			r.raise_for_status()
 			frappe.logger().debug({"webhook_success": r.text})
-			log_request(webhook.name, doc.name, request_url, headers, data, r)
+			log_request(webhook.name, doc_name or "", request_url, headers, data, r)
 			break
 
 		except requests.exceptions.ReadTimeout as e:
 			frappe.logger().debug({"webhook_error": e, "try": i + 1})
-			log_request(webhook.name, doc.name, request_url, headers, data)
+			log_request(webhook.name, doc_name or "", request_url, headers, data)
 
 		except Exception as e:
 			frappe.logger().debug({"webhook_error": e, "try": i + 1})
-			log_request(webhook.name, doc.name, request_url, headers, data, r)
+			log_request(webhook.name, doc_name or "", request_url, headers, data, r)
 			sleep(3 * i + 1)
 			if i != 2:
 				continue
@@ -219,6 +223,7 @@ def log_request(
 	)
 
 	request_log.save(ignore_permissions=True)
+	frappe.db.commit()
 
 
 def get_webhook_headers(doc, webhook):
@@ -245,12 +250,13 @@ def get_webhook_headers(doc, webhook):
 
 def get_webhook_data(doc, webhook):
 	data = {}
-	doc = doc.as_dict(convert_dates_to_str=True)
+	# Accept both Document and dict
+	doc_dict = doc.as_dict(convert_dates_to_str=True) if hasattr(doc, "as_dict") else doc
 
 	if webhook.webhook_data:
-		data = {w.key: doc.get(w.fieldname) for w in webhook.webhook_data}
+		data = {w.key: doc_dict.get(w.fieldname) for w in webhook.webhook_data}
 	elif webhook.webhook_json:
-		data = frappe.render_template(webhook.webhook_json, get_context(doc))
+		data = frappe.render_template(webhook.webhook_json, get_context(doc_dict))
 		data = json.loads(data)
 
 	return data

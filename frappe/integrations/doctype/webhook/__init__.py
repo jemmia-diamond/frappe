@@ -100,9 +100,9 @@ def flush_webhook_execution_queue():
 
 	for instance in unique_last_instances:
 		frappe.enqueue(
-			"frappe.integrations.doctype.webhook.webhook.enqueue_webhook",
-			doc=instance.doc,
-			webhook=instance.webhook,
-			now=frappe.flags.in_test,
-			queue=instance.webhook.background_jobs_queue or "default",
-		)
+				"frappe.integrations.doctype.webhook.webhook.enqueue_webhook",
+				doc=instance.doc.as_dict(convert_dates_to_str=True) if hasattr(instance.doc, "as_dict") else instance.doc,
+				webhook=instance.webhook,
+				now=frappe.flags.in_test,
+				queue=instance.webhook.background_jobs_queue or "default",
+			)
