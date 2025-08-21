@@ -99,45 +99,10 @@ def flush_webhook_execution_queue():
 	unique_last_instances.reverse()
 
 	for instance in unique_last_instances:
-		print(f"Enqueuing webhook {instance.webhook.get('name')} for {instance.doc.get('name')}")
-		
-		# Check queue length before enqueue
-		import redis
-		from frappe.utils.redis_queue import RedisQueue
-		queue_name = instance.webhook.background_jobs_queue or "default"
-		redis_client = redis.from_url(frappe.conf.redis_cache)
-		queue_length_before = redis_client.llen(f"rq:queue:{queue_name}")
-		print(f"Queue {queue_name} length before: {queue_length_before}")
-		
-		try:
-			frappe.enqueue(
-				"frappe.integrations.doctype.webhook.webhook.enqueue_webhook",
-				doc=instance.doc,
-				webhook=instance.webhook,
-				now=frappe.flags.in_test,
-				queue=instance.webhook.background_jobs_queue or "default",
-			)
-			
-			# Check queue length after enqueue
-			queue_length_after = redis_client.llen(f"rq:queue:{queue_name}")
-			print(f"Queue {queue_name} length after: {queue_length_after}")
-			job_added = queue_length_after > queue_length_before
-			print(f"Job added to queue: {job_added}")
-			
-			# If job not added, execute inline
-			if not job_added:
-				print("Job not added to queue, executing inline")
-				from frappe.integrations.doctype.webhook.webhook import enqueue_webhook
-				enqueue_webhook(instance.doc, instance.webhook)
-			
-		except Exception as e:
-			print(f"Enqueue failed: {str(e)}")
-			# Fallback: execute inline
-			try:
-				from frappe.integrations.doctype.webhook.webhook import enqueue_webhook
-				print("Executing webhook inline as fallback")
-				enqueue_webhook(instance.doc, instance.webhook)
-			except Exception as fallback_error:
-				print(f"Fallback execution also failed: {str(fallback_error)}")
-		
-		print(f"Enqueued webhook {instance.webhook.get('name')} for {instance.doc.get('name')}")
+		frappe.enqueue(
+			"frappe.integrations.doctype.webhook.webhook.enqueue_webhook",
+			doc=instance.doc,
+			webhook=instance.webhook,
+			now=frappe.flags.in_test,
+			queue=instance.webhook.background_jobs_queue or "default",
+		)
