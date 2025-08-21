@@ -204,30 +204,21 @@ def log_request(
 	data: dict,
 	res: requests.Response | None = None,
 ):
-	try:
-		request_log = frappe.get_doc(
-			{
-				"doctype": "Webhook Request Log",
-				"webhook": webhook,
-				"reference_document": docname,
-				"user": frappe.session.user if frappe.session.user else None,
-				"url": url,
-				"headers": frappe.as_json(headers) if headers else None,
-				"data": frappe.as_json(data) if data else None,
-				"response": res.text if res is not None else None,
-				"error": frappe.get_traceback(),
-			}
-		)
+	request_log = frappe.get_doc(
+		{
+			"doctype": "Webhook Request Log",
+			"webhook": webhook,
+			"reference_document": docname,
+			"user": frappe.session.user if frappe.session.user else None,
+			"url": url,
+			"headers": frappe.as_json(headers) if headers else None,
+			"data": frappe.as_json(data) if data else None,
+			"response": res.text if res is not None else None,
+			"error": frappe.get_traceback(),
+		}
+	)
 
-		request_log.save(ignore_permissions=True)
-		
-		# Force commit for Lead webhook logs
-		if docname and "CRM-LEAD" in docname:
-			frappe.db.commit()
-			
-	except Exception as e:
-		# Don't let log saving errors break webhook execution
-		pass
+	request_log.save(ignore_permissions=True)
 
 
 def get_webhook_headers(doc, webhook):
