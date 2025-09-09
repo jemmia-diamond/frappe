@@ -980,10 +980,6 @@ class Document(BaseDocument):
 			else:
 				frappe.throw(_("Could not find {0}").format(msg), frappe.LinkValidationError)
 
-		if cancelled_links:
-			msg = ", ".join(each[2] for each in cancelled_links)
-			frappe.throw(_("Cannot link cancelled document: {0}").format(msg), frappe.CancelledLinkError)
-
 	def get_all_children(self, parenttype=None) -> list["Document"]:
 		"""Returns all children documents from **Table** type fields in a list."""
 
