@@ -31,13 +31,6 @@ from frappe.utils.deprecations import deprecation_warning
 from frappe.utils.error import log_error_snapshot
 from frappe.website.serve import get_response
 
-from frappe.utils.sentry import FrappeIntegration, before_send
-from sentry_sdk.integrations.argv import ArgvIntegration
-from sentry_sdk.integrations.atexit import AtexitIntegration
-from sentry_sdk.integrations.dedupe import DedupeIntegration
-from sentry_sdk.integrations.excepthook import ExcepthookIntegration
-from sentry_sdk.integrations.modules import ModulesIntegration
-
 _site = None
 _sites_path = os.environ.get("SITES_PATH", ".")
 
@@ -430,6 +423,12 @@ def sync_database(rollback: bool) -> bool:
 # Always initialize sentry SDK if the DSN is sent
 if sentry_dsn := os.getenv("FRAPPE_SENTRY_DSN"):
 	import sentry_sdk
+	from frappe.utils.sentry import FrappeIntegration, before_send
+	from sentry_sdk.integrations.argv import ArgvIntegration
+	from sentry_sdk.integrations.atexit import AtexitIntegration
+	from sentry_sdk.integrations.dedupe import DedupeIntegration
+	from sentry_sdk.integrations.excepthook import ExcepthookIntegration
+	from sentry_sdk.integrations.modules import ModulesIntegration
 
 	integrations = [
 		AtexitIntegration(),
@@ -447,8 +446,6 @@ if sentry_dsn := os.getenv("FRAPPE_SENTRY_DSN"):
 		environment=os.getenv("SENTRY_ENVIRONMENT", "production"),
 		max_breadcrumbs=int(os.getenv("SENTRY_MAX_BREADCRUMBS", "50")),
 		send_default_pii=False,
-		auto_enabling_integrations=False,
-		default_integrations=False,
 		integrations=integrations,
 	)
 
