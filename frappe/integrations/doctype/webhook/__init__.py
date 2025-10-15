@@ -99,11 +99,20 @@ def flush_webhook_execution_queue():
 	unique_last_instances.reverse()
 
 	for instance in unique_last_instances:
-		frappe.enqueue(
-			"frappe.integrations.doctype.webhook.webhook.enqueue_webhook",
-			doc_doctype=instance.doc.doctype,
-			doc_name=instance.doc.name,
-			webhook=instance.webhook,
-			now=frappe.flags.in_test,
-			queue=instance.webhook.background_jobs_queue or "default",
-		)
+		# For delete events (on_trash), document is already deleted from DB
+		# So we only pass basic info and let enqueue_webhook handle it appropriately
+		is_delete_event = instance.webhook.get("webhook_docevent") == "on_trash"
+		
+		enqueue_kwargs = {
+			"method": "frappe.integrations.doctype.webhook.webhook.enqueue_webhook",
+			"doc_doctype": instance.doc.doctype,
+			"doc_name": instance.doc.name,
+			"webhook": instance.webhook,
+			"now": frappe.flags.in_test,
+			"queue": instance.webhook.background_jobs_queue or "default",
+		}
+		
+		if is_delete_event:
+			enqueue_kwargs["is_delete_event"] = True
+			
+		frappe.enqueue(**enqueue_kwargs)
