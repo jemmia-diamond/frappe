@@ -111,13 +111,10 @@ def flush_webhook_execution_queue():
 		}
 		
 		if is_delete_event:
-			# Pass full doc data for delete events since doc is deleted from DB
-			# Use as_dict to get clean dict without methods/attributes
 			doc_data = instance.doc.as_dict(convert_dates_to_str=True)
 			enqueue_kwargs["doc"] = doc_data
 			enqueue_kwargs["is_delete_event"] = True
 		else:
-			# For other events, pass doctype and name to fetch fresh data
 			enqueue_kwargs["doc_doctype"] = instance.doc.doctype
 			enqueue_kwargs["doc_name"] = instance.doc.name
 			
