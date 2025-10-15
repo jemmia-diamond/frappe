@@ -160,24 +160,18 @@ def enqueue_webhook(doc=None, webhook=None, doc_doctype=None, doc_name=None, is_
 	try:
 		webhook: Webhook = frappe.get_doc("Webhook", webhook.get("name"))
 		
-		# For delete events, we don't need to fetch the document as it's already deleted
-		if is_delete_event:
-			# Create a minimal doc object with just the name and doctype for delete events
-			doc = frappe._dict({
-				"name": doc_name,
-				"doctype": doc_doctype
-			})
-
-			return doc
-		else:
-			# Resolve document: prefer primitive args to avoid pickling issues
-			if doc is None:
-				if doc_doctype and doc_name:
-					doc = frappe.get_doc(doc_doctype, doc_name)
-				else:
-					# If neither doc nor (doctype, name) are provided, bail out
-					frappe.logger().debug({"enqueue_webhook_error": "Missing document for webhook enqueue"})
-					return
+		# Resolve document: prefer primitive args to avoid pickling issues
+		if doc is None:
+			if doc_doctype and doc_name:
+				doc = frappe.get_doc(doc_doctype, doc_name)
+			else:
+				# If neither doc nor (doctype, name) are provided, bail out
+				frappe.logger().debug({"enqueue_webhook_error": "Missing document for webhook enqueue"})
+				return
+		elif isinstance(doc, dict):
+			# For delete events, doc is already a dict with all data
+			# Convert to frappe._dict to maintain compatibility
+			doc = frappe._dict(doc)
 		
 		request_url = webhook.request_url
 		if webhook.is_dynamic_url:
@@ -266,11 +260,21 @@ def get_webhook_headers(doc, webhook):
 
 def get_webhook_data(doc, webhook):
 	data = {}
-	doc = doc.as_dict(convert_dates_to_str=True)
+	
+	# Convert doc to dict if it's a Document object
+	if isinstance(doc, dict):
+		# Already a dict (e.g., from delete events)
+		doc_dict = doc
+	elif hasattr(doc, 'as_dict') and callable(getattr(doc, 'as_dict', None)):
+		doc_dict = doc.as_dict(convert_dates_to_str=True)
+	else:
+		# Fallback: try to use doc as-is if it's dict-like
+		doc_dict = doc if isinstance(doc, dict) else {}
 
 	if webhook.webhook_data:
-		data = {w.key: doc.get(w.fieldname) for w in webhook.webhook_data}
+		data = {w.key: doc_dict.get(w.fieldname) for w in webhook.webhook_data}
 	elif webhook.webhook_json:
+		# For JSON template, use original doc object for better context
 		data = frappe.render_template(webhook.webhook_json, get_context(doc))
 		data = json.loads(data)
 

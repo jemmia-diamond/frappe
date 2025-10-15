@@ -100,19 +100,25 @@ def flush_webhook_execution_queue():
 
 	for instance in unique_last_instances:
 		# For delete events (on_trash), document is already deleted from DB
-		# So we only pass basic info and let enqueue_webhook handle it appropriately
+		# So we pass the doc data directly as it won't be available in DB
 		is_delete_event = instance.webhook.get("webhook_docevent") == "on_trash"
 		
 		enqueue_kwargs = {
 			"method": "frappe.integrations.doctype.webhook.webhook.enqueue_webhook",
-			"doc_doctype": instance.doc.doctype,
-			"doc_name": instance.doc.name,
 			"webhook": instance.webhook,
 			"now": frappe.flags.in_test,
 			"queue": instance.webhook.background_jobs_queue or "default",
 		}
 		
 		if is_delete_event:
+			# Pass full doc data for delete events since doc is deleted from DB
+			# Use as_dict to get clean dict without methods/attributes
+			doc_data = instance.doc.as_dict(convert_dates_to_str=True)
+			enqueue_kwargs["doc"] = doc_data
 			enqueue_kwargs["is_delete_event"] = True
+		else:
+			# For other events, pass doctype and name to fetch fresh data
+			enqueue_kwargs["doc_doctype"] = instance.doc.doctype
+			enqueue_kwargs["doc_name"] = instance.doc.name
 			
 		frappe.enqueue(**enqueue_kwargs)
