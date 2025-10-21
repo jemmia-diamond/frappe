@@ -99,6 +99,15 @@ def application(request: Request):
 
 		init_request(request)
 
+		# Set custom Sentry transaction name for better identification
+		if os.getenv("FRAPPE_SENTRY_DSN"):
+			try:
+				import sentry_sdk
+				transaction_name = get_transaction_name(request)
+				sentry_sdk.set_transaction_name(transaction_name)
+			except ImportError:
+				pass
+
 		validate_auth()
 
 		if request.method == "OPTIONS":
@@ -423,14 +432,17 @@ def sync_database(rollback: bool) -> bool:
 # Always initialize sentry SDK if the DSN is sent
 if sentry_dsn := os.getenv("FRAPPE_SENTRY_DSN"):
 	import sentry_sdk
-	from frappe.utils.sentry import FrappeIntegration, before_send
 	from sentry_sdk.integrations.argv import ArgvIntegration
 	from sentry_sdk.integrations.atexit import AtexitIntegration
 	from sentry_sdk.integrations.dedupe import DedupeIntegration
 	from sentry_sdk.integrations.excepthook import ExcepthookIntegration
 	from sentry_sdk.integrations.modules import ModulesIntegration
+	from sentry_sdk.integrations.logging import LoggingIntegration
+	from sentry_sdk.integrations.threading import ThreadingIntegration
 
 	integrations = [
+		LoggingIntegration(level=logging.INFO, event_level=logging.ERROR),
+		ThreadingIntegration(propagate_hub=True),
 		AtexitIntegration(),
 		ExcepthookIntegration(),
 		DedupeIntegration(),
@@ -440,14 +452,68 @@ if sentry_dsn := os.getenv("FRAPPE_SENTRY_DSN"):
 
 	sentry_sdk.init(
 		dsn=sentry_dsn,
-		before_send=before_send,
 		attach_stacktrace=True,
 		release=frappe.__version__,
 		environment=os.getenv("SENTRY_ENVIRONMENT", "production"),
 		max_breadcrumbs=int(os.getenv("SENTRY_MAX_BREADCRUMBS", "50")),
-		send_default_pii=False,
+		send_default_pii=os.getenv("SENTRY_SEND_DEFAULT_PII", "false").lower() == "true",
+		traces_sample_rate=float(os.getenv("SENTRY_TRACING_SAMPLE_RATE", "0.2")),
+		profiles_sample_rate=float(os.getenv("SENTRY_PROFILING_SAMPLE_RATE", "0.05")),
 		integrations=integrations,
+		before_send=lambda event, hint: event if not (
+			event.get("logger", "") == "CSSUTILS" or
+			(hint.get("exc_info") and any(
+				isinstance(exc, (frappe.ValidationError, frappe.PermissionError))
+				for exc in hint["exc_info"] if exc
+			))
+		) else None,
 	)
+
+def get_transaction_name(request):
+	"""Generate a meaningful transaction name for Sentry based on request path and method."""
+	method = request.method
+	path = request.path
+
+	# Handle API endpoints
+	if path.startswith("/api/method/"):
+		method_name = path.replace("/api/method/", "")
+		return f"{method} /api/method/{method_name}"
+	elif path.startswith("/api/resource/"):
+		resource_path = path.replace("/api/resource/", "")
+		return f"{method} /api/resource/{resource_path}"
+	elif path.startswith("/api/"):
+		return f"{method} {path}"
+
+	# Handle file downloads
+	elif path.startswith("/backups"):
+		return f"{method} /backups"
+	elif path.startswith("/private/files/"):
+		return f"{method} /private/files/*"
+	elif path.startswith("/files/"):
+		return f"{method} /files/*"
+
+	# Handle web pages and desk
+	elif path.startswith("/app/"):
+		return f"{method} /app/*"
+	elif path.startswith("/desk"):
+		return f"{method} /desk"
+	elif path == "/":
+		return f"{method} /"
+
+	# Handle other common patterns
+	elif path.startswith("/assets/"):
+		return f"{method} /assets/*"
+	elif path.startswith("/printview"):
+		return f"{method} /printview"
+
+	# Default fallback
+	else:
+		# Truncate very long paths but keep meaningful parts
+		if len(path) > 50:
+			path_parts = path.split('/')[:3]  # Keep first 3 parts
+			path = '/'.join(path_parts) + '/*'
+		return f"{method} {path}"
+
 
 def serve(
 	port=8000,
@@ -470,11 +536,22 @@ def serve(
 	if not os.environ.get("NO_STATICS"):
 		application = application_with_statics()
 
+	# Add Sentry WSGI middleware if Sentry is configured
+	if os.getenv("FRAPPE_SENTRY_DSN"):
+		try:
+			from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
+			application = SentryWsgiMiddleware(application)
+		except ImportError:
+			pass  # Sentry not available or version doesn't support WSGI middleware
+
 	if proxy or os.environ.get("USE_PROXY"):
 		application = ProxyFix(application, x_for=1, x_proto=1, x_host=1, x_port=1, x_prefix=1)
 
-	application.debug = True
-	application.config = {"SERVER_NAME": "127.0.0.1:8000"}
+	# Set debug and config attributes only if application supports them
+	if hasattr(application, 'debug'):
+		application.debug = True
+	if hasattr(application, 'config'):
+		application.config = {"SERVER_NAME": "127.0.0.1:8000"}
 
 	log = logging.getLogger("werkzeug")
 	log.propagate = False

@@ -36,7 +36,6 @@ def _is_ldap_exception(e):
 def log_error(title=None, message=None, reference_doctype=None, reference_name=None, *, defer_insert=False):
 	"""Log error to Error Log"""
 	from frappe.monitor import get_trace_id
-	from frappe.utils.sentry import capture_exception
 
 	# Parameter ALERT:
 	# the title and message may be swapped
@@ -66,9 +65,6 @@ def log_error(title=None, message=None, reference_doctype=None, reference_name=N
 		reference_name=reference_name,
 		trace_id=trace_id,
 	)
-
-	# Capture exception data if telemetry is enabled
-	capture_exception(message=f"{title}\n{traceback}")
 
 	if frappe.flags.read_only or defer_insert:
 		error_log.deferred_insert()
