@@ -2120,6 +2120,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	parse_filters_from_route_options() {
 		const filters = [];
 
+		if (Array.isArray(frappe.route_options) && Array.isArray(frappe.route_options[0])) {
+			return frappe.route_options;
+		}
+
 		let params = new URLSearchParams(window.location.search);
 		if (!params.toString() && frappe.route_options) {
 			params = new Map(Object.entries(frappe.route_options));
