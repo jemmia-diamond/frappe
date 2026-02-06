@@ -88,6 +88,33 @@ class Contact(Document):
 		user: DF.Link | None
 		user_agent: DF.Data | None
 		video_call: DF.Check
+
+		# GTM Tracking Fields
+		conversion_url: DF.SmallText | None
+		fbclid: DF.Data | None
+		first_ad_param: DF.SmallText | None
+		first_source: DF.Data | None
+		gclid: DF.Data | None
+		gtm_link: DF.SmallText | None
+		gtm_location: DF.Data | None
+		ip: DF.Data | None
+		ladi_form_id: DF.Data | None
+		last_ad_param: DF.SmallText | None
+		last_source: DF.Data | None
+		message_id: DF.Data | None
+		message_time: DF.Datetime | None
+		origin_url_page: DF.SmallText | None
+		referrer: DF.SmallText | None
+		session_count: DF.Int
+		ttclid: DF.Data | None
+		url_page: DF.SmallText | None
+		utm_campaign: DF.Data | None
+		utm_content: DF.Data | None
+		utm_medium: DF.Data | None
+		utm_source: DF.Data | None
+		utm_term: DF.Data | None
+		variant_content: DF.Data | None
+		variant_url: DF.SmallText | None
 	# end: auto-generated types
 
 	def validate(self):
