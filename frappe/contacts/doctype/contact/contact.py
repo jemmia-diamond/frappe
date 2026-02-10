@@ -94,6 +94,9 @@ class Contact(Document):
 		fbclid: DF.Data | None
 		first_ad_param: DF.SmallText | None
 		first_source: DF.Data | None
+		gad_campaignid: DF.Data | None
+		gad_source: DF.Data | None
+		gbraid: DF.Data | None
 		gclid: DF.Data | None
 		gtm_link: DF.SmallText | None
 		gtm_location: DF.Data | None
