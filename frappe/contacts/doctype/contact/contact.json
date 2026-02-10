@@ -57,6 +57,7 @@
   "psid",
   "can_inbox",
   "pancake_page_id",
+  "ad_ids",
   "custom_uuid",
   "website_form_selection",
   "page_url",
@@ -123,7 +124,6 @@
    "label": "Contact Section",
    "options": "fa fa-user"
   },
-
   {
    "fieldname": "ip",
    "fieldtype": "Data",
@@ -263,6 +263,11 @@
    "fieldname": "gad_campaignid",
    "fieldtype": "Data",
    "label": "GAD Campaign ID"
+  },
+  {
+   "fieldname": "ad_ids",
+   "fieldtype": "Small Text",
+   "label": "Ad IDs"
   },
   {
    "fieldname": "first_name",
