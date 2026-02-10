@@ -266,7 +266,7 @@
   },
   {
    "fieldname": "ad_ids",
-   "fieldtype": "JSON",
+   "fieldtype": "Small Text",
    "label": "Ad IDs"
   },
   {
