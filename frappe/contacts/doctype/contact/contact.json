@@ -95,6 +95,10 @@
   "gbraid",
   "gad_source",
   "gad_campaignid",
+  "ga_client_id",
+  "fb_client_id",
+  "ladi_client_id",
+  "gcl_au_id",
   "stringee_selection",
   "stringee_id",
   "stringee_to_number",
@@ -605,6 +609,26 @@
    "fieldname": "form_name",
    "fieldtype": "Data",
    "label": "Form Name"
+  },
+  {
+   "fieldname": "ga_client_id",
+   "fieldtype": "Data",
+   "label": "GA Client ID"
+  },
+  {
+   "fieldname": "fb_client_id",
+   "fieldtype": "Data",
+   "label": "FB Client ID"
+  },
+  {
+   "fieldname": "ladi_client_id",
+   "fieldtype": "Data",
+   "label": "Ladi Client ID"
+  },
+  {
+   "fieldname": "gcl_au_id",
+   "fieldtype": "Data",
+   "label": "GCL AU ID"
   },
   {
    "fieldname": "pancake_conversation_id",

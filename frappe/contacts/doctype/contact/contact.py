@@ -119,6 +119,10 @@ class Contact(Document):
 		utm_term: DF.Data | None
 		variant_content: DF.Data | None
 		variant_url: DF.SmallText | None
+		ga_client_id: DF.Data | None
+		fb_client_id: DF.Data | None
+		ladi_client_id: DF.Data | None
+		gcl_au_id: DF.Data | None
 	# end: auto-generated types
 
 	def validate(self):
