@@ -25,7 +25,7 @@ class ConsoleLog(Document):
 		frappe.throw(frappe._("Console Logs can not be deleted"))
 
 	@staticmethod
-	def clear_old_logs(days=30):
+	def clear_old_logs(days=1):
 		table = frappe.qb.DocType("Console Log")
 		frappe.db.delete(table, filters=(table.modified < (Now() - Interval(days=days))))
 
