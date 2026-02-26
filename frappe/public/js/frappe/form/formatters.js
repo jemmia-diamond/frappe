@@ -415,6 +415,16 @@ frappe.form.get_formatter = function (fieldtype) {
 frappe.format = function (value, df, options, doc) {
 	if (!df) df = { fieldtype: "Data" };
 	if (df.fieldname == "_user_tags") df = { ...df, fieldtype: "Tag" };
+
+	// Data masking: if field is in masked_fields, render as plain text
+	if (df.parent && df.fieldname) {
+		const meta = frappe.get_meta(df.parent);
+		const masked_fields = (meta && meta.masked_fields) || [];
+		if (masked_fields.includes(df.fieldname)) {
+			df = { ...df, fieldtype: "Data", read_only: 1 };
+		}
+	}
+
 	var fieldtype = df.fieldtype || "Data";
 
 	// format Dynamic Link as a Link

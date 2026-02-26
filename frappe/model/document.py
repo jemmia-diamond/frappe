@@ -210,11 +210,26 @@ class Document(BaseDocument):
 		if hasattr(self, "__setup__"):
 			self.__setup__()
 
+		if not self.flags.for_update:
+			self._apply_data_masking()
+
 		return self
 
 	def reload(self):
 		"""Reload document from database"""
 		return self.load_from_db()
+
+	def _apply_data_masking(self):
+		try:
+			from frappe.model.utils.mask import mask_field_value
+
+			masked_fields = frappe.get_meta(self.doctype).get_masked_fields()
+			for df in masked_fields:
+				val = self.get(df.fieldname)
+				if val is not None:
+					self.set(df.fieldname, mask_field_value(df, val))
+		except Exception:
+			pass
 
 	def get_latest(self):
 		if not getattr(self, "_doc_before_save", None):

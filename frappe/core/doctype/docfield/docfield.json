@@ -307,6 +307,13 @@
    "label": "Allow Bulk Edit"
   },
   {
+   "default": "0",
+   "depends_on": "eval:[\"Data\",\"Date\",\"Datetime\",\"Time\",\"Int\",\"Float\",\"Currency\",\"Percent\",\"Phone\",\"Link\",\"Dynamic Link\",\"Duration\",\"Select\",\"Read Only\"].includes(doc.fieldtype)",
+   "fieldname": "mask",
+   "fieldtype": "Check",
+   "label": "Mask"
+  },
+  {
    "fieldname": "column_break_13",
    "fieldtype": "Column Break"
   },

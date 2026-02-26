@@ -108,6 +108,9 @@ def generate_report_result(
 	if result:
 		result = get_filtered_data(report.ref_doctype, columns, result, user)
 
+	if result and report.ref_doctype:
+		result = _apply_report_data_masking(report.ref_doctype, columns, result)
+
 	if cint(report.add_total_row) and result and not skip_total_row:
 		result = add_total_row(result, columns, is_tree=is_tree, parent_field=parent_field)
 
@@ -839,3 +842,30 @@ def translate_report_data(data, total_row):
 			if isinstance(value, str):
 				d[field] = _(value)
 	return data
+
+
+def _apply_report_data_masking(ref_doctype, columns, result):
+	try:
+		import frappe as _frappe
+		from frappe.model.utils.mask import mask_field_value
+
+		masked_fields = _frappe.get_meta(ref_doctype).get_masked_fields()
+		if not masked_fields:
+			return result
+
+		masked_map = {df.fieldname: df for df in masked_fields}
+		col_fieldnames = [c.get("fieldname") for c in columns]
+
+		for row in result:
+			if isinstance(row, dict):
+				for fieldname, df in masked_map.items():
+					if fieldname in row:
+						row[fieldname] = mask_field_value(df, row[fieldname])
+			elif isinstance(row, (list, tuple)):
+				row = list(row)
+				for idx, fieldname in enumerate(col_fieldnames):
+					if fieldname in masked_map and idx < len(row):
+						row[idx] = mask_field_value(masked_map[fieldname], row[idx])
+	except Exception:
+		pass
+	return result

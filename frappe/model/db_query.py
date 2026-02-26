@@ -201,6 +201,8 @@ class DatabaseQuery:
 		if pluck:
 			return [d[pluck] for d in result]
 
+		result = self._apply_data_masking(result)
+
 		return result
 
 	def build_and_run(self):
@@ -1192,6 +1194,26 @@ from {tables}
 			r._comment_count = 0
 			if "_comments" in r:
 				r._comment_count = len(json.loads(r._comments or "[]"))
+
+	def _apply_data_masking(self, result):
+		try:
+			if not result or not self.doctype:
+				return result
+
+			from frappe.model.utils.mask import mask_dict_results, mask_list_results
+
+			masked_fields = frappe.get_meta(self.doctype).get_masked_fields()
+			if not masked_fields:
+				return result
+
+			if self.as_list:
+				fields = [f.split(".")[-1].strip("`") for f in (self.fields or [])]
+				field_index_map = {fieldname: idx for idx, fieldname in enumerate(fields)}
+				return mask_list_results(result, masked_fields, field_index_map)
+			else:
+				return mask_dict_results(result, masked_fields)
+		except Exception:
+			return result
 
 	def update_user_settings(self):
 		# update user settings if new search

@@ -647,6 +647,25 @@ class Meta(Document):
 
 		return permissions
 
+	def get_masked_fields(self):
+		import copy
+
+		if frappe.session.user == "Administrator":
+			return []
+
+		cache_key = f"masked_fields::{self.name}::{frappe.session.user}"
+		masked_fields = frappe.cache.get_value(cache_key)
+		if masked_fields is None:
+			masked_fields = []
+			mask_permlevel_access = set(self.get_permlevel_access(permission_type="mask"))
+			for df in self.fields:
+				if df.get("mask") and df.permlevel not in mask_permlevel_access:
+					df_copy = copy.copy(df)
+					masked_fields.append(df_copy)
+			frappe.cache.set_value(cache_key, masked_fields, expires_in_sec=300)
+
+		return masked_fields
+
 	def get_dashboard_data(self):
 		"""Returns dashboard setup related to this doctype.
 
