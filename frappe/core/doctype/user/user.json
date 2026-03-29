@@ -212,6 +212,7 @@
    "options": "Language"
   },
   {
+   "default": "Asia/Ho_Chi_Minh",
    "fieldname": "time_zone",
    "fieldtype": "Autocomplete",
    "label": "Time Zone"
