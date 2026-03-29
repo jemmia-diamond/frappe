@@ -805,6 +805,35 @@ from {tables}
 		additional_filters_config = get_additional_filters_from_hooks()
 		f: FilterTuple = get_filter(self.doctype, ft, additional_filters_config)
 
+		# Skip filters with None fieldname
+		if f.fieldname is None:
+			frappe.log_error(
+				title="Invalid Filter - None fieldname",
+				message=f"Filter with None fieldname detected for doctype {self.doctype}: {f}"
+			)
+			return "1=1"  # Return a neutral condition
+
+		# Handle None/null values - convert to IS NULL or IS NOT NULL
+		if f.value is None and f.operator not in ("is", "is not"):
+			print(f"DEBUG: Converting None value filter - doctype={self.doctype}, field={f.fieldname}, operator={f.operator}")
+			frappe.log_error(
+				title="Filter Debug - None value detected",
+				message=f"Converting None value filter: doctype={self.doctype}, fieldname={f.fieldname}, operator={f.operator}, value={f.value}"
+			)
+			if f.operator == "=":
+				f.operator = "is"
+				f.value = "not set"
+			elif f.operator == "!=":
+				f.operator = "is"
+				f.value = "set"
+			else:
+				# For other operators with None value, skip the filter
+				frappe.log_error(
+					title="Filter Debug - Skipping None value",
+					message=f"Skipping filter with None value and operator {f.operator}"
+				)
+				return "1=1"
+
 		tname = "`tab" + f.doctype + "`"
 		if tname not in self.tables:
 			self.append_table(tname)
