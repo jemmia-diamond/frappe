@@ -3,7 +3,8 @@
 
 import frappe
 from frappe.model.document import Document
-
+from frappe.query_builder import Interval
+from frappe.query_builder.functions import Now
 
 class ConsoleLog(Document):
 	# begin: auto-generated types
@@ -22,3 +23,9 @@ class ConsoleLog(Document):
 	def after_delete(self):
 		# because on_trash can be bypassed
 		frappe.throw(frappe._("Console Logs can not be deleted"))
+
+	@staticmethod
+	def clear_old_logs(days=1):
+		table = frappe.qb.DocType("Console Log")
+		frappe.db.delete(table, filters=(table.modified < (Now() - Interval(days=days))))
+
