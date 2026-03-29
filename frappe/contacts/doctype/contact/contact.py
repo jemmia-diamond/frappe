@@ -26,6 +26,7 @@ class Contact(Document):
 		address: DF.Link | None
 		can_inbox: DF.Check
 		company_name: DF.Data | None
+		custom_uuid: DF.Data | None
 		department: DF.Data | None
 		designation: DF.Data | None
 		email_id: DF.Data | None
