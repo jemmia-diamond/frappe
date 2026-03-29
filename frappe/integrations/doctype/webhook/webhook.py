@@ -145,11 +145,19 @@ def get_context(doc):
 	return {"doc": doc, "utils": get_safe_globals().get("frappe").get("utils")}
 
 
-def enqueue_webhook(doc, webhook) -> None:
+def enqueue_webhook(doc=None, webhook=None, doc_doctype=None, doc_name=None) -> None:
 	request_url = headers = data = r = None
 	try:
 		if not isinstance(webhook, Document):
 			webhook: Webhook = frappe.get_doc("Webhook", webhook.get("name"))
+		if doc is None:
+			if doc_doctype and doc_name:
+				doc = frappe.get_doc(doc_doctype, doc_name)
+			else:
+				# If neither doc nor (doctype, name) are provided, bail out
+				frappe.logger().debug({"enqueue_webhook_error": "Missing document for webhook enqueue"})
+				return
+
 		request_url = webhook.request_url
 		if webhook.is_dynamic_url:
 			request_url = frappe.render_template(webhook.request_url, get_context(doc))

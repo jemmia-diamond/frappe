@@ -113,7 +113,8 @@ def flush_webhook_execution_queue():
 	for instance in unique_last_instances:
 		frappe.enqueue(
 			"frappe.integrations.doctype.webhook.webhook.enqueue_webhook",
-			doc=instance.doc,
+			doc_doctype=instance.doc.doctype,
+			doc_name=instance.doc.name,
 			webhook=instance.webhook,
 			now=frappe.in_test,
 			queue=instance.webhook.background_jobs_queue or "default",
