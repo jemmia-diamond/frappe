@@ -70,3 +70,18 @@ Your query:
 		content=message,
 		status="Open",
 	).insert(ignore_permissions=True)
+
+def get_contact_by_conversation_id(conversation_id : str):
+
+	contact = None
+	
+	try:
+		contact = frappe.get_doc(
+		'Contact', {
+		'pancake_conversation_id' : conversation_id,
+		}, 
+	)
+	except Exception:
+		return None
+	
+	return contact

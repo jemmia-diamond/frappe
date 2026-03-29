@@ -45,6 +45,8 @@
   "column_break_rtxe",
   "last_outgoing_call_time",
   "last_incoming_call_time",
+  "last_summarize_time",
+  "is_replied",
   "pancake_section",
   "pancake_conversation_id",
   "pancake_inserted_at",
@@ -535,6 +537,17 @@
    "fieldname": "inserted_at",
    "fieldtype": "Datetime",
    "label": "Inserted At"
+  },
+  {
+   "fieldname": "last_summarize_time",
+   "fieldtype": "Datetime",
+   "label": "Last Summary Time"
+  },
+  {
+   "default": "true",
+   "fieldname": "is_replied",
+   "fieldtype": "Check",
+   "label": "Is Replied"
   }
  ],
  "icon": "fa fa-user",
@@ -542,7 +555,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-21 19:28:11.499560",
+ "modified": "2025-05-27 11:17:24.439868",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
