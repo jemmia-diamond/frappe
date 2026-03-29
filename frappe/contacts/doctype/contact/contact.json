@@ -91,6 +91,9 @@
   "gclid",
   "fbclid",
   "ttclid",
+  "gbraid",
+  "gad_source",
+  "gad_campaignid",
   "stringee_selection",
   "stringee_id",
   "stringee_to_number",
@@ -245,6 +248,21 @@
    "fieldname": "ttclid",
    "fieldtype": "Data",
    "label": "TTCLID"
+  },
+  {
+   "fieldname": "gbraid",
+   "fieldtype": "Data",
+   "label": "GBRAID"
+  },
+  {
+   "fieldname": "gad_source",
+   "fieldtype": "Data",
+   "label": "GAD Source"
+  },
+  {
+   "fieldname": "gad_campaignid",
+   "fieldtype": "Data",
+   "label": "GAD Campaign ID"
   },
   {
    "fieldname": "first_name",
