@@ -316,7 +316,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Source Group",
-   "options": "Facebook\nZalo\nTiktok\nPhone\nWebsite Form\nEmail\nOthers",
+   "options": "Facebook\nInstagram\nZaloOA\nZalo\nTiktok\nPhone\nWebsite Form\nEmail\nOthers",
    "reqd": 1
   },
   {
