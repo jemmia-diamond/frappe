@@ -34,9 +34,7 @@ class SystemSettings(Document):
 		country: DF.Link | None
 		currency: DF.Link | None
 		currency_precision: DF.Literal["", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-		date_format: DF.Literal[
-			"yyyy-mm-dd", "dd-mm-yyyy", "dd/mm/yyyy", "dd.mm.yyyy", "mm/dd/yyyy", "mm-dd-yyyy"
-		]
+		date_format: DF.Literal["yyyy-mm-dd", "dd-mm-yyyy", "dd/mm/yyyy", "dd.mm.yyyy", "mm/dd/yyyy", "mm-dd-yyyy"]
 		default_app: DF.Literal[None]
 		delete_background_exported_reports_after: DF.Int
 		deny_multiple_sessions: DF.Check
@@ -56,9 +54,7 @@ class SystemSettings(Document):
 		enable_telemetry: DF.Check
 		enable_two_factor_auth: DF.Check
 		encrypt_backup: DF.Check
-		first_day_of_the_week: DF.Literal[
-			"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
-		]
+		first_day_of_the_week: DF.Literal["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 		float_precision: DF.Literal["", "2", "3", "4", "5", "6", "7", "8", "9"]
 		force_user_to_reset_password: DF.Int
 		force_web_capture_mode_for_uploads: DF.Check
