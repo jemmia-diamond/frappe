@@ -19,6 +19,8 @@
   "full_name",
   "last_name",
   "user",
+  "inserted_at",
+  "updated_at",
   "cb00",
   "lead_owner",
   "source_group",
@@ -45,7 +47,7 @@
   "last_incoming_call_time",
   "pancake_section",
   "pancake_conversation_id",
-  "inserted_at",
+  "pancake_inserted_at",
   "pancake_updated_at",
   "pancake_customer_id",
   "thread_id",
@@ -58,11 +60,14 @@
   "remote_ip",
   "form_id",
   "form_name",
+  "form_inserted_at",
+  "form_updated_at",
   "stringee_selection",
   "stringee_id",
   "stringee_to_number",
   "stringee_from_number",
   "stringee_start_time",
+  "stringee_end_time",
   "stringee_from_internal",
   "stringee_to_internal",
   "stringee_recorded",
@@ -309,7 +314,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Source Group",
-   "options": "Facebook\nZalo\nTiktok\nPhone\nForm Website\nEmail\nOrthers",
+   "options": "Facebook\nZalo\nTiktok\nPhone\nWebsite Form\nEmail\nOthers",
    "reqd": 1
   },
   {
@@ -355,11 +360,6 @@
   {
    "fieldname": "column_break_rtxe",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "inserted_at",
-   "fieldtype": "Datetime",
-   "label": "Pancake Inserted At"
   },
   {
    "fieldname": "thread_id",
@@ -505,6 +505,36 @@
    "fieldname": "pancake_section",
    "fieldtype": "Section Break",
    "label": "Pancake"
+  },
+  {
+   "fieldname": "pancake_inserted_at",
+   "fieldtype": "Datetime",
+   "label": "Pancake Inserted At"
+  },
+  {
+   "fieldname": "stringee_end_time",
+   "fieldtype": "Datetime",
+   "label": "Stringee End Time"
+  },
+  {
+   "fieldname": "form_updated_at",
+   "fieldtype": "Datetime",
+   "label": "Form Updated At"
+  },
+  {
+   "fieldname": "updated_at",
+   "fieldtype": "Datetime",
+   "label": "Updated At"
+  },
+  {
+   "fieldname": "form_inserted_at",
+   "fieldtype": "Datetime",
+   "label": "Form Inserted At"
+  },
+  {
+   "fieldname": "inserted_at",
+   "fieldtype": "Datetime",
+   "label": "Inserted At"
   }
  ],
  "icon": "fa fa-user",
@@ -512,7 +542,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-08 04:06:59.427158",
+ "modified": "2025-05-21 19:28:11.499560",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
