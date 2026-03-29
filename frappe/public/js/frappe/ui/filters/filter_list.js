@@ -259,7 +259,8 @@ frappe.ui.FilterGroup = class {
 			.some((f) => {
 				let f_value = f.get_value();
 				if (filter_value.length === 2) {
-					return filter_value[0] === f_value[0] && filter_value[1] === f_value[1];
+					// allow multiple filters of the same fieldname
+					return false;
 				}
 				return frappe.utils.arrays_equal(f_value.slice(0, 4), filter_value.slice(0, 4));
 			});

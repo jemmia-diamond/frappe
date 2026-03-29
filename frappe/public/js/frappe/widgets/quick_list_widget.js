@@ -253,7 +253,7 @@ export default class QuickListWidget extends Widget {
 	set_footer() {
 		this.footer.empty();
 
-		let filters = frappe.utils.get_filter_from_json(this.quick_list_filter);
+		let filters = frappe.utils.get_filter_from_json(this.quick_list_filter, this.document_type);
 		let route = frappe.utils.generate_route({ type: "doctype", name: this.document_type });
 		this.see_all_button = $(`
 			<div class="see-all btn btn-xs">${__("View List")}</div>
