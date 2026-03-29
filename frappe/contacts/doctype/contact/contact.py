@@ -90,6 +90,7 @@ class Contact(Document):
 		video_call: DF.Check
 
 		# GTM Tracking Fields
+		ad_ids: DF.SmallText | None
 		conversion_url: DF.SmallText | None
 		fbclid: DF.Data | None
 		first_ad_param: DF.SmallText | None
