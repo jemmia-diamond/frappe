@@ -66,6 +66,31 @@
   "form_name",
   "form_inserted_at",
   "form_updated_at",
+  "cb_gtm",
+  "ip",
+  "gtm_link",
+  "gtm_location",
+  "url_page",
+  "utm_term",
+  "message_id",
+  "utm_medium",
+  "utm_source",
+  "utm_content",
+  "variant_url",
+  "ladi_form_id",
+  "message_time",
+  "utm_campaign",
+  "origin_url_page",
+  "variant_content",
+  "referrer",
+  "last_source",
+  "first_source",
+  "last_ad_param",
+  "conversion_url",
+  "first_ad_param",
+  "gclid",
+  "fbclid",
+  "ttclid",
   "stringee_selection",
   "stringee_id",
   "stringee_to_number",
@@ -94,6 +119,132 @@
    "fieldtype": "Section Break",
    "label": "Contact Section",
    "options": "fa fa-user"
+  },
+
+  {
+   "fieldname": "ip",
+   "fieldtype": "Data",
+   "label": "GTM IP Address"
+  },
+  {
+   "fieldname": "gtm_link",
+   "fieldtype": "Small Text",
+   "label": "GTM Link"
+  },
+  {
+   "fieldname": "gtm_location",
+   "fieldtype": "Data",
+   "label": "GTM Location"
+  },
+  {
+   "fieldname": "url_page",
+   "fieldtype": "Small Text",
+   "label": "GTM URL Page"
+  },
+  {
+   "fieldname": "utm_term",
+   "fieldtype": "Data",
+   "label": "UTM Term"
+  },
+  {
+   "fieldname": "message_id",
+   "fieldtype": "Data",
+   "label": "GTM Message ID",
+   "unique": 1
+  },
+  {
+   "fieldname": "utm_medium",
+   "fieldtype": "Data",
+   "label": "UTM Medium"
+  },
+  {
+   "fieldname": "utm_source",
+   "fieldtype": "Data",
+   "label": "UTM Source"
+  },
+  {
+   "fieldname": "cb_gtm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "utm_content",
+   "fieldtype": "Data",
+   "label": "UTM Content"
+  },
+  {
+   "fieldname": "variant_url",
+   "fieldtype": "Small Text",
+   "label": "GTM Variant URL"
+  },
+  {
+   "fieldname": "ladi_form_id",
+   "fieldtype": "Data",
+   "label": "GTM Ladi Form ID"
+  },
+  {
+   "fieldname": "message_time",
+   "fieldtype": "Datetime",
+   "label": "GTM Message Time"
+  },
+  {
+   "fieldname": "utm_campaign",
+   "fieldtype": "Data",
+   "label": "UTM Campaign"
+  },
+  {
+   "fieldname": "origin_url_page",
+   "fieldtype": "Small Text",
+   "label": "GTM Origin URL Page"
+  },
+  {
+   "fieldname": "variant_content",
+   "fieldtype": "Data",
+   "label": "GTM Variant Content"
+  },
+  {
+   "fieldname": "referrer",
+   "fieldtype": "Small Text",
+   "label": "GTM Referrer"
+  },
+  {
+   "fieldname": "last_source",
+   "fieldtype": "Data",
+   "label": "GTM Last Source"
+  },
+  {
+   "fieldname": "first_source",
+   "fieldtype": "Data",
+   "label": "GTM First Source"
+  },
+  {
+   "fieldname": "last_ad_param",
+   "fieldtype": "Small Text",
+   "label": "GTM Last Ad Param"
+  },
+  {
+   "fieldname": "conversion_url",
+   "fieldtype": "Small Text",
+   "label": "GTM Conversion URL"
+  },
+  {
+   "fieldname": "first_ad_param",
+   "fieldtype": "Small Text",
+   "label": "GTM First Ad Param"
+  },
+  {
+   "fieldname": "gclid",
+   "fieldtype": "Data",
+   "label": "GCLID"
+  },
+  {
+   "fieldname": "fbclid",
+   "fieldtype": "Data",
+   "label": "FBCLID"
+  },
+  {
+   "fieldname": "ttclid",
+   "fieldtype": "Data",
+   "label": "TTCLID"
   },
   {
    "fieldname": "first_name",
