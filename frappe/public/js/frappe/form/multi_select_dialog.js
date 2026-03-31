@@ -18,6 +18,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 		this.make();
 
 		this.selected_fields = new Set();
+		this.all_actual_results = {};
 	}
 
 	get_fields() {
@@ -426,20 +427,13 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 
 	get_checked_values() {
 		// Return name of checked value.
-		return this.$results
-			.find(".list-item-container")
-			.map(function () {
-				if ($(this).find(".list-row-check:checkbox:checked").length > 0) {
-					return $(this).attr("data-item-name");
-				}
-			})
-			.get();
+		return Array.from(this.selected_fields);
 	}
 
 	get_checked_items() {
 		// Return checked items with all the column values.
 		let checked_values = this.get_checked_values();
-		return this.results.filter((res) => checked_values.includes(res.name));
+		return checked_values.map((name) => this.all_actual_results[name]).filter(Boolean);
 	}
 
 	get_datatable_columns() {
@@ -526,8 +520,9 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 
 	empty_list() {
 		// Store all checked items
-		let checked = this.results
-			.filter((result) => this.selected_fields.has(result.name))
+		let checked = Array.from(this.selected_fields)
+			.map((name) => this.all_actual_results[name])
+			.filter(Boolean)
 			.map((item) => ({
 				...item,
 				checked: true,
@@ -610,6 +605,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 			results.forEach((result) => {
 				result.checked = 0;
 				this.results.push(result);
+				this.all_actual_results[result.name] = result;
 			});
 		}
 		this.render_result_list(this.results, more);
