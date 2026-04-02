@@ -44,6 +44,7 @@
   "bio",
   "column_break_22",
   "mobile_no",
+  "pancake_id",
   "settings_tab",
   "desk_settings_section",
   "mute_sounds",
@@ -211,6 +212,7 @@
    "options": "Language"
   },
   {
+   "default": "Asia/Ho_Chi_Minh",
    "fieldname": "time_zone",
    "fieldtype": "Autocomplete",
    "label": "Time Zone"
@@ -857,6 +859,12 @@
    "fieldname": "form_navigation_buttons",
    "fieldtype": "Check",
    "label": "Navigation Buttons"
+  },
+  {
+   "fieldname": "pancake_id",
+   "fieldtype": "Data",
+   "label": "Pancake ID",
+   "unique": 1
   }
  ],
  "icon": "fa fa-user",

@@ -95,6 +95,58 @@
    "onboard": 0,
    "report_ref_doctype": "DocShare",
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Users",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "User",
+   "link_count": 0,
+   "link_to": "User",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Role",
+   "link_count": 0,
+   "link_to": "Role",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Role Profile",
+   "link_count": 0,
+   "link_to": "Role Profile",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Module Profile",
+   "link_count": 0,
+   "link_to": "Module Profile",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
  "modified": "2026-01-11 23:30:10.696298",
@@ -121,8 +173,35 @@
  "quick_lists": [],
  "restrict_to_domain": "",
  "roles": [],
- "sequence_id": 13.0,
- "shortcuts": [],
+ "sequence_id": 15.0,
+ "shortcuts": [
+  {
+   "label": "User",
+   "link_to": "User",
+   "type": "DocType"
+  },
+  {
+   "label": "Role",
+   "link_to": "Role",
+   "type": "DocType"
+  },
+  {
+   "label": "Permission Manager",
+   "link_to": "permission-manager",
+   "type": "Page"
+  },
+  {
+   "label": "User Profile",
+   "link_to": "user-profile",
+   "type": "Page"
+  },
+  {
+   "doc_view": "",
+   "label": "User Type",
+   "link_to": "User Type",
+   "type": "DocType"
+  }
+ ],
  "title": "Users",
  "type": "Workspace"
 }

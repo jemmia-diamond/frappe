@@ -404,6 +404,7 @@ class Document(BaseDocument):
 		ignore_mandatory=None,
 		set_name=None,
 		set_child_names=True,
+		raise_direct_exception=False,
 	) -> "Self":
 		"""Insert the document in the database (as a new document).
 		This will check for user permissions and execute `before_insert`,
@@ -437,7 +438,10 @@ class Document(BaseDocument):
 		self.set_docstatus()
 		self.check_permission("create")
 		self.check_if_latest()
-		self._validate_links()
+		self._validate_links(
+			raise_direct_exception=raise_direct_exception,
+		)
+		self.check_permission("create")
 		self.run_method("before_insert")
 		self.set_new_name(set_name=set_name, set_child_names=set_child_names)
 		self.set_parent_in_children()
@@ -1129,7 +1133,7 @@ class Document(BaseDocument):
 			)
 		)
 
-	def _validate_links(self):
+	def _validate_links(self, raise_direct_exception=False):
 		if self.flags.ignore_links or self._action == "cancel":
 			return
 
@@ -1142,7 +1146,10 @@ class Document(BaseDocument):
 
 		if invalid_links:
 			msg = ", ".join(each[2] for each in invalid_links)
-			frappe.throw(_("Could not find {0}").format(msg), frappe.LinkValidationError)
+			if raise_direct_exception:
+				raise frappe.LinkValidationError(msg)
+			else:
+				frappe.throw(_("Could not find {0}").format(msg), frappe.LinkValidationError)
 
 		if cancelled_links:
 			msg = ", ".join(each[2] for each in cancelled_links)

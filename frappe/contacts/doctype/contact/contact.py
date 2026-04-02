@@ -22,31 +22,107 @@ class Contact(Document):
 		from frappe.core.doctype.dynamic_link.dynamic_link import DynamicLink
 		from frappe.types import DF
 
+		_updated_at: DF.Datetime | None
 		address: DF.Link | None
+		can_inbox: DF.Check
 		company_name: DF.Data | None
+		custom_uuid: DF.Data | None
 		department: DF.Data | None
 		designation: DF.Data | None
 		email_id: DF.Data | None
 		email_ids: DF.Table[ContactEmail]
+		first_message_time: DF.Datetime | None
 		first_name: DF.Data | None
+		form_id: DF.Data | None
+		form_inserted_at: DF.Datetime | None
+		form_name: DF.Data | None
+		form_updated_at: DF.Datetime | None
 		full_name: DF.Data | None
 		gender: DF.Link | None
 		google_contacts: DF.Link | None
 		google_contacts_id: DF.Data | None
+		haravan_customer_id: DF.Data | None
 		image: DF.AttachImage | None
+		inserted_at: DF.Datetime | None
 		is_primary_contact: DF.Check
+		is_replied: DF.Check
+		last_incoming_call_time: DF.Datetime | None
+		last_message_time: DF.Datetime | None
 		last_name: DF.Data | None
+		last_outgoing_call_time: DF.Datetime | None
+		last_summarize_time: DF.Datetime | None
+		lead_owner: DF.Link | None
 		links: DF.Table[DynamicLink]
 		middle_name: DF.Data | None
 		mobile_no: DF.Data | None
+		page_url: DF.Data | None
+		pancake_conversation_id: DF.Data | None
+		pancake_customer_id: DF.Data | None
+		pancake_inserted_at: DF.Datetime | None
+		pancake_page_id: DF.Data | None
+		pancake_updated_at: DF.Datetime | None
 		phone: DF.Data | None
 		phone_nos: DF.Table[ContactPhone]
+		phone_number_provided_time: DF.Datetime | None
+		psid: DF.Data | None
 		pulled_from_google_contacts: DF.Check
+		remote_ip: DF.Data | None
 		salutation: DF.Link | None
+		source: DF.Link | None
+		source_group: DF.Literal["Facebook", "Instagram", "ZaloOA", "ZaloKOC", "Zalo", "Tiktok", "Phone", "Website Form", "Email", "Call Center", "Others"]
+		source_name: DF.ReadOnly | None
 		status: DF.Literal["Passive", "Open", "Replied"]
+		stringee_end_time: DF.Datetime | None
+		stringee_from_internal: DF.Check
+		stringee_from_number: DF.Data | None
+		stringee_id: DF.Data | None
+		stringee_recorded: DF.Check
+		stringee_start_time: DF.Datetime | None
+		stringee_to_internal: DF.Check
+		stringee_to_number: DF.Data | None
 		sync_with_google_contacts: DF.Check
+		thread_id: DF.Data | None
+		type: DF.Data | None
 		unsubscribed: DF.Check
+		updated_at: DF.Datetime | None
 		user: DF.Link | None
+		user_agent: DF.Data | None
+		video_call: DF.Check
+
+		# GTM Tracking Fields
+		ad_ids: DF.SmallText | None
+		conversion_url: DF.SmallText | None
+		fbclid: DF.Data | None
+		first_ad_param: DF.SmallText | None
+		first_source: DF.Data | None
+		gad_campaignid: DF.Data | None
+		gad_source: DF.Data | None
+		gbraid: DF.Data | None
+		gclid: DF.Data | None
+		gtm_link: DF.SmallText | None
+		gtm_location: DF.Data | None
+		ip: DF.Data | None
+		ladi_form_id: DF.Data | None
+		last_ad_param: DF.SmallText | None
+		last_source: DF.Data | None
+		message_id: DF.Data | None
+		message_time: DF.Datetime | None
+		origin_url_page: DF.SmallText | None
+		referrer: DF.SmallText | None
+		session_count: DF.Int
+		ttclid: DF.Data | None
+		url_page: DF.SmallText | None
+		utm_campaign: DF.Data | None
+		utm_content: DF.Data | None
+		utm_medium: DF.Data | None
+		utm_source: DF.Data | None
+		utm_term: DF.Data | None
+		variant_content: DF.Data | None
+		variant_url: DF.SmallText | None
+		ga_client_id: DF.Data | None
+		fb_client_id: DF.Data | None
+		ladi_client_id: DF.Data | None
+		gcl_au_id: DF.Data | None
 	# end: auto-generated types
 
 	def autoname(self):
@@ -64,7 +140,7 @@ class Contact(Document):
 		self.full_name = self._get_full_name()
 		self.set_primary_email()
 		self.set_primary("phone")
-		self.set_primary("mobile_no")
+
 
 		self.set_user()
 

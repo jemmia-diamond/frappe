@@ -433,14 +433,12 @@ def sync_database():
 # Always initialize sentry SDK if the DSN is sent
 if sentry_dsn := os.getenv("FRAPPE_SENTRY_DSN"):
 	import sentry_sdk
+	from frappe.utils.sentry import FrappeIntegration, before_send
 	from sentry_sdk.integrations.argv import ArgvIntegration
 	from sentry_sdk.integrations.atexit import AtexitIntegration
 	from sentry_sdk.integrations.dedupe import DedupeIntegration
 	from sentry_sdk.integrations.excepthook import ExcepthookIntegration
 	from sentry_sdk.integrations.modules import ModulesIntegration
-	from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
-
-	from frappe.utils.sentry import FrappeIntegration, before_send
 
 	integrations = [
 		AtexitIntegration(),
@@ -450,32 +448,16 @@ if sentry_dsn := os.getenv("FRAPPE_SENTRY_DSN"):
 		ArgvIntegration(),
 	]
 
-	experiments = {}
-	kwargs = {}
-
-	if os.getenv("ENABLE_SENTRY_DB_MONITORING"):
-		integrations.append(FrappeIntegration())
-		experiments["record_sql_params"] = True
-
-	if tracing_sample_rate := os.getenv("SENTRY_TRACING_SAMPLE_RATE"):
-		kwargs["traces_sample_rate"] = float(tracing_sample_rate)
-		application = SentryWsgiMiddleware(application)
-
-	if profiling_sample_rate := os.getenv("SENTRY_PROFILING_SAMPLE_RATE"):
-		kwargs["profiles_sample_rate"] = float(profiling_sample_rate)
-
 	sentry_sdk.init(
 		dsn=sentry_dsn,
 		before_send=before_send,
 		attach_stacktrace=True,
 		release=frappe.__version__,
-		auto_enabling_integrations=False,
-		default_integrations=False,
+		environment=os.getenv("SENTRY_ENVIRONMENT", "production"),
+		max_breadcrumbs=int(os.getenv("SENTRY_MAX_BREADCRUMBS", "50")),
+		send_default_pii=False,
 		integrations=integrations,
-		_experiments=experiments,
-		**kwargs,
 	)
-
 
 def serve(
 	port=8000,

@@ -35,6 +35,8 @@ from frappe.utils import (
 	get_filter,
 	get_time,
 	get_timespan_date_range,
+	get_timespan_date_range_for_user,
+	make_filter_tuple,
 )
 from frappe.utils.data import DateTimeLikeObject, get_datetime, getdate, sbool
 
@@ -803,6 +805,35 @@ from {tables}
 		additional_filters_config = get_additional_filters_from_hooks()
 		f: FilterTuple = get_filter(self.doctype, ft, additional_filters_config)
 
+		# Skip filters with None fieldname
+		if f.fieldname is None:
+			frappe.log_error(
+				title="Invalid Filter - None fieldname",
+				message=f"Filter with None fieldname detected for doctype {self.doctype}: {f}"
+			)
+			return "1=1"  # Return a neutral condition
+
+		# Handle None/null values - convert to IS NULL or IS NOT NULL
+		if f.value is None and f.operator not in ("is", "is not"):
+			print(f"DEBUG: Converting None value filter - doctype={self.doctype}, field={f.fieldname}, operator={f.operator}")
+			frappe.log_error(
+				title="Filter Debug - None value detected",
+				message=f"Converting None value filter: doctype={self.doctype}, fieldname={f.fieldname}, operator={f.operator}, value={f.value}"
+			)
+			if f.operator == "=":
+				f.operator = "is"
+				f.value = "not set"
+			elif f.operator == "!=":
+				f.operator = "is"
+				f.value = "set"
+			else:
+				# For other operators with None value, skip the filter
+				frappe.log_error(
+					title="Filter Debug - Skipping None value",
+					message=f"Skipping filter with None value and operator {f.operator}"
+				)
+				return "1=1"
+
 		tname = "`tab" + f.doctype + "`"
 		if tname not in self.tables:
 			self.append_table(tname)
@@ -902,7 +933,7 @@ from {tables}
 				can_be_null = False
 
 			if f.operator.lower() in ("previous", "next", "timespan"):
-				date_range = get_date_range(f.operator.lower(), f.value)
+				date_range = get_date_range(f.operator.lower(), f.value, self.user)
 				f.operator = "between"
 				f.value = date_range
 				fallback = f"'{FallBackDateTimeStr}'"
@@ -1438,7 +1469,7 @@ def get_additional_filter_field(additional_filters_config, f, value):
 	return f
 
 
-def get_date_range(operator: str, value: str):
+def get_date_range(operator: str, value: str, user: str = None):
 	timespan_map = {
 		"1 week": "week",
 		"1 month": "month",
@@ -1456,7 +1487,10 @@ def get_date_range(operator: str, value: str):
 	else:
 		timespan = value
 
-	return get_timespan_date_range(timespan)
+	if user:
+		return get_timespan_date_range_for_user(timespan, user)
+	else:
+		return get_timespan_date_range(timespan)
 
 
 def requires_owner_constraint(role_permissions):

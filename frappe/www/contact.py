@@ -70,3 +70,17 @@ Your query:
 		content=message,
 		status="Open",
 	).insert(ignore_permissions=True)
+
+def get_contacts_by_conversation_id(conversation_id : str):
+
+	contacts = None
+	
+	try:
+		contacts = frappe.get_all(
+			'Contact', filters={
+            'pancake_conversation_id': conversation_id,
+       	}, fields=['name']
+	)
+	except Exception as e:
+		return []
+	return contacts

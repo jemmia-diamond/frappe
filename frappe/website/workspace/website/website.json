@@ -120,8 +120,43 @@
  "quick_lists": [],
  "restrict_to_domain": "",
  "roles": [],
- "sequence_id": 14.0,
- "shortcuts": [],
+ "sequence_id": 16.0,
+ "shortcuts": [
+  {
+   "color": "Green",
+   "format": "{} Published",
+   "label": "Blog Post",
+   "link_to": "Blog Post",
+   "stats_filter": "{\"published\":\"1\"}",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "format": "{} Active",
+   "label": "Blogger",
+   "link_to": "Blogger",
+   "stats_filter": "{\"disabled\": 0}",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "format": "{} Published",
+   "label": "Web Page",
+   "link_to": "Web Page",
+   "stats_filter": "{ \"published\": 1 }",
+   "type": "DocType"
+  },
+  {
+   "label": "Web Form",
+   "link_to": "Web Form",
+   "type": "DocType"
+  },
+  {
+   "label": "Website Settings",
+   "link_to": "Website Settings",
+   "type": "DocType"
+  }
+ ],
  "title": "Website",
  "type": "Workspace"
 }
