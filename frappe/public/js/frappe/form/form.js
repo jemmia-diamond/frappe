@@ -1117,14 +1117,11 @@ frappe.ui.form.Form = class FrappeForm {
 	show_conflict_message() {
 		if (this.doc.__needs_refresh) {
 			if (this.doc.__unsaved) {
-				this.dashboard.clear_headline();
-				this.dashboard.set_headline_alert(
-					__("This form has been modified after you have loaded it") +
-						'<button class="btn btn-xs btn-primary pull-right" onclick="cur_frm.reload_doc()">' +
-						__("Refresh") +
-						"</button>",
-					"alert-warning"
-				);
+				frappe.show_alert({
+					message: this.doctype + " " + __("got updated by another user"),
+					indicator: 'orange'
+				}, 5);
+				this.reload_doc();
 			} else {
 				this.debounced_reload_doc();
 			}
