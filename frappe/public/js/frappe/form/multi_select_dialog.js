@@ -158,6 +158,10 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 			this.$wrapper.addClass("hidden");
 			this.$child_wrapper.removeClass("hidden");
 			this.dialog.fields_dict.more_btn.$wrapper.hide();
+
+			// Record the search state so the change event handler can skip
+			// redundant re-renders when the results are already up-to-date.
+			this._last_fetched_search_state = this._get_search_state();
 		});
 	}
 
@@ -337,6 +341,10 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 	bind_events() {
 		let me = this;
 
+		// Track the last search state that was used to fetch results,
+		// so we can skip redundant re-renders from the change event.
+		this._last_fetched_search_state = null;
+
 		this.$results.on("click", ".list-item-container", function (e) {
 			if (!$(e.target).is(":checkbox") && !$(e.target).is("a")) {
 				$(this).find(":checkbox").trigger("click");
@@ -364,6 +372,14 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 
 		this.$parent.find(".input-with-feedback").on("change", () => {
 			frappe.flags.auto_scroll = false;
+			// Skip redundant re-render if the search state hasn't changed
+			// (e.g. input blur after the debounced input handler already fetched results).
+			// This prevents the DOM from being destroyed mid-click when the user
+			// clicks a result right after typing in the search field.
+			let current_state = this._get_search_state();
+			if (this._last_fetched_search_state === current_state) {
+				return;
+			}
 			if (this.is_child_selection_enabled()) {
 				this.show_child_results();
 			} else {
@@ -387,6 +403,26 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 				}, 300)
 			);
 		});
+	}
+
+	_get_search_state() {
+		// Build a string representing the current filter/search state
+		try {
+			let parts = [];
+			parts.push(this.dialog.fields_dict["search_term"]?.get_value() || "");
+			if ($.isArray(this.setters)) {
+				for (let df of this.setters) {
+					parts.push(this.dialog.fields_dict[df.fieldname]?.get_value() || "");
+				}
+			} else if (this.setters) {
+				Object.keys(this.setters).forEach((setter) => {
+					parts.push(this.dialog.fields_dict[setter]?.get_value() || "");
+				});
+			}
+			return parts.join("|");
+		} catch (e) {
+			return null; // Return null to ensure get_results runs on error
+		}
 	}
 
 	get_parent_name_of_selected_children() {
@@ -609,6 +645,10 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 			});
 		}
 		this.render_result_list(this.results, more);
+
+		// Record the search state so the change event handler can skip
+		// redundant re-renders when the results are already up-to-date.
+		this._last_fetched_search_state = this._get_search_state();
 	}
 
 	async get_filtered_parents_for_child_search() {
