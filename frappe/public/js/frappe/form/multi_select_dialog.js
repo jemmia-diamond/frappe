@@ -158,6 +158,10 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 			this.$wrapper.addClass("hidden");
 			this.$child_wrapper.removeClass("hidden");
 			this.dialog.fields_dict.more_btn.$wrapper.hide();
+
+			// Record the search state so the change event handler can skip
+			// redundant re-renders when the results are already up-to-date.
+			this._last_fetched_search_state = this._get_search_state();
 		});
 	}
 
