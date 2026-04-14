@@ -26,15 +26,15 @@ frappe.throw = function (msg) {
 	throw new Error(msg.message);
 };
 
-frappe.confirm = function (message, confirm_action, reject_action) {
+frappe.confirm = function (message, confirm_action, reject_action, options = {}) {
 	var d = new frappe.ui.Dialog({
-		title: __("Confirm", null, "Title of confirmation dialog"),
-		primary_action_label: __("Yes", null, "Approve confirmation dialog"),
+		title: options?.dialog_title || __("Confirm", null, "Title of confirmation dialog"),
+		primary_action_label: options?.confirm_title || __("Yes", null, "Approve confirmation dialog"),
 		primary_action: () => {
 			confirm_action && confirm_action();
 			d.hide();
 		},
-		secondary_action_label: __("No", null, "Dismiss confirmation dialog"),
+		secondary_action_label: options?.reject_title || __("No", null, "Dismiss confirmation dialog"),
 		secondary_action: () => d.hide(),
 	});
 
