@@ -1117,11 +1117,7 @@ frappe.ui.form.Form = class FrappeForm {
 	show_conflict_message() {
 		if (this.doc.__needs_refresh) {
 			if (this.doc.__unsaved) {
-				frappe.show_alert({
-					message: this.doctype + " " + __("got updated by another user"),
-					indicator: 'orange'
-				}, 5);
-				this.reload_doc();
+				this.doc.__needs_refresh = false;
 			} else {
 				this.debounced_reload_doc();
 			}
