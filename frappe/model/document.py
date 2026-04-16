@@ -863,11 +863,17 @@ class Document(BaseDocument):
 			return
 
 		if cstr(previous.modified) != cstr(self._original_modified):
-			frappe.msgprint(
-				_("Error: Document has been modified after you have opened it")
-				+ (f" ({previous.modified}, {self.modified}). ")
-				+ _("Please refresh to get the latest document."),
-				raise_exception=frappe.TimestampMismatchError,
+			# allow overwrites
+			# Version control tracks all changes
+			# frappe.msgprint(
+			# 	_("Error: Document has been modified after you have opened it")
+			# 	+ (f" ({previous.modified}, {self.modified}). ")
+			# 	+ _("Please refresh to get the latest document."),
+			# 	raise_exception=frappe.TimestampMismatchError,
+			# )
+			frappe.log_error(
+				title="Document Modified Concurrently",
+				message=f"Document {self.doctype} {self.name} was modified (previous: {previous.modified}, original: {self._original_modified}). Allowing overwrite."
 			)
 
 		if not self.meta.issingle:
