@@ -1243,14 +1243,7 @@ frappe.ui.form.Form = class FrappeForm {
 	show_conflict_message() {
 		if (this.doc.__needs_refresh) {
 			if (this.doc.__unsaved) {
-				this.dashboard.clear_headline();
-				this.dashboard.set_headline_alert(
-					__("This form has been modified after you have loaded it") +
-						'<button class="btn btn-xs btn-primary pull-right" onclick="cur_frm.reload_doc()">' +
-						__("Refresh") +
-						"</button>",
-					"alert-warning"
-				);
+				this.doc.__needs_refresh = false;
 			} else {
 				this.debounced_reload_doc();
 			}
