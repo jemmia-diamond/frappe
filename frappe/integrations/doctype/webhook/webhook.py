@@ -33,6 +33,7 @@ class Webhook(Document):
 
 		background_jobs_queue: DF.Autocomplete | None
 		condition: DF.SmallText | None
+		enable_log: DF.Check
 		enable_security: DF.Check
 		enabled: DF.Check
 		is_dynamic_url: DF.Check
@@ -170,7 +171,8 @@ def enqueue_webhook(doc=None, webhook=None, doc_doctype=None, doc_name=None, is_
 
 	except Exception as e:
 		frappe.logger().debug({"enqueue_webhook_error": e})
-		log_request(webhook.name, doc.doctype, doc.name, request_url, headers, data)
+		doc_name_for_log = doc.name if doc else doc_name
+		log_request(webhook, doc.doctype, doc_name_for_log, request_url, headers, data)
 		return
 
 	for i in range(3):
@@ -184,16 +186,16 @@ def enqueue_webhook(doc=None, webhook=None, doc_doctype=None, doc_name=None, is_
 			)
 			r.raise_for_status()
 			frappe.logger().debug({"webhook_success": r.text})
-			log_request(webhook.name, doc.doctype, doc.name, request_url, headers, data, r)
+			log_request(webhook, doc.doctype, doc.name, request_url, headers, data, r)
 			break
 
 		except requests.exceptions.ReadTimeout as e:
 			frappe.logger().debug({"webhook_error": e, "try": i + 1})
-			log_request(webhook.name, doc.doctype, doc.name, request_url, headers, data)
+			log_request(webhook, doc.doctype, doc.name, request_url, headers, data)
 
 		except Exception as e:
 			frappe.logger().debug({"webhook_error": e, "try": i + 1})
-			log_request(webhook.name, doc.doctype, doc.name, request_url, headers, data, r)
+			log_request(webhook, doc.doctype, doc.name, request_url, headers, data, r)
 			sleep(3 * i + 1)
 			if i != 2:
 				continue
@@ -203,7 +205,7 @@ def enqueue_webhook(doc=None, webhook=None, doc_doctype=None, doc_name=None, is_
 
 
 def log_request(
-	webhook: str,
+	webhook: str | Webhook,
 	doctype: str,
 	docname: str,
 	url: str,
@@ -211,10 +213,22 @@ def log_request(
 	data: dict,
 	res: requests.Response | None = None,
 ):
+	if isinstance(webhook, str):
+		try:
+			webhook_doc = frappe.get_doc("Webhook", webhook)
+		except Exception:
+			webhook_doc = frappe._dict({"name": webhook, "enable_log": 1})
+	else:
+		webhook_doc = webhook
+
+	enable_log = webhook_doc.get("enable_log", 1)
+	if not enable_log:
+		return
+
 	request_log = frappe.get_doc(
 		{
 			"doctype": "Webhook Request Log",
-			"webhook": webhook,
+			"webhook": webhook_doc.name,
 			"reference_doctype": doctype,
 			"reference_document": docname,
 			"user": frappe.session.user if frappe.session.user else None,
