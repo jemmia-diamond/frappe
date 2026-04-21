@@ -656,7 +656,7 @@ class BaseDocument:
 		for fieldname in table_fieldnames:
 			children = getattr(self, fieldname, None) or []
 			doc[fieldname] = [
-				d.as_dict(
+				d if isinstance(d, dict) else d.as_dict(
 					convert_dates_to_str=convert_dates_to_str,
 					no_nulls=no_nulls,
 					no_default_fields=no_default_fields,
