@@ -258,6 +258,7 @@ scheduler_events = {
 	],
 	"daily_long": [],
 	"daily_maintenance": [
+		"frappe.integrations.doctype.s3_backup_settings.s3_backup_settings.take_backups_daily",
 		"frappe.email.doctype.auto_email_report.auto_email_report.send_daily",
 		"frappe.desk.notifications.clear_notifications",
 		"frappe.sessions.clear_expired_sessions",
@@ -267,12 +268,14 @@ scheduler_events = {
 		"frappe.core.doctype.user_invitation.user_invitation.mark_expired_invitations",
 	],
 	"weekly_long": [
+		"frappe.integrations.doctype.s3_backup_settings.s3_backup_settings.take_backups_weekly",
 		"frappe.desk.form.document_follow.send_weekly_updates",
 		"frappe.utils.change_log.check_for_update",
 		"frappe.desk.doctype.changelog_feed.changelog_feed.fetch_changelog_feed",
 	],
 	"monthly": [
 		"frappe.email.doctype.auto_email_report.auto_email_report.send_monthly",
+		"frappe.integrations.doctype.s3_backup_settings.s3_backup_settings.take_backups_monthly",
 	],
 }
 
