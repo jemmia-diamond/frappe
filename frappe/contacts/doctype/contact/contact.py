@@ -125,17 +125,6 @@ class Contact(Document):
 		gcl_au_id: DF.Data | None
 	# end: auto-generated types
 
-	def autoname(self):
-		self.name = self._get_full_name()
-
-		# concat party name if reqd
-		for link in self.links:
-			self.name = self.name + "-" + cstr(link.link_name).strip()
-			break
-
-		if frappe.db.exists("Contact", self.name):
-			self.name = append_number_if_name_exists("Contact", self.name)
-
 	def validate(self):
 		self.full_name = self._get_full_name()
 		self.set_primary_email()
