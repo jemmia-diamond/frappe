@@ -21,6 +21,7 @@
   "is_dynamic_url",
   "timeout",
   "background_jobs_queue",
+  "debounce_duration",
   "cb_webhook",
   "request_method",
   "request_structure",
@@ -189,6 +190,13 @@
    "fieldname": "background_jobs_queue",
    "fieldtype": "Autocomplete",
    "label": "Background Jobs Queue"
+  },
+  {
+   "default": "0",
+   "description": "Duration (in seconds) to ignore subsequent triggers for the same document to avoid spamming.",
+   "fieldname": "debounce_duration",
+   "fieldtype": "Int",
+   "label": "Debounce Duration (Seconds)"
   }
  ],
  "links": [

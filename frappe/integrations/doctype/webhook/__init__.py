@@ -18,7 +18,7 @@ def get_all_webhooks():
 	# query webhooks
 	webhooks_list = frappe.get_all(
 		"Webhook",
-		fields=["name", "condition", "webhook_docevent", "webhook_doctype", "background_jobs_queue"],
+		fields=["name", "condition", "webhook_docevent", "webhook_doctype", "background_jobs_queue", "debounce_duration"],
 		filters={"enabled": True},
 	)
 
@@ -114,6 +114,13 @@ def flush_webhook_execution_queue():
 		# For delete events (on_trash), document is already deleted from DB
 		# So we pass the doc data directly as it won't be available in DB
 		is_delete_event = instance.webhook.get("webhook_docevent") == "on_trash"
+		webhook = instance.webhook
+
+		if webhook.get("debounce_duration") and not is_delete_event:
+			cache_key = f"webhook_debounce:{webhook.name}:{instance.doc.name}"
+			if frappe.cache.get_value(cache_key):
+				continue
+			frappe.cache.set_value(cache_key, 1, expires=webhook.get("debounce_duration"))
 
 		enqueue_kwargs = {
 			"method": "frappe.integrations.doctype.webhook.webhook.enqueue_webhook",
