@@ -240,22 +240,22 @@
   },
   {
    "fieldname": "gclid",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "GCLID"
   },
   {
    "fieldname": "fbclid",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "FBCLID"
   },
   {
    "fieldname": "ttclid",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "TTCLID"
   },
   {
    "fieldname": "gbraid",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "GBRAID"
   },
   {

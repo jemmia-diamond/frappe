@@ -92,13 +92,13 @@ class Contact(Document):
 		# GTM Tracking Fields
 		ad_ids: DF.SmallText | None
 		conversion_url: DF.SmallText | None
-		fbclid: DF.Data | None
+		fbclid: DF.SmallText | None
 		first_ad_param: DF.SmallText | None
 		first_source: DF.Data | None
 		gad_campaignid: DF.Data | None
 		gad_source: DF.Data | None
-		gbraid: DF.Data | None
-		gclid: DF.Data | None
+		gbraid: DF.SmallText | None
+		gclid: DF.SmallText | None
 		gtm_link: DF.SmallText | None
 		gtm_location: DF.Data | None
 		ip: DF.Data | None
@@ -110,7 +110,7 @@ class Contact(Document):
 		origin_url_page: DF.SmallText | None
 		referrer: DF.SmallText | None
 		session_count: DF.Int
-		ttclid: DF.Data | None
+		ttclid: DF.SmallText | None
 		url_page: DF.SmallText | None
 		utm_campaign: DF.Data | None
 		utm_content: DF.Data | None
