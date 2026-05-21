@@ -634,8 +634,28 @@ frappe.ui.Sidebar = class Sidebar {
 			// Ref: https://github.com/frappe/frappe/issues/36317
 			if (!this.sidebar_title) {
 				const FALLBACK_SIDEBAR = "My CRM";
+				const BLACKLIST = ["Desk", "desk"];
+				let routes = frappe.get_route();
+
+				// If URL is explicit workspace → trust routes[1] over last_sidebar
+				// Try exact key first, then lowercase — handles Vietnamese and custom names
+				if (routes[0] === "Workspaces" && routes[1]) {
+					let match = frappe.boot.workspace_sidebar_item[routes[1]]
+						|| frappe.boot.workspace_sidebar_item[routes[1].toLowerCase()];
+					if (match) {
+						frappe.app.sidebar.setup(match.label || routes[1]);
+						return;
+					}
+				}
+
+				// Restore from localStorage if valid and not blacklisted
+				// Fallback to FALLBACK_SIDEBAR if last_sidebar is null, blacklisted, or missing from boot
+				// Guard: workspace_sidebar_item only contains workspaces user has access to
 				let saved = localStorage.getItem("last_sidebar");
-				let target = (saved && frappe.boot.workspace_sidebar_item[saved.toLowerCase()])
+				let use_saved = saved
+					&& !BLACKLIST.includes(saved)
+					&& frappe.boot.workspace_sidebar_item[saved.toLowerCase()];
+				let target = use_saved
 					? saved
 					: (frappe.boot.workspace_sidebar_item[FALLBACK_SIDEBAR.toLowerCase()]
 						? FALLBACK_SIDEBAR
