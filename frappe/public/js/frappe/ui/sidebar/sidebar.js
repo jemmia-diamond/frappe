@@ -634,8 +634,12 @@ frappe.ui.Sidebar = class Sidebar {
 			// Ref: https://github.com/frappe/frappe/issues/36317
 			if (!this.sidebar_title) {
 				const FALLBACK_SIDEBAR = "My CRM";
+				const BLACKLIST = ["Desk", "desk"];
 				let saved = localStorage.getItem("last_sidebar");
-				let target = (saved && frappe.boot.workspace_sidebar_item[saved.toLowerCase()])
+				let use_saved = saved
+					&& !BLACKLIST.includes(saved)
+					&& frappe.boot.workspace_sidebar_item[saved.toLowerCase()];
+				let target = use_saved
 					? saved
 					: (frappe.boot.workspace_sidebar_item[FALLBACK_SIDEBAR.toLowerCase()]
 						? FALLBACK_SIDEBAR
