@@ -633,9 +633,15 @@ frappe.ui.Sidebar = class Sidebar {
 			// Guard: skip if workspace no longer exists or user has no access (not in boot).
 			// Ref: https://github.com/frappe/frappe/issues/36317
 			if (!this.sidebar_title) {
+				const FALLBACK_SIDEBAR = "My CRM";
 				let saved = localStorage.getItem("last_sidebar");
-				if (saved && frappe.boot.workspace_sidebar_item[saved.toLowerCase()]) {
-					frappe.app.sidebar.setup(saved);
+				let target = (saved && frappe.boot.workspace_sidebar_item[saved.toLowerCase()])
+					? saved
+					: (frappe.boot.workspace_sidebar_item[FALLBACK_SIDEBAR.toLowerCase()]
+						? FALLBACK_SIDEBAR
+						: null);
+				if (target) {
+					frappe.app.sidebar.setup(target);
 					return;
 				}
 			}
