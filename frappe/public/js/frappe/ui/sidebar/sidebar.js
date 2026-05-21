@@ -252,6 +252,11 @@ frappe.ui.Sidebar = class Sidebar {
 		this.workspace_sidebar_items = updated_items;
 	}
 	setup(workspace_title) {
+		// PATCH (sidebar-persistence): Frappe only keeps sidebar_title in memory.
+		// On hard refresh, memory is wiped and sidebar renders blank.
+		// We persist the last active sidebar to localStorage so it can be restored.
+		localStorage.setItem("last_sidebar", workspace_title);
+
 		if (!this.onboarding_widget) {
 			this.onboarding_widget = {};
 		}
@@ -621,6 +626,20 @@ frappe.ui.Sidebar = class Sidebar {
 
 	set_workspace_sidebar(router) {
 		try {
+			// PATCH (sidebar-persistence): On hard refresh, this.sidebar_title is null
+			// because memory was wiped. Frappe's original logic then fails to find the correct
+			// sidebar and renders blank. We restore the last known sidebar from localStorage
+			// before falling through to Frappe's logic.
+			// Guard: skip if workspace no longer exists or user has no access (not in boot).
+			// Ref: https://github.com/frappe/frappe/issues/36317
+			if (!this.sidebar_title) {
+				let saved = localStorage.getItem("last_sidebar");
+				if (saved && frappe.boot.workspace_sidebar_item[saved.toLowerCase()]) {
+					frappe.app.sidebar.setup(saved);
+					return;
+				}
+			}
+
 			let route = frappe.get_route();
 			let view, entity_name;
 			switch (route.length) {
