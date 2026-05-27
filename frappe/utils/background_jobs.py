@@ -294,7 +294,6 @@ def start_worker(
 	if not strategy:
 		strategy = DequeueStrategy.DEFAULT
 
-	_start_sentry()
 	_freeze_gc()
 
 	with frappe.init_site():
@@ -334,8 +333,6 @@ def start_worker_pool(
 
 	WARNING: This feature is considered "EXPERIMENTAL".
 	"""
-
-	_start_sentry()
 
 	# If gc.freeze is done then importing modules before forking allows us to share the memory
 	import frappe.database.query  # sqlparse and indirect imports
@@ -614,50 +611,3 @@ def truncate_failed_registry(job, connection, type, value, traceback):
 			for job_obj in Job.fetch_many(job_ids=job_ids, connection=connection):
 				job_obj and fail_registry.remove(job_obj, delete_job=True)
 
-
-def _start_sentry():
-	sentry_dsn = os.getenv("FRAPPE_SENTRY_DSN")
-	if not sentry_dsn:
-		return
-
-	import sentry_sdk
-	from sentry_sdk.integrations.argv import ArgvIntegration
-	from sentry_sdk.integrations.atexit import AtexitIntegration
-	from sentry_sdk.integrations.dedupe import DedupeIntegration
-	from sentry_sdk.integrations.excepthook import ExcepthookIntegration
-	from sentry_sdk.integrations.modules import ModulesIntegration
-
-	from frappe.utils.sentry import FrappeIntegration, before_send
-
-	integrations = [
-		AtexitIntegration(),
-		ExcepthookIntegration(),
-		DedupeIntegration(),
-		ModulesIntegration(),
-		ArgvIntegration(),
-	]
-
-	experiments = {}
-	kwargs = {}
-
-	if os.getenv("ENABLE_SENTRY_DB_MONITORING"):
-		integrations.append(FrappeIntegration())
-		experiments["record_sql_params"] = True
-
-	if tracing_sample_rate := os.getenv("SENTRY_TRACING_SAMPLE_RATE"):
-		kwargs["traces_sample_rate"] = float(tracing_sample_rate)
-
-	if profiling_sample_rate := os.getenv("SENTRY_PROFILING_SAMPLE_RATE"):
-		kwargs["profiles_sample_rate"] = float(profiling_sample_rate)
-
-	sentry_sdk.init(
-		dsn=sentry_dsn,
-		before_send=before_send,
-		attach_stacktrace=True,
-		release=frappe.__version__,
-		auto_enabling_integrations=False,
-		default_integrations=False,
-		integrations=integrations,
-		_experiments=experiments,
-		**kwargs,
-	)
