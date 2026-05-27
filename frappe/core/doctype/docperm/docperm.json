@@ -188,6 +188,12 @@
    "label": "Share"
   },
   {
+   "default": "0",
+   "fieldname": "mask",
+   "fieldtype": "Check",
+   "label": "Mask"
+  },
+  {
    "default": "1",
    "fieldname": "print",
    "fieldtype": "Check",

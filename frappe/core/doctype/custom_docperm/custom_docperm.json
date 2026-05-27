@@ -190,6 +190,12 @@
   },
   {
    "default": "0",
+   "fieldname": "mask",
+   "fieldtype": "Check",
+   "label": "Mask"
+  },
+  {
+   "default": "0",
    "fieldname": "print",
    "fieldtype": "Check",
    "label": "Print"

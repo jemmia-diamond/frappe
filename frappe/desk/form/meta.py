@@ -82,6 +82,11 @@ class FormMeta(Meta):
 			for k in ("search_fields", "is_custom_field", "linked_document_type"):
 				df[k] = self.get("fields")[i].get(k)
 
+		try:
+			d["masked_fields"] = [df.fieldname for df in self.get_masked_fields()]
+		except Exception:
+			d["masked_fields"] = []
+
 		return d
 
 	def add_code(self):

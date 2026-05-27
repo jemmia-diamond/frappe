@@ -246,6 +246,14 @@ frappe.ui.form.Layout = class Layout {
 	}
 
 	init_field(df, parent, render = false) {
+		if (df && df.fieldname && this.doctype) {
+			const meta = frappe.get_meta(this.doctype);
+			const masked_fields = (meta && meta.masked_fields) || [];
+			if (masked_fields.includes(df.fieldname)) {
+				df = Object.assign({}, df, { fieldtype: "Data", read_only: 1 });
+			}
+		}
+
 		const fieldobj = frappe.ui.form.make_control({
 			df: df,
 			doctype: this.doctype,
