@@ -127,6 +127,26 @@ frappe.router = {
 	},
 
 	async route() {
+
+		// Check if the current form is dirty, if yes, then show a confirmation dialog
+		if (window.cur_frm && window.cur_frm.is_dirty()) {
+			let new_sub_path = this.get_sub_path();
+			if (new_sub_path !== this.current_sub_path) {
+				if (!confirm(__("You have unsaved changes. Are you sure you want to leave this page?"))) {
+					if (this.last_known_url) {
+						history.pushState(null, null, this.last_known_url);
+					} else if (this.current_sub_path) {
+						history.pushState(null, null, "/desk/" + this.current_sub_path);
+					} else {
+						history.pushState(null, null, "/desk");
+					}
+					return;
+				} else {
+					window.cur_frm.doc.__unsaved = 0;
+				}
+			}
+		}
+		
 		// resolve the route from the URL or hash
 		// translate it so the objects are well defined
 		// and render the page as required
