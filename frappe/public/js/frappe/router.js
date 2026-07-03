@@ -132,7 +132,19 @@ frappe.router = {
 		if (window.cur_frm && window.cur_frm.is_dirty()) {
 			let new_sub_path = this.get_sub_path();
 			if (new_sub_path !== this.current_sub_path) {
-				if (!confirm(__("You have unsaved changes. Are you sure you want to leave this page?"))) {
+				const is_saving = frappe.ui && frappe.ui.form && frappe.ui.form.is_saving;
+
+				let is_new_doc_saved = false;
+				const old_parts = (this.current_sub_path || "").split("/");
+				const new_parts = (new_sub_path || "").split("/");
+				if (old_parts[0] === "Form" && new_parts[0] === "Form" && old_parts[1] === new_parts[1]) {
+					const old_name = old_parts[2] || "";
+					if (old_name.indexOf("new-") === 0) {
+						is_new_doc_saved = true;
+					}
+				}
+
+				if (!is_saving && !is_new_doc_saved && !confirm(__("You have unsaved changes. Are you sure you want to leave this page?"))) {
 					if (this.last_known_url) {
 						history.pushState(null, null, this.last_known_url);
 					} else if (this.current_sub_path) {
@@ -146,7 +158,7 @@ frappe.router = {
 				}
 			}
 		}
-		
+
 		// resolve the route from the URL or hash
 		// translate it so the objects are well defined
 		// and render the page as required
