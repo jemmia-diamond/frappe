@@ -35,6 +35,7 @@ class Webhook(Document):
 		condition: DF.SmallText | None
 		enable_log: DF.Check
 		enable_security: DF.Check
+		fire_and_forget: DF.Check
 		enabled: DF.Check
 		is_dynamic_url: DF.Check
 		request_method: DF.Literal["POST", "PUT", "DELETE"]
@@ -173,6 +174,19 @@ def enqueue_webhook(doc=None, webhook=None, doc_doctype=None, doc_name=None, is_
 		frappe.logger().debug({"enqueue_webhook_error": e})
 		doc_name_for_log = doc.name if doc else doc_name
 		log_request(webhook, doc.doctype, doc_name_for_log, request_url, headers, data)
+		return
+
+	if webhook.fire_and_forget:
+		try:
+			requests.request(
+				method=webhook.request_method,
+				url=request_url,
+				data=json.dumps(data, default=str),
+				headers=headers,
+				timeout=webhook.timeout or 5,
+			)
+		except Exception:
+			pass
 		return
 
 	for i in range(3):
