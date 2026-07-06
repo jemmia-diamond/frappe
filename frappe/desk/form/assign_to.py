@@ -117,14 +117,15 @@ def add(args=None, *, ignore_permissions=False):
 				follow_document(args["doctype"], args["name"], assign_to)
 
 			# notify
-			notify_assignment(
-				d.assigned_by,
-				d.allocated_to,
-				d.reference_type,
-				d.reference_name,
-				action="ASSIGN",
-				description=args.get("description"),
-			)
+			if args.get("notify", True):
+				notify_assignment(
+					d.assigned_by,
+					d.allocated_to,
+					d.reference_type,
+					d.reference_name,
+					action="ASSIGN",
+					description=args.get("description"),
+				)
 
 	if shared_with_users:
 		user_list = format_message_for_assign_to(shared_with_users)

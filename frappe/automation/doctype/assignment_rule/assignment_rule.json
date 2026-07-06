@@ -11,6 +11,7 @@
   "document_type",
   "due_date_based_on",
   "priority",
+  "notification_enabled",
   "disabled",
   "column_break_4",
   "description",
@@ -42,6 +43,12 @@
    "fieldname": "priority",
    "fieldtype": "Int",
    "label": "Priority"
+  },
+  {
+   "default": "1",
+   "fieldname": "notification_enabled",
+   "fieldtype": "Check",
+   "label": "Notification Enabled"
   },
   {
    "default": "0",

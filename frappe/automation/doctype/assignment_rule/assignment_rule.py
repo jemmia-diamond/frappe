@@ -88,7 +88,7 @@ class AssignmentRule(Document):
 					name=doc.get("name"),
 					description=frappe.render_template(self.description, doc),
 					assignment_rule=self.name,
-					notify=True,
+					notify=self.notification_enabled,
 					date=doc.get(self.due_date_based_on) if self.due_date_based_on else None,
 				),
 				ignore_permissions=True,
