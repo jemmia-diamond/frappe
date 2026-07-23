@@ -8,6 +8,7 @@ from frappe.core.doctype.dynamic_link.dynamic_link import deduplicate_dynamic_li
 from frappe.model.document import Document
 from frappe.model.naming import append_number_if_name_exists
 from frappe.utils import cstr, has_gravatar
+from erpnext.utilities.phone_utils import get_phone_variants
 
 
 class Contact(Document):
@@ -483,8 +484,14 @@ def get_contact_with_phone_number(number):
 	if not number:
 		return
 
+	try:
+		variants = get_phone_variants(number)
+		filters = [["phone", "in", variants]]
+	except ImportError:
+		filters = [["phone", "like", f"%{number}"]]
+
 	contacts = frappe.get_all(
-		"Contact Phone", filters=[["phone", "like", f"%{number}"]], fields=["parent"], limit=1
+		"Contact Phone", filters=filters, fields=["parent"], limit=1
 	)
 
 	return contacts[0].parent if contacts else None
