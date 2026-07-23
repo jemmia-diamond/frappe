@@ -10,7 +10,8 @@ import {
 class FormTimeline extends BaseTimeline {
 	make() {
 		super.make();
-		this.setup_timeline_actions();
+		// BinDK: Hide `New Email` button around comment section
+		// this.setup_timeline_actions();
 		this.render_timeline_items();
 		this.setup_activity_toggle();
 	}
