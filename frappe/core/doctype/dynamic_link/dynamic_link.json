@@ -16,7 +16,8 @@
    "in_list_view": 1,
    "label": "Link Document Type",
    "options": "DocType",
-   "reqd": 1
+   "reqd": 1,
+   "search_index": 1
   },
   {
    "fieldname": "link_name",
@@ -24,7 +25,8 @@
    "in_list_view": 1,
    "label": "Link Name",
    "options": "link_doctype",
-   "reqd": 1
+   "reqd": 1,
+   "search_index": 1
   },
   {
    "fieldname": "link_title",
@@ -36,13 +38,14 @@
  ],
  "istable": 1,
  "links": [],
- "modified": "2024-03-23 16:03:23.469424",
+ "modified": "2026-07-23 15:58:03.779221",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Dynamic Link",
  "owner": "Administrator",
  "permissions": [],
  "quick_entry": 1,
+ "row_format": "Dynamic",
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
