@@ -64,6 +64,13 @@ def get_list(
 	validate_args(args)
 	_list = frappe.get_list(**args)
 
+	if doctype == "File":
+		try:
+			from erpnext.r2_storage import process_file_list
+			process_file_list(_list)
+		except Exception:
+			pass
+
 	if not expand:
 		return _list
 
@@ -104,7 +111,15 @@ def get(doctype, name=None, filters=None, parent=None):
 	doc.check_permission()
 	doc.apply_fieldlevel_read_permissions()
 
-	return doc.as_dict()
+	doc_dict = doc.as_dict()
+	if doctype == "File":
+		try:
+			from erpnext.r2_storage import process_file_list
+			process_file_list([doc_dict])
+		except Exception:
+			pass
+
+	return doc_dict
 
 
 @frappe.whitelist()
