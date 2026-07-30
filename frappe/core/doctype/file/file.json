@@ -18,6 +18,7 @@
   "file_size",
   "column_break_5",
   "file_url",
+  "r2_file_url",
   "thumbnail_url",
   "folder",
   "is_folder",
@@ -94,6 +95,14 @@
    "fieldname": "file_url",
    "fieldtype": "Code",
    "label": "File URL",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:!doc.is_folder",
+   "fieldname": "r2_file_url",
+   "fieldtype": "Text",
+   "is_virtual": 1,
+   "label": "R2 File URL",
    "read_only": 1
   },
   {
