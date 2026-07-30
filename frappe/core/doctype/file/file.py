@@ -89,6 +89,20 @@ class File(Document):
 			return self.file_url.startswith(URL_PREFIXES)
 		return not self.content
 
+	@property
+	def r2_file_url(self):
+		"""
+		Dynamically resolve fresh R2 URL (presigned/public) for this file.
+		Never store presigned URLs statically in the database as they expire (TTL).
+		"""
+		if not self.file_url:
+			return None
+		try:
+			from erpnext.r2_storage import get_r2_url_for_file
+			return get_r2_url_for_file(self)
+		except Exception:
+			return self.file_url
+
 	def autoname(self):
 		"""Set name for folder"""
 		if self.is_folder:
