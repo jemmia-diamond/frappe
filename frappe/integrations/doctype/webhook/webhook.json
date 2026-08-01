@@ -8,6 +8,8 @@
  "field_order": [
   "sb_doc_events",
   "webhook_doctype",
+  "enabled_backend_enqueue",
+  "enqueue_name",
   "cb_doc_events",
   "webhook_docevent",
   "enabled",
@@ -197,6 +199,17 @@
    "fieldname": "fire_and_forget",
    "fieldtype": "Check",
    "label": "Fire and Forget"
+  },
+  {
+   "default": "0",
+   "fieldname": "enabled_backend_enqueue",
+   "fieldtype": "Check",
+   "label": "Enabled in Backend"
+  },
+  {
+   "fieldname": "enqueue_name",
+   "fieldtype": "Data",
+   "label": "Enqueue Name"
   }
  ],
  "links": [
@@ -205,7 +218,7 @@
    "link_fieldname": "webhook"
   }
  ],
- "modified": "2025-07-18 18:22:38.276809",
+ "modified": "2026-08-01 05:32:39.232788",
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "Webhook",
@@ -225,6 +238,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],

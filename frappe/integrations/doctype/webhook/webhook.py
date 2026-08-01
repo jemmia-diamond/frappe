@@ -35,24 +35,17 @@ class Webhook(Document):
 		condition: DF.SmallText | None
 		enable_log: DF.Check
 		enable_security: DF.Check
-		fire_and_forget: DF.Check
 		enabled: DF.Check
+		enabled_backend_enqueue: DF.Check
+		enqueue_name: DF.Data | None
+		fire_and_forget: DF.Check
 		is_dynamic_url: DF.Check
 		request_method: DF.Literal["POST", "PUT", "DELETE"]
 		request_structure: DF.Literal["", "Form URL-Encoded", "JSON"]
 		request_url: DF.SmallText
 		timeout: DF.Int
 		webhook_data: DF.Table[WebhookData]
-		webhook_docevent: DF.Literal[
-			"after_insert",
-			"on_update",
-			"on_submit",
-			"on_cancel",
-			"on_trash",
-			"on_update_after_submit",
-			"on_change",
-			"workflow_transition",
-		]
+		webhook_docevent: DF.Literal["after_insert", "on_update", "on_submit", "on_cancel", "on_trash", "on_update_after_submit", "on_change", "workflow_transition"]
 		webhook_doctype: DF.Link
 		webhook_headers: DF.Table[WebhookHeader]
 		webhook_json: DF.Code | None
