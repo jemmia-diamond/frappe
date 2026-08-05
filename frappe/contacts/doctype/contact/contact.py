@@ -8,7 +8,7 @@ from frappe.core.doctype.dynamic_link.dynamic_link import deduplicate_dynamic_li
 from frappe.model.document import Document
 from frappe.model.naming import append_number_if_name_exists
 from frappe.utils import cstr, has_gravatar
-from erpnext.utilities.phone_utils import get_phone_variants
+from erpnext.utilities.phone_utils import get_phone_variants, normalize_to_standard_format
 
 
 class Contact(Document):
@@ -125,6 +125,17 @@ class Contact(Document):
 		ladi_client_id: DF.Data | None
 		gcl_au_id: DF.Data | None
 	# end: auto-generated types
+
+	def before_save(self):
+		if getattr(self, "phone", None):
+			normalized = normalize_to_standard_format(self.phone)
+			if normalized:
+				self.phone = normalized
+				
+		if getattr(self, "mobile_no", None):
+			normalized = normalize_to_standard_format(self.mobile_no)
+			if normalized:
+				self.mobile_no = normalized
 
 	def validate(self):
 		self.full_name = self._get_full_name()

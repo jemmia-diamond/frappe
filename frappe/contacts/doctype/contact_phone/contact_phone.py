@@ -3,6 +3,7 @@
 
 # import frappe
 from frappe.model.document import Document
+from erpnext.utilities.phone_utils import normalize_to_standard_format
 
 
 class ContactPhone(Document):
@@ -21,5 +22,8 @@ class ContactPhone(Document):
 		parenttype: DF.Data
 		phone: DF.Data
 	# end: auto-generated types
-
-	pass
+	def before_save(self):
+		if self.phone:
+			normalized = normalize_to_standard_format(self.phone)
+			if normalized:
+				self.phone = normalized
