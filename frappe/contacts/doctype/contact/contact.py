@@ -136,6 +136,12 @@ class Contact(Document):
 			normalized = normalize_to_standard_format(self.mobile_no)
 			if normalized:
 				self.mobile_no = normalized
+				
+		for phone_row in self.get("phone_nos", []):
+			if phone_row.phone:
+				normalized = normalize_to_standard_format(phone_row.phone)
+				if normalized:
+					phone_row.phone = normalized
 
 	def validate(self):
 		self.full_name = self._get_full_name()
