@@ -477,7 +477,7 @@ def delete_for_document(doc):
 
 
 @frappe.whitelist()
-def search(text, start=0, limit=20, doctype=""):
+def search(text: str, start: int = 0, limit: int = 20, doctype: str = ""):
 	"""
 	Search for given text in __global_search
 	:param text: phrase to be searched
@@ -535,11 +535,10 @@ def search(text, start=0, limit=20, doctype=""):
 						r.image = doc.get(meta.image_field)
 					if meta.title_field:
 						r.title = doc.get(meta.title_field)
+					if doc.has_permission():
+						sorted_results.append(r)
 				except Exception:
 					frappe.clear_messages()
-
-				if doc.has_permission():
-					sorted_results.append(r)
 
 	return sorted_results
 

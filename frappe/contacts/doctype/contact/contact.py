@@ -1,5 +1,7 @@
 # Copyright (c) 2021, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+from typing import Any
+
 import frappe
 from frappe import _
 from frappe.contacts.address_and_contact import set_link_title
@@ -152,9 +154,6 @@ class Contact(Document):
 		self.set_user()
 
 		set_link_title(self)
-
-		if self.email_id and not self.image:
-			self.image = has_gravatar(self.email_id)
 
 		if self.get("sync_with_google_contacts") and not self.get("google_contacts"):
 			frappe.throw(_("Select Google Contacts to which contact should be synced."))
@@ -395,7 +394,7 @@ def invite_user(contact: str):
 
 
 @frappe.whitelist()
-def get_contact_details(contact):
+def get_contact_details(contact: str):
 	contact = frappe.get_doc("Contact", contact)
 	contact.check_permission()
 
@@ -424,15 +423,17 @@ def update_contact(doc, method):
 
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
-def contact_query(doctype, txt, searchfield, start, page_len, filters):
+def contact_query(
+	doctype: str, txt: str, searchfield: str, start: int, page_len: int, filters: dict[str, Any]
+):
 	from frappe.desk.reportview import get_match_cond
 
 	doctype = "Contact"
 	if not frappe.get_meta(doctype).get_field(searchfield) and searchfield not in frappe.db.DEFAULT_COLUMNS:
 		return []
 
-	link_doctype = filters.pop("link_doctype")
-	link_name = filters.pop("link_name")
+	link_doctype = filters.pop("link_doctype", None)
+	link_name = filters.pop("link_name", None)
 
 	return frappe.db.sql(
 		f"""select
@@ -462,7 +463,7 @@ def contact_query(doctype, txt, searchfield, start, page_len, filters):
 
 
 @frappe.whitelist()
-def address_query(links):
+def address_query(links: str):
 	import json
 
 	links = [

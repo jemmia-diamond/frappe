@@ -15,6 +15,8 @@
 @import "scrollbar";
 @import "navbar";
 @import "../common/modal";
+@import "settings_dialog";
+@import "../common/about";
 @import "slides";
 @import "toast";
 @import "breadcrumb";
@@ -24,7 +26,6 @@
 @import "timeline";
 @import "avatar";
 @import "notification";
-@import "global_search";
 @import "desktop";
 @import "../common/awesomeplete";
 @import "main";
@@ -33,6 +34,7 @@
 @import "form_sidebar";
 @import "filters";
 @import "list";
+@import "global_search";
 @import "report";
 @import "file_view";
 @import "frappe_datatable";
@@ -54,4 +56,4 @@
 @import "version";
 @import "menu";
 @import "sidebar_header";
-@import "sidebar_card";
+@import "card";

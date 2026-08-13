@@ -126,6 +126,12 @@ def application(request: Request):
 		elif request.path.startswith("/private/files/"):
 			response = frappe.utils.response.download_private_file(request.path)
 
+		elif request.path == "/.well-known/security.txt" and request.method == "GET":
+			if request.scheme != "https":
+				raise NotFound
+			security_settings = frappe.get_doc("Security Settings")
+			response = Response(security_settings.security_txt, content_type="text/plain")
+
 		elif request.path.startswith("/.well-known/") and request.method == "GET":
 			response = handle_wellknown(request.path)
 
@@ -169,17 +175,16 @@ def run_after_request_hooks(request, response):
 
 
 def init_request(request):
-	frappe.local.request = request
-	frappe.local.request.after_response = CallbackManager()
-
-	frappe.local.is_ajax = frappe.get_request_header("X-Requested-With") == "XMLHttpRequest"
-
 	site = _site or request.headers.get("X-Frappe-Site-Name") or get_site_name(request.host)
-	frappe.init(site, sites_path=_sites_path, force=True)
+	try:
+		frappe.init(site, sites_path=_sites_path, force=True, is_request=True)
+	finally:
+		frappe.local.request = request
+		request.after_response = CallbackManager()
 
-	if not (frappe.local.conf and frappe.local.conf.db_name):
-		# site does not exist
-		raise NotFound
+	assert frappe.local.conf and frappe.local.conf.db_name, "config should be loaded"
+
+	frappe.local.is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
 
 	frappe.connect(set_admin_as_user=False)
 	if frappe.local.conf.maintenance_mode:
@@ -457,6 +462,9 @@ if sentry_dsn := os.getenv("FRAPPE_SENTRY_DSN"):
 		max_breadcrumbs=int(os.getenv("SENTRY_MAX_BREADCRUMBS", "50")),
 		send_default_pii=False,
 		integrations=integrations,
+		include_local_variables=False,
+		_experiments=experiments,
+		**kwargs,
 	)
 
 def serve(
