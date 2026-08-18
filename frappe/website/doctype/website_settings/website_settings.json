@@ -14,6 +14,7 @@
   "home_tab",
   "sb0",
   "home_page",
+  "desk_home_link",
   "cb4",
   "title_prefix",
   "misc_section",
@@ -92,6 +93,12 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Home Page"
+  },
+  {
+   "description": "Link for the Desk home page icon in breadcrumbs. Default is /desk.",
+   "fieldname": "desk_home_link",
+   "fieldtype": "Data",
+   "label": "Desk Home Link"
   },
   {
    "fieldname": "cb4",
