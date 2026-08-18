@@ -49,6 +49,8 @@ def get_bootinfo():
 	bootinfo.sitename = frappe.local.site
 	bootinfo.sysdefaults = frappe.defaults.get_defaults()
 	bootinfo.sysdefaults["setup_complete"] = frappe.is_setup_complete()
+	
+	bootinfo.desk_home_link = frappe.get_website_settings("desk_home_link") or "/desk"
 
 	bootinfo.server_date = frappe.utils.nowdate()
 

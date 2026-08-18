@@ -275,7 +275,7 @@ frappe.breadcrumbs = {
 
 	clear() {
 		this.$breadcrumbs = $(".navbar-breadcrumbs").empty();
-		this.append_breadcrumb_element("/desk", frappe.utils.icon("home"));
+		this.append_breadcrumb_element(frappe.boot.desk_home_link || "/desk", frappe.utils.icon("home"));
 	},
 
 	toggle(show) {
