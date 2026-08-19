@@ -92,6 +92,55 @@ def get_count() -> int | None:
 
 	return count
 
+@frappe.whitelist()
+@frappe.read_only()
+def get_list_childtable(doctype, parenttype, parent_names, fields=None, filters=None, limit=None, order_by=None):
+	"""
+	Fetch child table records for multiple parents in one query safely (handles N+1).
+	Automatically checks permissions on the parent documents.
+	"""
+	if isinstance(parent_names, str):
+		parent_names = frappe.parse_json(parent_names)
+	if isinstance(fields, str):
+		fields = frappe.parse_json(fields)
+	if isinstance(filters, str):
+		filters = frappe.parse_json(filters)
+
+	if not parent_names:
+		return []
+
+	allowed_parents = frappe.get_list(
+		parenttype,
+		filters={"name": ("in", parent_names)},
+		pluck="name"
+	)
+
+	if not allowed_parents:
+		return []
+
+	child_filters = [
+		["parenttype", "=", parenttype],
+		["parent", "in", allowed_parents]
+	]
+
+	if filters:
+		if isinstance(filters, dict):
+			for k, v in filters.items():
+				child_filters.append([k, "=", v])
+		elif isinstance(filters, list):
+			child_filters.extend(filters)
+
+	if not fields:
+		fields = ["*"]
+
+	return frappe.get_all(
+		doctype,
+		filters=child_filters,
+		fields=fields,
+		limit=limit,
+		order_by=order_by,
+		ignore_permissions=True
+	)
 
 def execute(doctype, *args, **kwargs):
 	return DatabaseQuery(doctype).execute(*args, **kwargs)
