@@ -24,6 +24,26 @@ frappe.db = {
 			});
 		});
 	},
+	get_list_childtable: function (doctype, parenttype, parent_names, args) {
+		if (!args) { args = {}; }
+
+		args.doctype = doctype;
+		args.parenttype = parenttype;
+		args.parent_names = parent_names;
+		if (!args.fields) { args.fields = ["*"]; }
+		if (!("limit" in args)) { args.limit = 20;}
+
+		return new Promise((resolve) => {
+			frappe.call({
+				method: "frappe.desk.reportview.get_list_childtable",
+				args: args,
+				type: "GET",
+				callback: function (r) {
+					resolve(r.message || []);
+				},
+			});
+		});
+	},
 	exists: function (doctype, nameOrFilters) {
 		return new Promise((resolve) => {
 			let filters;
