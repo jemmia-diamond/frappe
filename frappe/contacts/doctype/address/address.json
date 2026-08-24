@@ -186,7 +186,8 @@
   {
    "fieldname": "haravan_id",
    "fieldtype": "Data",
-   "label": "Haravan ID"
+   "label": "Haravan ID",
+   "unique": 1
   }
  ],
  "icon": "fa fa-map-marker",
