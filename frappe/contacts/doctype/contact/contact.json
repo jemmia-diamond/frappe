@@ -760,7 +760,6 @@
    "fieldname": "haravan_customer_id",
    "fieldtype": "Data",
    "label": "Haravan Customer ID",
-   "read_only": 1,
    "unique": 1
   }
  ],
