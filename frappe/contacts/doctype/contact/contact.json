@@ -618,7 +618,8 @@
   {
    "fieldname": "fb_client_id",
    "fieldtype": "Data",
-   "label": "FB Client ID"
+   "label": "FB Client ID",
+   "length": 250
   },
   {
    "fieldname": "ladi_client_id",
@@ -768,7 +769,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-14 08:41:19.450166",
+ "modified": "2026-08-25 00:11:30.503122",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Contact",
