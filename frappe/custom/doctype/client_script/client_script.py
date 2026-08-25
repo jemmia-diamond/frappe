@@ -13,6 +13,7 @@ class ClientScript(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
+		context: DF.SmallText | None
 		dt: DF.Link
 		enabled: DF.Check
 		module: DF.Link | None
