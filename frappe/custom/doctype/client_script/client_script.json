@@ -8,6 +8,8 @@
  "document_type": "Document",
  "engine": "InnoDB",
  "field_order": [
+  "context",
+  "section_break_emrv",
   "dt",
   "view",
   "column_break_3",
@@ -28,6 +30,7 @@
    "oldfieldtype": "Link",
    "options": "DocType",
    "reqd": 1,
+   "search_index": 1,
    "set_only_once": 1
   },
   {
@@ -47,7 +50,8 @@
    "default": "0",
    "fieldname": "enabled",
    "fieldtype": "Check",
-   "label": "Enabled"
+   "label": "Enabled",
+   "search_index": 1
   },
   {
    "default": "Form",
@@ -71,13 +75,22 @@
   {
    "fieldname": "section_break_6",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "context",
+   "fieldtype": "Small Text",
+   "label": "Context"
+  },
+  {
+   "fieldname": "section_break_emrv",
+   "fieldtype": "Section Break"
   }
  ],
  "icon": "fa fa-glass",
  "idx": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-23 16:01:29.862624",
+ "modified": "2026-08-25 23:15:12.591490",
  "modified_by": "Administrator",
  "module": "Custom",
  "name": "Client Script",
@@ -107,6 +120,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
