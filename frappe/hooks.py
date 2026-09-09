@@ -515,6 +515,7 @@ default_log_clearing_doctypes = {
 	"Route History": 90,
 	"OAuth Bearer Token": 30,
 	"API Request Log": 90,
+	"Assignment Log": 3,
 	"Email Queue Recipient": 30,  # this is added as a dummy placeholder and clearing is handled by Email Queue itself
 }
 
