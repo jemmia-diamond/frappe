@@ -25,8 +25,9 @@ class AssignmentRule(Document):
 		)
 		from frappe.types import DF
 
-		assign_condition: DF.Code
+		assign_condition: DF.Code | None
 		assignment_days: DF.Table[AssignmentRuleDay]
+		assignment_log_enabled: DF.Check
 		close_condition: DF.Code | None
 		description: DF.SmallText
 		disabled: DF.Check
@@ -77,7 +78,7 @@ class AssignmentRule(Document):
 	def do_assignment(self, doc):
 		# clear existing assignment, to reassign
 		assign_to.clear(doc.get("doctype"), doc.get("name"), ignore_permissions=True)
-
+		previous_user = self.last_user
 		user = self.get_user(doc)
 
 		if user:
@@ -96,6 +97,22 @@ class AssignmentRule(Document):
 
 			# set for reference in round robin
 			self.db_set("last_user", user)
+			next_user = self.get_user(doc)
+
+			try:
+				if self.assignment_log_enabled:
+					frappe.get_doc({
+						"doctype": "Assignment Log",
+						"assign_to_doctype": doc.get("doctype"),
+						"assign_to_docname": doc.get("name"),
+						"assigned_at": frappe.utils.now_datetime(),
+						"assign_to": user,
+						"previous_user": previous_user,
+						"next_user": next_user
+					}).insert(ignore_permissions=True)
+			except Exception as e:
+				frappe.log_error(f"Failed to create Assignment Log: {str(e)}", "Assignment Log Error")
+
 			return True
 
 		return False
@@ -259,7 +276,7 @@ def apply(doc=None, method=None, doctype=None, name=None):
 
 	# multiple auto assigns
 	assignment_rule_docs: list[AssignmentRule] = [
-		frappe.get_cached_doc("Assignment Rule", d.get("name")) for d in assignment_rules
+		frappe.get_doc("Assignment Rule", d.get("name")) for d in assignment_rules
 	]
 
 	if not assignment_rule_docs:
