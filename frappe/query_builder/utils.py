@@ -84,6 +84,7 @@ def mask_fields(
 	fields: list[Any],
 	result: list[dict] | list[tuple],
 	as_dict: bool = True,
+	pluck: bool = False,
 ) -> list[dict] | list[tuple]:
 	"""Mask fields in the result based on the doctype's masked fields.
 
@@ -92,12 +93,12 @@ def mask_fields(
 		fields: List of field objects from the query
 		result: Query results as list of dicts or tuples
 		as_dict: Whether results are dictionaries (True) or tuples (False)
-
+		pluck: Whether results were plucked into a flat list of scalar values
 	Returns:
 		Result with masked field values applied based on user permissions
 	"""
 	from frappe.database.query import CORE_DOCTYPES
-	from frappe.model.utils.mask import mask_dict_results, mask_list_results
+	from frappe.model.utils.mask import mask_dict_results, mask_list_results, mask_pluck_results
 
 	# We can't query meta for core doctypes here
 	if doctype in CORE_DOCTYPES:
@@ -107,6 +108,9 @@ def mask_fields(
 
 	if not masked_fields:
 		return result
+
+	if pluck:
+		return mask_pluck_results(result, masked_fields, fields)
 
 	if not as_dict:
 		field_index_map = {}
@@ -135,7 +139,7 @@ def execute_query(query, *args, **kwargs):
 
 	if result and dt and fields:
 		as_dict = kwargs.get("as_dict", not kwargs.get("as_list", False))
-		result = mask_fields(dt, fields, result, as_dict=as_dict)
+		result = mask_fields(dt, fields, result, as_dict=as_dict, pluck=kwargs.get("pluck", False))
 
 	return result
 
@@ -158,11 +162,11 @@ def execute_child_queries(queries, result):
 
 
 def prepare_query(query):
+	from frappe.utils.safe_exec import SERVER_SCRIPT_FILE_PREFIX, check_safe_sql_query
+
 	param_collector = NamedParameterWrapper()
 	query = query.get_sql(param_wrapper=param_collector)
 	if frappe.local.flags.get("in_safe_exec", False):
-		from frappe.utils.safe_exec import SERVER_SCRIPT_FILE_PREFIX, check_safe_sql_query
-
 		if not check_safe_sql_query(query, throw=False):
 			callstack = inspect.stack()
 
@@ -178,6 +182,9 @@ def prepare_query(query):
 			# if frame2 is server script <serverscript> is set as the filename it shouldn't be allowed.
 			if len(callstack) >= 3 and SERVER_SCRIPT_FILE_PREFIX in callstack[2].filename:
 				raise frappe.PermissionError("Only SELECT SQL allowed in scripting")
+
+	if frappe.local.flags.get("in_render_safe_exec", False):
+		check_safe_sql_query(query, throw=True)
 
 	return query, param_collector.parameters
 

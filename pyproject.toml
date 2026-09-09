@@ -15,12 +15,14 @@ dependencies = [
     "filetype~=1.2.0",
     "GitPython~=3.1.45",
     "Jinja2~=3.1.6",
-    "Pillow~=12.1.1",
-    "PyJWT~=2.10.1",
+    "Pillow~=12.2.0",
+    "PyJWT~=2.13.0",
+    "duckdb~=1.4.3",
+    "pyarrow~=25.0.0",
     # We depend on internal attributes,
     # do NOT add loose requirements on PyMySQL versions.
     "PyMySQL==1.1.2",
-    "pypdf==6.8.0",
+    "pypdf==6.13.3",
     "PyPika @ git+https://github.com/frappe/pypika@2c50e6142b2d61d2d243e466fdd5dc03b3d918f2",
     "mysqlclient==2.2.7",
     "PyQRCode~=1.2.1",
@@ -35,10 +37,11 @@ dependencies = [
     "bleach-allowlist~=1.0.3",
     "chardet~=5.2.0",
     "croniter~=6.0.0",
-    "cryptography~=46.0.3",
+    "cryptography~=50.0.0",
     "cssutils~=2.11.1",
+    "distro~=1.9.0",
     "email-reply-parser~=0.5.12",
-    "gunicorn @ git+https://github.com/frappe/gunicorn@bb554053bb87218120d76ab6676af7015680e8b6",
+    "gunicorn @ git+https://github.com/frappe/gunicorn@54b59ca884c79dcf04d4882658a32bbaf17e999f",
     "html5lib~=1.1",
     "ipython~=8.37.0",
     "ldap3~=2.9.1",
@@ -48,14 +51,15 @@ dependencies = [
     "num2words~=0.5.14",
     "oauthlib~=3.3.1",
     "openpyxl~=3.1.5",
+    "xlsxwriter~=3.2.9",
     "orjson~=3.11.5",
     "passlib~=1.7.4",
     "pdfkit~=1.0.0",
-    "phonenumbers~=9.0.21",
+    "phonenumbers~=9.0.23",
     "premailer~=3.10.0",
     "psutil~=7.0.0",
     "psycopg2-binary~=2.9.11",
-    "pyOpenSSL~=25.3.0",
+    "pyOpenSSL~=26.4.0",
     "pydantic~=2.12.5",
     "pyotp~=2.9.0",
     "python-dateutil~=2.9.0.post0",
@@ -64,7 +68,7 @@ dependencies = [
     "redis~=7.1.0",
     "hiredis~=3.3.0",
     "requests-oauthlib~=2.0.0",
-    "requests~=2.32.5",
+    "requests~=2.33.0",
     # We depend on internal attributes of RQ.
     # Do NOT add loose requirements on RQ versions.
     # Audit the code changes w.r.t. background_jobs.py before updating.
@@ -86,7 +90,6 @@ dependencies = [
     "google-api-python-client~=2.188.0",
     "google-auth-oauthlib~=1.2.4",
     "google-auth~=2.48.0",
-    "posthog~=5.0.0",
     "vobject~=0.9.9",
     "pycountry~=24.6.1",
     "websockets~=15.0.1",
@@ -213,6 +216,10 @@ nixpkgs-deps = [
     "nodejs_20",
     "python312",
 ]
+
+[tool.uv]
+exclude-newer = "7 days"
+exclude-newer-package = { }
 
 [tool.mypy]
 strict = false

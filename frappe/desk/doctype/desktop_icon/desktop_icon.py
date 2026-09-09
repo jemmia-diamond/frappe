@@ -26,6 +26,7 @@ class DesktopIcon(Document):
 		app: DF.Autocomplete | None
 		bg_color: DF.Literal["gray", "blue"]
 		hidden: DF.Check
+		icon: DF.Icon | None
 		icon_image: DF.Attach | None
 		icon_type: DF.Literal["Link", "Folder", "App"]
 		idx: DF.Int
@@ -63,8 +64,9 @@ class DesktopIcon(Document):
 			clear_desktop_icons_cache(user=self.owner)
 
 	def after_rename(self, old, new, merge):
-		delete_desktop_icon_file(self.app, old)
-		self.export_desktop_icon()
+		if self.standard and self.app:
+			delete_desktop_icon_file(self.app, old)
+			self.export_desktop_icon()
 
 	def export_desktop_icon(self):
 		allow_export = (
@@ -84,63 +86,6 @@ class DesktopIcon(Document):
 		if os.path.exists(file_path):
 			os.remove(file_path)
 
-	def is_permitted(self, bootinfo):
-		icon_module = None
-		if self.icon_type == "Link" and self.link_to:
-			icon_module = frappe.db.get_value("Workspace", self.link_to, "module")
-		# module permission check
-		if icon_module:
-			blocked_modules = frappe.get_cached_doc("User", frappe.session.user).get_blocked_modules()
-			if icon_module in blocked_modules:
-				return False
-		# perform a permission check based on roles table (desktop icons)
-		allowed_roles = [d.role for d in self.get("roles") or []]
-		if allowed_roles and not set(allowed_roles).intersection(frappe.get_roles()):
-			return False
-		if self.icon_type == "Folder":
-			return True
-		elif self.icon_type == "App":
-			return self.check_app_permission()
-		else:
-			try:
-				items = bootinfo.workspace_sidebar_item[self.label.lower()]["items"]
-
-				if len(items) and all(item["type"] == "Section Break" for item in items):
-					return False
-				if len(items) == 0:
-					return False
-				return True
-			except KeyError:
-				return False
-
-	def check_app_permission(self):
-		for a in frappe.get_installed_apps():
-			if frappe.get_hooks(app_name=a)["app_title"][0] == self.label or self.app == a:
-				app_detail = frappe.get_hooks("add_to_apps_screen", app_name=a)
-				if len(app_detail) != 0:
-					permission_method = app_detail[0].get("has_permission", None)
-					if permission_method:
-						return frappe.call(permission_method)
-					else:
-						return True
-				else:
-					# App hooks.py doesn't have add_to_apps_screen
-					return True
-
-	# def is_permitted(self):
-	# 	"""Return True if `Has Role` is not set or the user is allowed."""
-	# 	from frappe.utils import has_common
-
-	# 	allowed = [d.role for d in frappe.get_all("Has Role", fields=["role"], filters={"parent": self.name})]
-
-	# 	if not allowed:
-	# 		return True
-
-	# 	roles = frappe.get_roles()
-
-	# 	if has_common(roles, allowed):
-	# 		return True
-
 	def after_insert(self):
 		clear_desktop_icons_cache()
 
@@ -157,6 +102,21 @@ def get_workspace_names(workspaces):
 	for w in workspaces["pages"]:
 		workspace_list.append(w["name"])
 	return workspace_list
+
+
+def check_app_permission(label, app):
+	for a in frappe.get_installed_apps():
+		if frappe.get_hooks(app_name=a)["app_title"][0] == label or app == a:
+			app_detail = frappe.get_hooks("add_to_apps_screen", app_name=a)
+			if len(app_detail) != 0:
+				permission_method = app_detail[0].get("has_permission", None)
+				if permission_method:
+					return frappe.call(permission_method)
+				else:
+					return True
+			else:
+				# App hooks.py doesn't have add_to_apps_screen
+				return True
 
 
 def get_desktop_icons(user=None, bootinfo=None):
@@ -206,12 +166,40 @@ def get_desktop_icons(user=None, bootinfo=None):
 		# sort by idx
 		user_icons.sort(key=lambda a: a.idx)
 
+		# map of Desktop Icon name -> set of roles configured in its `roles` child table,
+		# scoped to the icons we actually loaded for this user
+		icon_roles_map = {}
+		icon_names = [s.name for s in user_icons]
+		if icon_names:
+			icon_roles = frappe.get_all(
+				"Has Role",
+				filters={"parenttype": "Desktop Icon", "parent": ["in", icon_names]},
+				fields=["parent", "role"],
+			)
+			for r in icon_roles:
+				icon_roles_map.setdefault(r.parent, set()).add(r.role)
+
+		user_roles = set(frappe.get_roles(user))
+
 		permitted_icons = []
 		permitted_parent_labels = set()
 		if bootinfo:
 			for s in user_icons:
-				icon = frappe.get_doc("Desktop Icon", s.name)
-				if icon.is_permitted(bootinfo):
+				if s.icon_type == "Folder":
+					permitted = True
+				elif s.icon_type == "App":
+					permitted = check_app_permission(s.label, s.app)
+				else:
+					# Workspace Sidebar link: present in the boot map ⇒ user can see at least
+					# one item in it (get_sidebar_items already enforces this).
+					sidebar = bootinfo.workspace_sidebar_item.get(s.label.lower())
+					permitted = bool(sidebar and sidebar["items"])
+
+				# if the icon restricts by role, the user must have at least one of them
+				if permitted and icon_roles_map.get(s.name):
+					permitted = bool(icon_roles_map[s.name] & user_roles)
+
+				if permitted:
 					permitted_icons.append(s)
 
 					if not s.parent_icon:
@@ -228,6 +216,15 @@ def get_desktop_icons(user=None, bootinfo=None):
 def clear_desktop_icons_cache(user=None):
 	frappe.cache.hdel("desktop_icons", user or frappe.session.user)
 	frappe.cache.hdel("bootinfo", user or frappe.session.user)
+
+
+def get_app_desktop_icon(app_name: str) -> str | None:
+	"""Return the name of the "App" type Desktop Icon created for `app_name`, if it exists."""
+	app_title = frappe.get_hooks("app_title", app_name=app_name)
+	if not app_title:
+		return None
+
+	return frappe.db.exists("Desktop Icon", {"label": app_title[0], "icon_type": "App"})
 
 
 def create_desktop_icons_from_workspace():
@@ -249,52 +246,56 @@ def create_desktop_icons_from_workspace():
 			if app_name in frappe.get_installed_apps():
 				icon.app_name = app_name
 				app_title = frappe.get_hooks("app_title", app_name=app_name)[0]
-				app_icon = frappe.db.exists("Desktop Icon", {"label": app_title, "icon_type": "App"})
+				app_icon = get_app_desktop_icon(app_name)
 				if app_icon:
 					icon.parent_icon = app_icon
 
+				app_icon_link = frappe.db.get_value("Desktop Icon", app_icon, "link") if app_icon else None
+
 				# Portal App With Desk Workspace
-				if frappe.db.get_value("Desktop Icon", app_icon, "link") and not frappe.db.get_value(
-					"Desktop Icon", app_icon, "link"
-				).startswith("/app"):
+				if app_icon_link and not app_icon_link.startswith("/app"):
 					icon.hidden = 1
 					icon.parent_icon = None
 
 				# If Desk App has one workspace with the same name
-				if icon.label == app_title and (
-					app_icon and frappe.db.get_value("Desktop Icon", app_icon, "link").startswith("/app")
-				):
+				if icon.label == app_title and app_icon_link and app_icon_link.startswith("/app"):
 					icon.hidden = 1
 					icon.parent_icon = None
 
 				try:
-					if not frappe.db.exists(
-						"Desktop Icon", [{"label": icon.label, "icon_type": icon.icon_type}]
-					):
+					# `label` is the docname (autoname: field:label) and is unique, so an icon
+					# of *any* type with this label collides. Filtering on icon_type as well
+					# would let a workspace named after an app slip through into an IntegrityError.
+					if not frappe.db.exists("Desktop Icon", icon.label):
 						icon.insert(ignore_if_duplicate=True)
-				except Exception as e:
-					frappe.error_log(title="Creation of Desktop Icon Failed", message=e)
+				except Exception:
+					frappe.log_error(title="Creation of Desktop Icon Failed")
 
 
 def create_desktop_icons_from_installed_apps():
 	apps = frappe.get_installed_apps()
 	index = 0
 	for a in apps:
-		app_title = frappe.get_hooks("app_title", app_name=a)[0]
+		if get_app_desktop_icon(a):
+			continue
+
 		app_details = frappe.get_hooks("add_to_apps_screen", app_name=a)
-		if not frappe.db.exists("Desktop Icon", [{"icon_type": "App"}, {"app": a}]):
-			if len(app_details) != 0:
-				icon = frappe.new_doc("Desktop Icon")
-				icon.label = app_title
-				icon.link_type = "External"
-				icon.idx = index
-				icon.icon_type = "App"
-				icon.app = a
-				icon.link = app_details[0]["route"]
-				icon.logo_url = app_details[0]["logo"]
-				if not frappe.db.exists("Desktop Icon", [{"label": icon.label, "icon_type": icon.icon_type}]):
-					icon.save()
-				index += 1
+		if len(app_details) != 0:
+			app_title = frappe.get_hooks("app_title", app_name=a)[0]
+			if frappe.db.exists("Desktop Icon", app_title):
+				# some other icon (e.g. a workspace link) already holds this label
+				continue
+
+			icon = frappe.new_doc("Desktop Icon")
+			icon.label = app_title
+			icon.link_type = "External"
+			icon.idx = index
+			icon.icon_type = "App"
+			icon.app = a
+			icon.link = app_details[0]["route"]
+			icon.logo_url = app_details[0]["logo"]
+			icon.save()
+			index += 1
 
 
 def create_desktop_icons():
@@ -324,15 +325,23 @@ def create_user_icons(user, data):
 
 @frappe.whitelist()
 def add_workspace_to_desktop(workspace: str):
-	sidebar = frappe.new_doc("Workspace Sidebar")
-	sidebar_item = frappe.new_doc("Workspace Sidebar Item")
-	sidebar_item.label = workspace
-	sidebar_item.type = "Link"
-	sidebar_item.link_to = workspace
-	sidebar_item.link_type = "Workspace"
-	sidebar.title = workspace
-	sidebar.append("items", sidebar_item)
-	sidebar.save()
+	if frappe.db.exists("Workspace Sidebar", workspace):
+		sidebar = frappe.get_doc("Workspace Sidebar", workspace)
+	else:
+		sidebar = frappe.new_doc("Workspace Sidebar")
+		sidebar.title = workspace
+
+	if not any(item.link_to == workspace for item in sidebar.get("items", [])):
+		sidebar_item = frappe.new_doc("Workspace Sidebar Item")
+		sidebar_item.label = workspace
+		sidebar_item.type = "Link"
+		sidebar_item.link_to = workspace
+		sidebar_item.link_type = "Workspace"
+		sidebar.append("items", sidebar_item)
+		sidebar.save()
+
+	if frappe.db.exists("Desktop Icon", workspace):
+		return {"icon": frappe.get_doc("Desktop Icon", workspace).as_dict()}
 
 	new_icon = frappe.new_doc("Desktop Icon")
 	new_icon.label = workspace

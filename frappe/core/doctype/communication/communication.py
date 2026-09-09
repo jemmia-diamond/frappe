@@ -402,7 +402,9 @@ class Communication(Document, CommunicationEmailMixin):
 
 		for doctype, docname in parse_email([self.recipients, self.cc, self.bcc]):
 			# Both document and doctype names should be case insensitive in email addresses.
-			doctype = frappe.db.get_value("DocType", doctype)
+			doctype = frappe.db.exists("DocType", doctype, cache=True) or frappe.db.exists(
+				"DocType", frappe.unscrub(doctype), cache=True
+			)
 			if doctype:
 				docname = frappe.db.get_value(doctype, docname, ignore=True)
 			if not (doctype and docname):
@@ -447,11 +449,19 @@ class Communication(Document, CommunicationEmailMixin):
 			self.add_link(doctype, name)
 
 	def add_link(self, link_doctype, link_name, autosave=False):
+		title_field = frappe.get_meta(link_doctype).get_title_field()
+		link_title = (
+			frappe.db.get_value(link_doctype, link_name, title_field, cache=True, order_by=None)
+			if title_field != "name"
+			else None
+		)
+
 		self.append(
 			"timeline_links",
 			{
 				"link_doctype": link_doctype,
 				"link_name": link_name,
+				"link_title": link_title or link_name,
 				"communication_date": self.communication_date,
 			},
 		)
@@ -604,7 +614,7 @@ def parse_email(email_strings):
 			if not document_parts or len(document_parts) != 2:
 				continue
 
-			doctype = frappe.unscrub(unquote_plus(document_parts[0]))
+			doctype = unquote_plus(document_parts[0])
 			docname = unquote_plus(document_parts[1])
 			yield doctype, docname
 

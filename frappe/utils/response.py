@@ -26,6 +26,7 @@ import frappe.sessions
 import frappe.utils
 from frappe import _
 from frappe.core.doctype.access_log.access_log import make_access_log
+from frappe.core.doctype.file.utils import check_path_safety
 from frappe.utils import format_timedelta, orjson_dumps
 
 if TYPE_CHECKING:
@@ -280,6 +281,13 @@ def download_backup(path):
 			_("You need to be logged in and have System Manager Role to be able to access backups.")
 		)
 
+	filename = path.split("/backups/", 1)[1]
+	backup_path = frappe.get_site_path("private", "backups")
+	requested_path = frappe.get_site_path("private", "backups", filename)
+	is_safe = check_path_safety(base_path=backup_path, requested_path=requested_path)
+	if not is_safe:
+		frappe.throw(_("Invalid backup path"), frappe.PermissionError)
+
 	return send_private_file(path)
 
 
@@ -298,7 +306,22 @@ def download_private_file(path: str) -> Response:
 	return send_private_file(path.split("/private", 1)[1])
 
 
-FORCE_DOWNLOAD_EXTENSIONS = (".svg", ".html", ".htm", ".xml")
+FORCE_DOWNLOAD_EXTENSIONS = (
+	".svg",
+	".svgz",
+	".html",
+	".htm",
+	".xhtml",
+	".xht",
+	".shtml",
+	".shtm",
+	".mhtml",
+	".mht",
+	".xml",
+	".xsl",
+	".xslt",
+	".swf",
+)
 
 
 def send_private_file(path: str) -> Response:

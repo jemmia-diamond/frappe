@@ -9,7 +9,8 @@ import frappe.desk.form.load
 import frappe.desk.form.meta
 from frappe import _
 from frappe.core.doctype.file.utils import extract_images_from_html
-from frappe.desk.form.document_follow import follow_document
+from frappe.desk.form.document_follow import _follow_document
+from frappe.query_builder.functions import IfNull
 
 if TYPE_CHECKING:
 	from frappe.core.doctype.comment.comment import Comment
@@ -43,13 +44,13 @@ def add_comment(
 	comment.insert(ignore_permissions=True)
 
 	if frappe.get_cached_value("User", frappe.session.user, "follow_commented_documents"):
-		follow_document(comment.reference_doctype, comment.reference_name, frappe.session.user)
+		_follow_document(comment.reference_doctype, comment.reference_name, frappe.session.user)
 
 	return comment
 
 
 @frappe.whitelist()
-def update_comment(name, content):
+def update_comment(name: str | int, content: str):
 	"""allow only owner to update comment"""
 	doc = frappe.get_doc("Comment", name)
 
@@ -92,9 +93,15 @@ def get_next(
 		filters = json.loads(filters)
 
 	table = frappe.qb.DocType(doctype)
-	sort_column = table[sort_field]
 	name_column = table.name
 	current_sort_value = frappe.db.get_value(doctype, value, sort_field)
+	fallback = _sort_field_fallback(doctype, sort_field)
+	if fallback is not None:
+		sort_column = IfNull(table[sort_field], fallback)
+		if current_sort_value is None:
+			current_sort_value = fallback
+	else:
+		sort_column = table[sort_field]
 
 	is_ascending = sort_order.lower() == "asc"
 	if prev == is_ascending:
@@ -121,6 +128,23 @@ def get_next(
 
 	frappe.msgprint(_("No further records"))
 	return None
+
+
+def _sort_field_fallback(doctype: str, fieldname: str):
+	if fieldname in ("name", "modified", "creation", "modified_by", "owner", "idx", "docstatus"):
+		return None
+	df = frappe.get_meta(doctype).get_field(fieldname)
+	if df is None:
+		return ""
+	if df.fieldtype in ("Check", "Float", "Int", "Currency", "Percent"):
+		return None
+	if getattr(df, "not_nullable", False):
+		return None
+	if df.fieldtype in ("Date", "Datetime"):
+		return "0001-01-01"
+	if df.fieldtype == "Time":
+		return "00:00:00"
+	return ""
 
 
 def get_pdf_link(doctype, docname, print_format="Standard", no_letterhead=0):

@@ -210,8 +210,9 @@ frappe.ui.Filter = class {
 
 		if (Array.isArray(value)) {
 			this._filter_value_set = this.field.set_value(value);
-		} else if (value !== undefined || value !== null) {
-			this._filter_value_set = this.field.set_value((value + "").trim());
+		} else if (value !== undefined && value !== null) {
+			const field_value = typeof value === "number" ? value : String(value).trim();
+			this._filter_value_set = this.field.set_value(field_value);
 		}
 		return this._filter_value_set;
 	}
@@ -491,7 +492,10 @@ frappe.ui.filter_utils = {
 					const parsed = JSON.parse(val);
 					val = Array.isArray(parsed) ? parsed : [String(parsed)];
 				} catch {
-					val = val.split(",").map((v) => strip(v));
+					val = val
+						.split(",")
+						.map((v) => strip(v))
+						.filter((v) => v != null && v !== "");
 				}
 			}
 		} else if (frappe.boot.additional_filters_config[condition]) {
@@ -512,7 +516,10 @@ frappe.ui.filter_utils = {
 
 	get_default_condition(df) {
 		const meta = frappe.get_meta(df.parent);
-		if (df.fieldtype == "Data" && !meta?.is_large_table) {
+		if (["_assign", "_liked_by"].includes(df.fieldname)) {
+			// stored as a JSON array, so an exact match can never hit
+			return "like";
+		} else if (df.fieldtype == "Data" && !meta?.is_large_table) {
 			return "like";
 		} else if (df.fieldtype == "Date" || df.fieldtype == "Datetime") {
 			return "Between";
