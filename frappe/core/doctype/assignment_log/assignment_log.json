@@ -1,0 +1,87 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-09 08:55:57.215064",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "assign_to_doctype",
+  "assign_to_docname",
+  "assigned_at",
+  "assign_to",
+  "previous_user",
+  "next_user"
+ ],
+ "fields": [
+  {
+   "fieldname": "assign_to_doctype",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Assign To DocType",
+   "options": "DocType",
+   "search_index": 1
+  },
+  {
+   "fieldname": "assign_to_docname",
+   "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
+   "label": "Assign To DocName",
+   "options": "assign_to_doctype",
+   "search_index": 1
+  },
+  {
+   "fieldname": "assigned_at",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Assigned At"
+  },
+  {
+   "fieldname": "assign_to",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Assign To",
+   "options": "User"
+  },
+  {
+   "fieldname": "previous_user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Previous User",
+   "options": "User"
+  },
+  {
+   "fieldname": "next_user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Next User",
+   "options": "User"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-09 08:55:57.215064",
+ "modified_by": "Administrator",
+ "module": "Core",
+ "name": "Assignment Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

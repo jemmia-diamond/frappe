@@ -12,6 +12,7 @@
   "due_date_based_on",
   "priority",
   "notification_enabled",
+  "assignment_log_enabled",
   "disabled",
   "column_break_4",
   "description",
@@ -49,6 +50,13 @@
    "fieldname": "notification_enabled",
    "fieldtype": "Check",
    "label": "Notification Enabled"
+  },
+  {
+   "default": "0",
+   "description": "If enabled, logs will be created for each auto assignment under the Assignment Log DocType.",
+   "fieldname": "assignment_log_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Assignment Log"
   },
   {
    "default": "0",
