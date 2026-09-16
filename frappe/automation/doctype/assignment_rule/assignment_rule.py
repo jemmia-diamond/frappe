@@ -1,6 +1,6 @@
 # Copyright (c) 2022, Frappe Technologies and contributors
 # License: MIT. See LICENSE
-
+import random
 from collections.abc import Iterable
 
 import frappe
@@ -40,6 +40,19 @@ class AssignmentRule(Document):
 		unassign_condition: DF.Code | None
 		users: DF.TableMultiSelect[AssignmentRuleUser]
 	# end: auto-generated types
+
+	@frappe.whitelist()
+	def randomize_users(self):
+		"""Randomize order of target users on demand (for Client Script button)."""
+		if self.users and len(self.users) > 1:
+			user_list = list(self.users)
+			random.shuffle(user_list)
+			for i, d in enumerate(user_list, 1):
+				d.idx = i
+			self.users = user_list
+			if not self.is_new():
+				self.save(ignore_permissions=True)
+		return [d.user for d in self.users]
 
 	def validate(self):
 		self.validate_document_types()
