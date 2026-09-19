@@ -47,6 +47,7 @@ class Contact(Document):
 		inserted_at: DF.Datetime | None
 		is_primary_contact: DF.Check
 		is_replied: DF.Check
+		koc: DF.Link | None
 		last_incoming_call_time: DF.Datetime | None
 		last_message_time: DF.Datetime | None
 		last_name: DF.Data | None
@@ -142,6 +143,39 @@ class Contact(Document):
 				normalized = normalize_to_standard_format(phone_row.phone)
 				if normalized:
 					phone_row.phone = normalized
+
+		# if not self.koc:
+		# 	self.match_koc_referral()
+
+	def match_koc_referral(self):
+		"""
+		Match incoming contact to a KOC via referral parameters (ref, koc, slug) or source/referrer.
+		Condition: Contact creation/inserted_at must be >= KOC.referral_valid_from (if set).
+		"""
+		try:
+			candidate_slugs = []
+			for field in ["referrer", "url_page", "utm_term", "utm_content", "utm_campaign", "utm_source"]:
+				val = getattr(self, field, None)
+				if val and isinstance(val, str):
+					candidate_slugs.extend([s.strip().lower() for s in val.replace("/", " ").replace("=", " ").replace("&", " ").replace("?", " ").split() if s.strip()])
+
+			if not candidate_slugs:
+				return
+
+			reach_time = self.inserted_at or self.creation or frappe.utils.now_datetime()
+
+			kocs = frappe.get_all("KOC", fields=["name", "slugs", "referral_valid_from"])
+			for k in kocs:
+				if k.referral_valid_from and frappe.utils.get_datetime(k.referral_valid_from) > frappe.utils.get_datetime(reach_time):
+					continue
+
+				if k.slugs:
+					koc_slugs = [s.strip().lower() for s in k.slugs.split(",") if s.strip()]
+					if any(slug in candidate_slugs or k.name.lower() in candidate_slugs for slug in koc_slugs):
+						self.koc = k.name
+						break
+		except Exception:
+			frappe.log_error(title="KOC Referral Match Error in Contact")
 
 	def validate(self):
 		self.full_name = self._get_full_name()
