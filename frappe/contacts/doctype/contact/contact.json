@@ -26,6 +26,7 @@
   "lead_owner",
   "source_group",
   "source",
+  "koc",
   "status",
   "designation",
   "phone",
@@ -504,6 +505,15 @@
    "fieldtype": "Link",
    "label": "Source",
    "options": "Lead Source"
+  },
+  {
+   "fieldname": "koc",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "KOC",
+   "options": "KOC",
+   "search_index": 1
   },
   {
    "fieldname": "first_message_time",
