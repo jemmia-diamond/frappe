@@ -111,8 +111,16 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Rule",
-   "options": "Round Robin\nLoad Balancing\nBased on Field",
+   "options": "Round Robin\nLoad Balancing\nBased on Field\nCustom Round Robin",
    "reqd": 1
+  },
+  {
+   "depends_on": "eval: doc.rule == 'Custom Round Robin'",
+   "description": "Master fixed sequence of sales users. The assignment will strictly cycle through this order, skipping any users not currently in active Users.",
+   "fieldname": "custom_users_order",
+   "fieldtype": "Table",
+   "label": "Custom Users Order",
+   "options": "Assignment Rule User"
   },
   {
    "depends_on": "eval: doc.rule !== 'Based on Field'",
@@ -126,6 +134,15 @@
    "fieldname": "last_user",
    "fieldtype": "Link",
    "label": "Last User",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.rule == 'Custom Round Robin'",
+   "description": "Last assigned sales user (excluding off-hour tech user)",
+   "fieldname": "last_sales_user",
+   "fieldtype": "Link",
+   "label": "Last Sales User",
    "options": "User",
    "read_only": 1
   },
