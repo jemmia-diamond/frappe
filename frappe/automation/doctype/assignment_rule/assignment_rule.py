@@ -35,8 +35,10 @@ class AssignmentRule(Document):
 		due_date_based_on: DF.Literal[None]
 		field: DF.Literal[None]
 		last_user: DF.Link | None
+		last_sales_user: DF.Link | None
+		custom_users_order: DF.Table[AssignmentRuleUser]
 		priority: DF.Int
-		rule: DF.Literal["Round Robin", "Load Balancing", "Based on Field"]
+		rule: DF.Literal["Round Robin", "Load Balancing", "Based on Field", "Custom Round Robin"]
 		unassign_condition: DF.Code | None
 		users: DF.TableMultiSelect[AssignmentRuleUser]
 	# end: auto-generated types
@@ -57,6 +59,18 @@ class AssignmentRule(Document):
 	def validate(self):
 		self.validate_document_types()
 		self.validate_assignment_days()
+		self.sort_users_for_custom_round_robin()
+
+	def sort_users_for_custom_round_robin(self):
+		"""Sort active users according to custom_users_order when rule is Custom Round Robin."""
+		if self.rule == "Custom Round Robin" and self.users and len(self.users) > 1:
+			order_map = {d.user: i for i, d in enumerate(self.custom_users_order or [])}
+			if order_map:
+				# Sort users based on custom_users_order index, placing unlisted users at end
+				sorted_users = sorted(self.users, key=lambda d: order_map.get(d.user, 999999))
+				for i, d in enumerate(sorted_users, 1):
+					d.idx = i
+				self.users = sorted_users
 
 	def clear_cache(self):
 		super().clear_cache()
@@ -110,6 +124,9 @@ class AssignmentRule(Document):
 
 			# set for reference in round robin
 			self.db_set("last_user", user)
+			if user != "tech@jemmia.vn":
+				self.db_set("last_sales_user", user)
+
 			next_user = self.get_user(doc)
 
 			try:
@@ -148,10 +165,49 @@ class AssignmentRule(Document):
 		"""
 		if self.rule == "Round Robin":
 			return self.get_user_round_robin()
+		elif self.rule == "Custom Round Robin":
+			return self.get_user_custom_round_robin()
 		elif self.rule == "Load Balancing":
 			return self.get_user_load_balancing()
 		elif self.rule == "Based on Field":
 			return self.get_user_based_on_field(doc)
+
+	def get_user_custom_round_robin(self):
+		"""
+		Get next user based on custom fixed order rotation.
+		- If only 1 user or tech@jemmia.vn, returns directly.
+		- Rotates through custom_users_order starting after last_sales_user,
+		  finding the first user that is currently present in active users.
+		"""
+		if not self.users:
+			return "tech@jemmia.vn"
+
+		active_users = [d.user for d in self.users]
+
+		# If only 1 user or only tech@jemmia.vn
+		if len(active_users) == 1 or (len(active_users) > 0 and active_users[0] == "tech@jemmia.vn" and len(set(active_users)) == 1):
+			return active_users[0]
+
+		# Filter custom_users_order
+		master_order = [d.user for d in (self.custom_users_order or [])]
+		if not master_order:
+			# Fallback to standard round robin if custom order not set
+			return self.get_user_round_robin()
+
+		# Find starting index in master_order based on last_sales_user
+		start_idx = 0
+		if self.last_sales_user and self.last_sales_user in master_order:
+			start_idx = (master_order.index(self.last_sales_user) + 1) % len(master_order)
+
+		# Cycle through master_order starting from start_idx
+		for i in range(len(master_order)):
+			candidate = master_order[(start_idx + i) % len(master_order)]
+			if candidate in active_users and candidate != "tech@jemmia.vn":
+				return candidate
+
+		# Fallback to first non-tech active user, or tech@jemmia.vn
+		non_tech_active = [u for u in active_users if u != "tech@jemmia.vn"]
+		return non_tech_active[0] if non_tech_active else "tech@jemmia.vn"
 
 	def get_user_round_robin(self):
 		"""
